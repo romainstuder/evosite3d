@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+
+"""Get position in CDS from Trimal output"""
 
 # Load libraries
 import sys
@@ -47,4 +49,4 @@ site = sys.argv[4]
 column_in_full = int(column_list[int(site)*3])/3
 
 # Print output
-print site, corresponding_dict[gene][int(column_in_full)], sequence_dict[gene][column_in_full-1]
+print(site, corresponding_dict[gene][int(column_in_full)], sequence_dict[gene][column_in_full-1])

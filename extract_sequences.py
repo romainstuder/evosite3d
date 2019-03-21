@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+
+"""Extract sequences"""
+
 
 import sys
 from Bio import SeqIO
@@ -20,7 +23,5 @@ for record in SeqIO.parse(open(sys.argv[2], "rU"), "fasta"):
     gene = record.id
     if gene in sequence_list:
         sequence = str(record.seq)
-        print ">"+gene
-        print sequence
-
-
+        print(">"+gene)
+        print(sequence)

@@ -1,9 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+"""Remove ensembl name from tree"""
 
 import sys
-##from pytreetools import *
+# from pytreetools import *
+
 
 def parsed_tree(tree):
+    """
+
+    Args:
+        tree:
+
+    Returns:
+
+    """
     tab_tree = []
     word = ""
     tag = 0
@@ -70,4 +81,4 @@ for item in tree_list:
         item = item.split("_")[0] # Keep only gene id
     new_tree = new_tree + item
 new_tree = new_tree+";" # Add final ";"
-print new_tree
+print(new_tree)
