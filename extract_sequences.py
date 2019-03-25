@@ -2,7 +2,6 @@
 
 """Extract sequences"""
 
-
 import sys
 from Bio import SeqIO
 
@@ -18,7 +17,7 @@ while 1:
     sequence_list.append(gene)
 file_in.close()
 
-# Write only sequences that are in the list to keep 
+# Write only sequences that are in the list to keep
 for record in SeqIO.parse(open(sys.argv[2], "rU"), "fasta"):
     gene = record.id
     if gene in sequence_list:
