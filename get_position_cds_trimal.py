@@ -28,6 +28,8 @@ while 1:
         column_list = tab[1:]
 file_in.close()
 
+column_list = [int(x) for x in column_list]
+
 # Get corresponding positions per column
 corresponding_dict = {}
 for gene in sequence_dict:
@@ -45,8 +47,12 @@ gene = sys.argv[3]
 # Define position from CodeML
 site = sys.argv[4]
 
+print("column_list", column_list)
+
 # Assign column to the full alignment
-column_in_full = int(column_list[int(site)*3])/3
+column_in_full = int(int(column_list[int(site)*3])/3)
+
+print("column_in_full", column_in_full)
 
 # Print output
 print(site, corresponding_dict[gene][int(column_in_full)], sequence_dict[gene][column_in_full-1])

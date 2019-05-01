@@ -3,8 +3,6 @@
 """Remove ensembl name from tree"""
 
 import sys
-# from pytreetools import *
-
 
 def parsed_tree(tree):
     """
@@ -24,7 +22,7 @@ def parsed_tree(tree):
             if char == "(":
                 tag = 1
         if char == "[":
-            if len(word) > 0:
+            if word:
                 tab_tree.append(word)
             word = char
             tag_bracket = 1
@@ -50,12 +48,12 @@ def parsed_tree(tree):
             elif char == " ":
                 tab_tree.append(word)
                 word = ""
-            elif (char == "." or "_") and (char != ";"):  # Any alphabetical caracter
+            elif (char == "." or "_") and (char != ";"):  # Any alphabetical character
                 word = word + char
             elif char == ";":
                 if word != "":
                     tab_tree.append(word)
-                #print "End of tree reach"
+                # print "End of tree reach"
                 break
     return tab_tree
 
@@ -78,7 +76,7 @@ tree_list = parsed_tree(tree_line)
 new_tree = ""
 for item in tree_list:
     if "_" in item:
-        item = item.split("_")[0] # Keep only gene id
+        item = item.split("_")[0]  # Keep only gene id
     new_tree = new_tree + item
-new_tree = new_tree+";" # Add final ";"
+new_tree = new_tree+";"  # Add final ";"
 print(new_tree)

@@ -15,7 +15,7 @@ sequence_list = []  # To keep order of sequence
 sequence_dict = {}
 for record in SeqIO.parse(open(infile, "rU"), "fasta"):
     tab = record.id.split(" ")
-    sequence = record.seq.tostring().replace(" ", "")
+    sequence = str(record.seq).replace(" ", "")
     # print sequence, len(sequence)
     sequence_list.append(tab[0])
     sequence_dict[tab[0]] = sequence
