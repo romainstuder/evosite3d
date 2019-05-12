@@ -4,6 +4,7 @@
 
 import sys
 
+
 def parsed_tree(tree):
     """
 
@@ -66,7 +67,7 @@ while 1:
     if line == "":
         break
     line = line.rstrip()
-    tree_line = tree_line+ line
+    tree_line = tree_line + line
 tree_file.close()
 
 # Disassemble tree into list
@@ -79,4 +80,5 @@ for item in tree_list:
         item = item.split("_")[0]  # Keep only gene id
     new_tree = new_tree + item
 new_tree = new_tree+";"  # Add final ";"
+
 print(new_tree)
