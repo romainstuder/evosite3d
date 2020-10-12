@@ -15,7 +15,7 @@ for record in SeqIO.parse(handle, "fasta"):
 handle.close()
 
 # Load columns kept after Trimal
-column_list = []
+column_str_list = []
 file_in = open(sys.argv[2], "r")
 while 1:
     line = file_in.readline()
@@ -25,10 +25,10 @@ while 1:
     if line[0] == "#":
         line = line.replace(",", "")
         tab = line.split()
-        column_list = tab[1:]
+        column_str_list = tab[1:]
 file_in.close()
 
-column_list = [int(x) for x in column_list]
+column_list = [int(x) for x in column_str_list]
 
 # Get corresponding positions per column
 corresponding_dict = {}
