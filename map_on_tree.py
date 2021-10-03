@@ -1,10 +1,9 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python3
 """ Module to map info on tree """
 
-# Load libraries
-
 import sys
+from typing import List
+
 from Bio import SeqIO
 from Bio.SeqUtils import ProtParam
 
@@ -25,7 +24,7 @@ handle.close()
 
 
 # Load tree
-tree_tab = []
+tree_tab: List[str] = []
 tree_file = open(sys.argv[2], "r")
 while 1:
     line = tree_file.readline()
