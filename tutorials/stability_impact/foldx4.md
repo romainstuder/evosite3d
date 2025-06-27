@@ -33,7 +33,6 @@ Tokuriki N, Stricher F, Serrano L, Tawfik DS. How protein stability and new func
 Dasmeh P, Serohijos AW, Kepp KP, Shakhnovich EI. Positively selected sites in cetacean myoglobins contribute to protein stability. PLoS Comput Biol. 2013;9(3):e1002929. http://dx.doi.org/10.1371/journal.pcbi.1002929
 And I personally used it in three of my studies: 
 Studer RA, Christin PA, Williams MA, Orengo CA. Stability-activity tradeoffs constrain the adaptive evolution of RubisCO. Proc Natl Acad Sci U S A. 2014 Feb 11;111(6):2223-8. http://dx.doi.org/10.1073/pnas.1310811111
-Studer RA, Opperdoes FR, Nicolaes GA, Mulder AB, Mulder R. Understanding the functional difference between growth arrest-specific protein 6 and protein S: an evolutionary approach. Open Biol. 2014 Oct;4(10). pii: 140121. http://dx.doi.org/10.1098/rsob.140121
 
 Rallapalli PM, Orengo CA, Studer RA, Perkins SJ. Positive selection during the evolution of the blood coagulation factors in the context of their disease-causing mutations. Mol Biol Evol. 2014 Nov;31(11):3040-56. http://dx.doi.org/10.1093/molbev/msu248
 
@@ -43,7 +42,9 @@ Tutorial by example:
 The structure is a bacterial cytochrome P450 (PDB:4TVF). You can download its PDB file (4TVF.pdb) from here: http://www.rcsb.org/pdb/explore.do?structureId=4TVF
 
 Or directly with wget:
+```shell
 wget http://ftp.rcsb.org/download/4TVF.pdb
+```
 
 We would like to test the stability of mutation at position 280, from a leucine (L) to an aspartic acid (D). Here is the original structure, with Leu280 in green, and residues around 6Å in yellow:
 
@@ -53,24 +54,33 @@ We would like to test the stability of mutation at position 280, from a leucine 
 FoldX works in two steps:
 
 
-1) Repair the structure.
+#1) Repair the structure.
 
 There are frequent problems in PDB structures, like steric clashes. FoldX will try to fix them and lower the global energy (ΔG). The "RepairPDB" command is better than the "Optimize" command. Here is how to launch FoldX:
-foldx --command=RepairPDB --pdb=4TVF.pdb --ionStrength=0.05 --pH=7 --water=CRYSTAL --vdwDesign=2 --outPDB=true --pdbHydrogens=false
+```shell
+foldx --command=RepairPDB \
+      --pdb=4TVF.pdb \
+      --ionStrength=0.05 \
+      --pH=7 \
+      --water=CRYSTAL \
+      --vdwDesign=2 \
+      --outPDB=true \
+      --pdbHydrogens=false
+```
 
 We indicate which PDB file it needs to use, that we want to repair it (RepairPDB), that it will use water and metal bonds from the PDB file (--water=CRYSTAL) and that we want a PDB as output (--outPDB=true). All other parameter are by default.
 
 This process is quite long (around 10 minutes). Here is the result (the original structure is now in white, while the repaired structure is in yellow/green):
 ￼
 
- We can see that some side chains have slightly moved (in particular Phe16). 
+We can see that some side chains have slightly moved (in particular Phe16). 
 
 The starting free energy ΔG was +73.22 kcal/mol, and it was lowered to -46.97 kcal/mol, which is now stable (remember that a "+" sign means unstable while a "-" sign means stable).
 
 Once it's finished, it will produce a file named "4TVF_Repair.pdb", which you will use in the next step.
 
 
-2) Perform the mutation
+# 2) Perform the mutation
 
 The mutation itself is performed by the BuildModel function. There are other methods, but the BuildModel is apparently the most robust (I said apparently, but there are no proper benchmarks against the other method PositionScan or PSSM). You also need to specify the mutation in a separate file "individual_list.txt". Here is the file "individual_list.txt" (yes, just one line):
 LA280D;
@@ -79,7 +89,18 @@ It contains the starting amino acid (L), the chain (A), the position (280) and t
 In the following command line, you will see that is 4TVF_Repair.pdb and not 4TVF.pdb that is mutated. You will also notice "--numberOfRuns=3". This is because some residues can have many rotamers and could have some convergence problems. You may to increase this values to 5 or 10, in case you are mutating long residues (i.e. Arginine) that have many rotamers.
 
 You can run it by:
-foldx --command=BuildModel --pdb=4TVF_Repair.pdb --mutant-file=individual_list.txt --ionStrength=0.05 --pH=7 --water=CRYSTAL --vdwDesign=2 --outPDB=true --pdbHydrogens=false --numberOfRuns=3
+```shell
+foldx --command=BuildModel \
+      --pdb=4TVF_Repair.pdb \
+      --mutant-file=individual_list.txt \
+      --ionStrength=0.05 \
+      --pH=7 \
+      --water=CRYSTAL \
+      --vdwDesign=2 \
+      --outPDB=true \
+      --pdbHydrogens=false \
+      --numberOfRuns=3
+```
 It is much faster this time (i.e. a few seconds) and will produce many files.
 
 FoldX will first mutate the target residue (L) to itself (L) and move it as well as all neighbouring side chains multiple times. We can see that Leu280 (green) was rotated:
@@ -114,9 +135,9 @@ PS: A way to define the threshold is to use the standard deviation (SD) by multi
 
 The reported accuracy of FoldX is 0.46 kcal/mol (i.e., the SD of the difference
 between ΔΔGs calculated by FoldX and the experimental values). We can bin the ΔΔG values into seven categories:
-1. highly stabilising (ΔΔG < −1.84 kcal/mol); 
-2. stabilising (−1.84 kcal/mol ≤ ΔΔG < −0.92 kcal/mol); 
-3. slightly stabilising (−0.92 kcal/mol ≤ ΔΔG < −0.46 kcal/mol); 
+1. highly stabilising (ΔΔG < −1.84 kcal/mol);
+2. stabilising (−1.84 kcal/mol ≤ ΔΔG < −0.92 kcal/mol);
+3. slightly stabilising (−0.92 kcal/mol ≤ ΔΔG < −0.46 kcal/mol);
 4. neutral (−0.46 kcal/mol < ΔΔG ≤ +0.46 kcal/mol);
 5. slightly destabilising (+0.46 kcal/mol < ΔΔG ≤ +0.92 kcal/mol);
 6. destabilising (+0.92 kcal/mol < ΔΔG ≤ +1.84 kcal/mol);

@@ -4,7 +4,7 @@ In this post, I will make a short tutorial on one of my favourite programs, Code
 
 Theoretical principles:
 
-The selective pressure in protein coding genes can be detected within the framework of comparative genomics. The selective pressure is assumed to be defined by the ratio (ω) dN/dS. dS represents the synonymous rate (keeping  the amino acid) and  dN the non-synonymous rate (changing the amino acid). In the absence of evolutionary pressure, the synonymous rate and the non-synonymous rate are equal, so the dN/dS ratio is equal to 1. Under purifying selection, natural selection prevents the replacement of amino acids, so the dN will be lower than the dS, and dN/dS < 1. And under positive selection, the replacement rate of amino acid is favoured by selection, and dN/dS > 1.
+The selective pressure in protein coding genes can be detected within the framework of comparative genomics. The selective pressure is assumed to be defined by the ratio (ω) dN/dS. dS represents the synonymous rate (keeping  the amino acid) and  dN the non-synonymous rate (changing the amino acid). In the absence of evolutionary pressure, the synonymous rate and the non-synonymous rate are equal, so the dN/dS ratio is equal to 1. Under purifying selection, natural selection prevents the replacement of amino acids, so the dN will be lower than the dS, and dN/dS < 1. And under positive selection, the replacement rate of amino acid is favoured by selection, and dN/dS > 1.
 
 CodeML and substitutions models:
 
@@ -24,7 +24,7 @@ Sites with identical dN/dS in both foreground and background branches:
 K0 : Proportion of sites that are under purifying selection (ω0 < 1) on both foreground and background branches.
 K1 : Proportion of sites that are under neutral evolution (ω1 = 1) on both foreground and background branches.
 
-Sites with different dN/dS between  foreground and background branches:
+Sites with different dN/dS between foreground and background branches:
 K2a: Proportion of sites that are under positive selection (ω2 ≥ 1) on the foreground branch and under purifying selection (ω0 < 1) on background branches.
 K2b: Proportion of sites that are under positive selection (ω2 ≥ 1) on the foreground branch and under neutral evolution (ω1 = 1) on background branches.
 
@@ -36,7 +36,7 @@ Sites with identical dN/dS in both foreground and background branches:
 K0 : Sites that are under purifying selection (ω0 < 1) on both foreground and background branches.
 K1 : Sites that are under neutral evolution (ω1 = 1) on both foreground and background branches.
 
-Sites with different dN/dS between  foreground and background branches:
+Sites with different dN/dS between foreground and background branches:
 K2a: Sites that are under neutral evolution (ω2 = 1) on the foreground branch and under purifying selection (ω0 < 1) on background branches.
 K2b: Sites that are under neutral evolution (ω2 = 1) on the foreground branch and under neutral evolution (ω1 = 1) on background branches.
 
@@ -68,11 +68,11 @@ Run command file (alternative model):
 
 We estimate the Ts/Tv ratio (fix_kappa = 0) and the dN/dS (fix_omega = 0). The branch-site model is specified by setting the model parameter to 2 (different dN/dS for branches) and the NSsites value to 2 (which allows 3 categories for sites: purifying, neutral and positive selection).
 
-
+```shell
      seqfile = TF105351.Eut.3.phy            * sequence data file name
     treefile = TF105351.Eut.3.53876.tree     * tree structure file name
-     outfile = TF105351.Eut.3.53876.mlc      * main result file name 
- 
+     outfile = TF105351.Eut.3.53876.mlc      * main result file name 
+ 
        noisy = 9   * 0,1,2,3,9: how much rubbish on the screen
      verbose = 1   * 1: detailed output, 0: concise output
      runmode = 0   * 0: user tree;  1: semi-automatic;  2: automatic
@@ -97,6 +97,7 @@ RateAncestor = 0       * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
   Small_Diff = .45e-6  * Default value.
    cleandata = 1       * remove sites with ambiguity data (1:yes, 0:no)?
  fix_blength = 0       * 0: ignore, -1: random, 1: initial, 2: fixed
+```
 
 Run command file (null model):
 
@@ -105,7 +106,7 @@ The command file for the null model is the same as for the alternative model, ex
 2) The dN/dS ratio is fixed to 1 (fix_omega = 1).
 
 
-
+```shell
      seqfile = TF105351.Eut.3.phy               * sequence data file name
     treefile = TF105351.Eut.3.53876.tree        * tree structure file name
      outfile = TF105351.Eut.3.53876.fixed.mlc   * main result file name
@@ -134,12 +135,16 @@ RateAncestor = 0       * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
   Small_Diff = .45e-6  * Default value.
    cleandata = 1       * remove sites with ambiguity data (1:yes, 0:no)?
  fix_blength = 0       * 0: ignore, -1: random, 1: initial, 2: fixed
+```
 
 Launch CodeML:
 In Unix (Linux, MacOSX), this will look like:
+```shell
 codeml ./TF105351.Eut.3.53876.ctl
+```
+```shell
 codeml ./TF105351.Eut.3.53876.fixed.ctl
-
+```
 Analyse results:
 
 1) Assign significance of the detection of positive selection on the selected branch:
@@ -148,8 +153,8 @@ Two output files are produced:
 TF105351.Eut.3.53876.mlc (alternative model) and TF105351.Eut.3.53876.fixed.mlc (null model).
 
 We retieve the likelihood values lnL1 and lnL0 from TF105351.Eut.3.53876.mlc and TF105351.Eut.3.53876.fixed.mlc files, respectively:
-lnL(ntime: 41  np: 46):  -4707.210163      +0.000000  (lnL1) 
-lnL(ntime: 41  np: 45):  -4710.222252      +0.000000  (lnL0)
+lnL(ntime: 41  np: 46):  -4707.210163      +0.000000  (lnL1) 
+lnL(ntime: 41  np: 45):  -4710.222252      +0.000000  (lnL0)
 We can construct the LRT:
 --> 
 ΔLRT = 2×(lnL1 - lnL0) = 2×(-4707.210163 - (-4710.222252)) = 6.024178
@@ -161,17 +166,18 @@ A significant result with the branch-site codon model means that positive select
 
 2) If significant, we can retrieve sites under positive selection:
 
-In the TF105351.Eut.3.53876.mlc, we can retrieve sites under positive selection using the Bayes Empirical Bayes (BEB) method:  
+In the TF105351.Eut.3.53876.mlc, we can retrieve sites under positive selection using the Bayes Empirical Bayes (BEB) method:  
+```shell
 Positive sites for foreground lineages Prob(w>1):
-    36 K 0.971*
-   159 C 0.993**
+    36 K 0.971*
+   159 C 0.993**
+```
+
 Amino acids K and C refer to the first sequence in the alignment.
-Position 36 has  a high probability (97.1%) of being under positive selection. Position 159 has a very high probability (99.3%) of being under positive selection.
+
+Position 36 has  a high probability (97.1%) of being under positive selection. Position 159 has a very high probability (99.3%) of being under positive selection.
 
 Position 36 shifted from a lysine to a glycine.
 
 Position 36 shifted from a lysine to a glycine.
 
-In future posts, I will speak about various potential problems (or not) and limits of the inference of positive selection.
-
-RAS

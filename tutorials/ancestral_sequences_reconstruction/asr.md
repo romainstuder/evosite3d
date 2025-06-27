@@ -1,24 +1,24 @@
-Tutorial on Ancestral Sequence Reconstruction
+# Tutorial on Ancestral Sequence Reconstruction
 
 This tutorial was part of a course on protein evolution done during ECCB 2014 in Strasbourg.
 
 
 NB: If there are any question, comments or bugs, feel free to ask. ;)
+NB2: Revised in 2025
 
 
-
-Introduction
+## Introduction
 The slides of the introduction are available here:
 ancestral_sequence_reconstruction.pdf
 
 
-In this practical, you will learn how to prepare files for CodeML, how to use it for reconstructing ancestral sequences and how to compute the isoelectric point of protein sequences. There are a few scripts you will need to download during the practical.
-
-If you need to make these scripts executable, use chmod: 
-chmod +x script.py
+In this practical, you will learn how to prepare files for CodeML, how to use it for reconstructing ancestral sequences 
+and how to compute the isoelectric point of protein sequences. There are a few scripts you will need to download during 
+the practical.
 
 
 Tools used in this practical:
+```shell
 # Libraries for Python
 Biopython: http://biopython.org/wiki/Main_Page
 
@@ -39,97 +39,115 @@ FastTree: http://www.microbesonline.org/fasttree/
 
 # Tree visualisation
 NJplot: http://doua.prabi.fr/software/njplot
+```
+
+On macOS, you can install many of them with homebrew: https://brew.sh/
+```shell
+brew tap brewsci/bio
+brew install clustal-omega fasttree figtree jalview mafft paml trimal
+```
+
+```shell
+brew install uv
+uv pip install biopython
+```
 
 
-
-This practical will focus on the lysozyme, an enzyme (EC 3.2.1.17) that damages bacterial cell walls. The Uniprot page is: http://www.uniprot.org/uniprot/P61626
+This practical will focus on the lysozyme, an enzyme (EC 3.2.1.17) that damages bacterial cell walls. 
+The Uniprot page is: http://www.uniprot.org/uniprot/P61626
 They evolved differently in Primates:
 
 
+## Step 1: Prepare alignment.
+The quality of the ancestral reconstruction will heavily depend on the quality of the alignment and the tree topology 
+(branch lengths are re-estimated during the reconstruction).
 
-￼
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
- 
- 
- 
- 
-Step 1: Prepare alignment.
-The quality of the ancestral reconstruction will heavily depend on the quality of the alignment and the tree topology (branch lengths are re-estimated during the reconstruction).
-
-Please download the sequence file: lysozyme_primates.seq
+https://www.ensembl.org/Homo_sapiens/Gene/Compara_Ortholog?db=core;g=ENSG00000090382;r=12:69348381-69354234
+Please download the sequence file: 
+```shell
+cp Human_LYZ_orthologues.fa lysozyme_primates.seq
+```
 
 Make a multiple alignment, either with Mafft-L-INS-i or Clustal-Omega:
-
+```shell
 mafft-linsi lysozyme_primates.seq > lysozyme_primates.fasta
+```
 or
-clustal-omega-1.2.0-macosx --in lysozyme_primates.seq --out lysozyme_primates.fasta 
+```shell
+clustalo --in lysozyme_primates.seq --out lysozyme_primates.fasta 
+```
 
-(Please have a look at the alignment in Jalview)
+You can have a look at the alignment in Jalview:
+```shell
+jalview ./lysozyme_primates.fasta
+```
 
-
-The format of the resulting alignment is FASTA. However, most phylogenetic softwares use PHYLIP format. So, you have to convert it into PHYLIP.
-Download the script  "convert_fasta2phylip.py" and execute it:
-
-convert_fasta2phylip.py lysozyme_primates.fasta lysozyme_primates.phy
+The format of the resulting alignment is FASTA. However, most phylogenetic software use PHYLIP format. So, you have to 
+convert it into PHYLIP. Download the script "convert_fasta2phylip.py" and execute it:
+```shell
+python ../../scripts/convert_fasta2phylip.py lysozyme_primates.fasta lysozyme_primates.phy
+```
 
 (If you are not familiar, have a look at the differences between the alignment in FASTA and PHYLIP formats).
 
 
-Step 2: Prepare alignment.
+## Step 2: Prepare alignment.
 We can now generate a tree, either with PhyML (one of the most accurate tool) or FastTree (very fast and pretty accurate):
 
-phyml -i lysozyme_primates.phy -d aa -m JTT -c 4 -a e -b 0
+```shell
+phyml -i lysozyme_primates.phy -d aa -m WAG -c 8 -a e -b 0
 mv lysozyme_primates.phy_phyml_tree.txt lysozyme_primates.tree
+```
 
+```shell
 Option used:
 -i = input file
 -d aa: amino acid sequences
--m JTT: (substitution matrix). JTT works fine for most proteins, but other matrices (WAG, LG) can do slightly better.
--c 4: (numbers of categories for the gamma distribution)
+-m WAG: (substitution matrix). JTT works fine for most proteins, but other matrices (WAG, LG) can do slightly better.
+-c 8: (numbers of categories for the gamma distribution)
 -a e: (estimate alpha parameter for the gamma distribution) 
 -b 0: (we don't want boostrap, as this will cause trouble for further analyses in CodeML).
+```
 
 
 or run:
 
+```shell
 FastTree -nosupport lysozyme_primates.phy > lysozyme_primates.tree
+````
 
 Option used:
--nosupport:(we don't want boostrap, as this will cause trouble for further analyses in CodeML).
+`-nosupport`: (we don't want boostrap, as this will cause trouble for further analyses in CodeML).
 
 
-Finally, we could root the tree. Use NJplot and root it by the group containing the Marmoset sequence (Callithrix jacchus).
+Finally, we could root the tree. Use `newick utilities` to root it by the group containing the Marmoset sequence 
+(Callithrix jacchus):
+```shell
+nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069
+```
 
-Save it as "lysozyme_primates_rooted.tree"
+We can rerun and save the output as `lysozyme_primates_rooted.tree`:
+```shell
+nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069 > lysozyme_primates_rooted.tree
+```
 
 
-Step 3: Run ancestral sequence reconstruction.
+
+## Step 3: Run ancestral sequence reconstruction.
 
 The ancestral sequence reconstruction is done by CodeML, from the PAML package.
 
-It is launched with "codeml control_file.ctl"
+It is launched with 
+```shell
+codeml control_file.ctl
+```
 
 You may have to copy the file "jones.dat" from the dat folder in the PAML package, or indicate its location.
 
 
 
 The control file contains many parameters:
-
+```shell
       seqfile = lysozyme_primates.phy    * sequence data filename
      treefile = lysozyme_primates_root.tree   * tree structure file name
       outfile = lysozyme_primates.mlc    * main result file name
@@ -164,7 +182,7 @@ The control file contains many parameters:
         ncatG = 4   * # of categories in dG of NSsites models
 
 
-        getSE = 0  * 0: don't want them, 1: want S.E.s of estimates
+        getSE = 0  * 0: don\'t want them, 1: want S.E.s of estimates
 
  RateAncestor = 1  * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
 
@@ -182,15 +200,15 @@ The control file contains many parameters:
 
 Explanation of some parameters:
 runmode = 0 => We provide the tree.
-clock = 0 => We don't set a molecular clock. We assume that the genes are evolving at different rate.
-aaDist = 0 => We don't use the physicochemical properties of the amino acid.
+clock = 0 => We don\'t set a molecular clock. We assume that the genes are evolving at different rate.
+aaDist = 0 => We don\'t use the physicochemical properties of the amino acid.
 aaRatefile = ./jones.dat => We use the JTT matrix. Other matrix could be used (WAG, etc...)
 model = 2 => We use an empirical model (= substitutions matrix such as JTT).
 fix_alpha = 0 => We estimated the alpha parameter of the gamma distribution.
 alpha = 0.5 => We start the estimation from 0.5
 RateAncestor = 1 => Force the estimation of ancestral states.
 cleandata = 0 => Keep all ambigous data ("-", "X").
-
+```
 
 
 Please have a look at the output.
@@ -217,8 +235,9 @@ Questions:
 Now it is time to extract ancestral sequences and put them in a file. The rst file is quite difficult to parse, hopefully, each ancestral sequence start by "node".
 
 Download the following script and execute it: parse_rst.py
-
-./parse_rst.py rst
+```shell
+python ../../scripts/parse_rst.py rst
+```
 
 It displays ancestral sequences in FASTA format. Let's put them in a file:
 
@@ -246,13 +265,15 @@ And similarly for ancestral sequences:
 
 
 
-Part 5: Map properties on tree.
+## Part 5: Map properties on tree.
 We could easily map ancestral properties on the tree. The tree provided in rst contains nodes where bootstrap information is.
 We just need to change the values of these nodes by the corresponding pI.
 
 Download the following script and execute it: map_on_tree.py
 
-./map_on_tree.py ancestral_sequences.fasta lysozyme_primates_annotated.tree >  lysozyme_primates_annotated_pI.tree
+```shell
+./map_on_tree.py ancestral_sequences.fasta lysozyme_primates_annotated.tree > lysozyme_primates_annotated_pI.tree
+```
 
 Have a look at both trees in a text editor.
 
