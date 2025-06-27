@@ -11,7 +11,6 @@ Finally, as usual, if you have any questions or comments, your are welcome!
 
 ----------
 
- 
 Introduction:
 
 Here is a brief tutorial on how to use FoldX to estimate the stability effect of a mutation in a 3D structure. The stability (ΔG) of a protein is defined by the free energy, which is express in kcal/mol. The lower it is, the more stable it is. ΔΔG is difference in free energy (in kcal/mol) between a wild-type and mutant. A mutation that brings energy (ΔΔG > 0 kcal/mol) will destabilise the structure, while a mutation that remove energy (ΔΔG < 0 kcal/mol) will stabilise the structure. A common threshold is to say that a mutation has a significant effect if ΔΔG is >1 kcal/mol, which roughly corresponds to the energy of a single hydrogen bond.
