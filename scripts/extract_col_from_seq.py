@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Extract transition between branches """
+"""Extract transition between branches"""
 
 import sys
 from Bio import SeqIO
@@ -16,8 +16,8 @@ aln_start = 0
 aln_stop = 0
 
 max_length = 0
-input_handle = open(sys.argv[1], 'r')
-for record in SeqIO.parse(input_handle, 'fasta'):
+input_handle = open(sys.argv[1], "r")
+for record in SeqIO.parse(input_handle, "fasta"):
     matrix[record.id] = str(record.seq)
     # matrix_id.append(record.id)
     if record.id == sequence_target:
@@ -25,18 +25,18 @@ for record in SeqIO.parse(input_handle, 'fasta'):
         j = 0
         for i, aa in enumerate(str(record.seq)):
             if aa != "-":
-                j = j+1
+                j = j + 1
             if j == seq_start:
-                aln_start = i-1
+                aln_start = i - 1
             elif j == seq_stop:
-                aln_stop = i+1
+                aln_stop = i + 1
                 break
 
 # Write file
-input_handle = open(sys.argv[1], 'r')
+input_handle = open(sys.argv[1], "r")
 file_out = open(sys.argv[2], "w")
-for record in SeqIO.parse(input_handle, 'fasta'):
+for record in SeqIO.parse(input_handle, "fasta"):
     matrix[record.id] = str(record.seq)
-    file_out.write(">"+record.id+"\n")
-    file_out.write(str(record.seq)[aln_start:aln_stop]+"\n")
+    file_out.write(">" + record.id + "\n")
+    file_out.write(str(record.seq)[aln_start:aln_stop] + "\n")
 file_out.close()

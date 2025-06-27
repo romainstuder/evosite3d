@@ -37,8 +37,8 @@ for gene in sequence_dict:
     corr_dict = {}
     for i in range(len(sequence_dict[gene])):
         if sequence_dict[gene][i] != "-":
-            j = j+1
-            corr_dict[i+1] = j
+            j = j + 1
+            corr_dict[i + 1] = j
     corresponding_dict[gene] = corr_dict
 
 # Define reference gene
@@ -50,9 +50,13 @@ site = sys.argv[4]
 print("column_list", column_list)
 
 # Assign column to the full alignment
-column_in_full = int(int(column_list[int(site)*3])/3)
+column_in_full = int(int(column_list[int(site) * 3]) / 3)
 
 print("column_in_full", column_in_full)
 
 # Print output
-print(site, corresponding_dict[gene][int(column_in_full)], sequence_dict[gene][column_in_full-1])
+print(
+    site,
+    corresponding_dict[gene][int(column_in_full)],
+    sequence_dict[gene][column_in_full - 1],
+)

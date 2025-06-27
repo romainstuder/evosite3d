@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Extract full sequences"""
+"""Extract full sequences"""
 
 import sys
 
@@ -22,7 +22,7 @@ while 1:
                 # print(tab)
                 name = tab[0]
                 seq = "".join(tab[1:])
-                print(">"+name)
+                print(">" + name)
                 print(seq)
                 # print(tab)
                 # site = tab[0]

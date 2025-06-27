@@ -1,65 +1,73 @@
 #!/usr/bin/env python3
 
-"""Convert FASTA to PHYLIP"""
+"""
+Convert FASTA to PHYLIP format.
+Usage: script.py input.fasta output.phy [name_length=50]
+"""
 
+import argparse
 import sys
 from Bio import SeqIO
 
-print("Convert FASTA to PHYLIP")
 
-infile = sys.argv[1]
-outfile = sys.argv[2]
-
-sequence_list = []  # To keep order of sequence
-
-sequence_dict = {}
-for record in SeqIO.parse(open(infile, "rU"), "fasta"):
-    tab = record.id.split(" ")
-    sequence = str(record.seq).replace(" ", "")
-    # print sequence, len(sequence)
-    sequence_list.append(tab[0])
-    sequence_dict[tab[0]] = sequence
-    if "U" in sequence:
-        print(tab[0])
-        sys.exit()
-
-print("Number of sequences:", len(sequence_dict))
+def parse_args():
+    parser = argparse.ArgumentParser(description="Convert FASTA to PHYLIP format.")
+    parser.add_argument("input_fasta", help="Input FASTA file")
+    parser.add_argument("output_phylip", help="Output PHYLIP file")
+    parser.add_argument(
+        "-n",
+        "--name_length",
+        type=int,
+        default=50,
+        help="Max length of sequence names (default: 50)",
+    )
+    return parser.parse_args()
 
 
-# Test length of the alignment:
-alignment_length = 0
-for gene in sequence_dict:
-    if (alignment_length != 0) and (len(sequence_dict[gene]) != alignment_length):
-        print("Error in alignment length, exit on error !!!")
-        sys.exit()
-    else:
-        alignment_length = len(sequence_dict[gene])
+def main():
+    args = parse_args()
 
-number_of_seq = len(sequence_dict)
-print("Number of sequences:\t"+str(number_of_seq))
-print("Alignment length:\t"+str(alignment_length))
-print("Ratio =\t"+str(alignment_length/3))
+    print("Convert FASTA to PHYLIP")
 
-if alignment_length%3 != 0:
-    print("Warning: Hum, your alignment didn't code for nucleotides")
+    sequence_order = []
+    sequences = {}
 
-# Length of gene id, can be changed by passing a third argument
-name_length = 50
-if len(sys.argv) > 3:
-    name_length = int(sys.argv[3])
+    with open(args.input_fasta, "r") as handle:
+        for record in SeqIO.parse(handle, "fasta"):
+            seq_id = record.id.split()[0]
+            seq = str(record.seq).replace(" ", "")
+
+            if "U" in seq:
+                print(f"Sequence {seq_id} contains 'U'. Exiting.")
+                sys.exit(1)
+
+            sequence_order.append(seq_id)
+            sequences[seq_id] = seq
+
+    num_seqs = len(sequences)
+    print(f"Number of sequences: {num_seqs}")
+
+    lengths = {len(seq) for seq in sequences.values()}
+    if len(lengths) != 1:
+        print("Error: Sequences have differing lengths.")
+        sys.exit(1)
+
+    alignment_length = lengths.pop()
+    print(f"Alignment length: {alignment_length}")
+    print(f"Ratio (alignment length / 3): {alignment_length / 3:.2f}")
+
+    if alignment_length % 3 != 0:
+        print(
+            "Warning: Alignment length is not divisible by 3; may not code for nucleotides."
+        )
+
+    with open(args.output_phylip, "w") as phyfile:
+        phyfile.write(f"{num_seqs}\t{alignment_length}\n")
+        for seq_id in sequence_order:
+            name = args.name_length
+            truncated_name = seq_id[:name].rstrip("_").replace(" ", "")
+            phyfile.write(f"{truncated_name}  {sequences[seq_id]}\n")
 
 
-# Write alignment in Phylip format
-phyfile = open(outfile, "w")
-phyfile.write(str(number_of_seq)+"\t"+str(alignment_length)+"\n")
-for gene in sequence_list:
-    if len(gene) > name_length:
-        gene_name = gene[0:name_length].replace(" ", "")
-        if gene_name[-1] == "_":
-            gene_name = gene_name[0:-1]
-        # elif gene_name[-2] == "_":
-        #     gene_name = gene_name[0:-2]
-    else:
-        gene_name = gene
-    phyfile.write(gene_name+"  "+sequence_dict[gene]+"\n")
-phyfile.close()
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Extract transition between branches """
+"""Extract transition between branches"""
 
 import sys
 
@@ -18,7 +18,7 @@ target_branches = ["208..209", "209..210", "209..265", "208..230"]
 #                    "299", "318", "320", "355",
 #                    "366"]
 
-target_position = ['198', '204', '222', '234', '251', '270', '272', '307', '318']
+target_position = ["198", "204", "222", "234", "251", "270", "272", "307", "318"]
 
 
 tag = 0

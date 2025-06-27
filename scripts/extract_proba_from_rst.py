@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Extract transition between branches """
+"""Extract transition between branches"""
 
 import sys
 import operator
@@ -21,14 +21,14 @@ aln_start = 0
 aln_stop = 0
 
 position_str_list = seq_of_interest.split("+")
-position_list = [int(x)+shift for x in position_str_list]
+position_list = [int(x) + shift for x in position_str_list]
 
 
 list_of_position = {}
 
 max_length = 0
-input_handle = open(sequence_file, 'r')
-for record in SeqIO.parse(input_handle, 'fasta'):
+input_handle = open(sequence_file, "r")
+for record in SeqIO.parse(input_handle, "fasta"):
     matrix[record.id] = str(record.seq)
     # matrix_id.append(record.id)
     if record.id == sequence_target:
@@ -36,9 +36,9 @@ for record in SeqIO.parse(input_handle, 'fasta'):
         for i, aa in enumerate(str(record.seq)):
             if j in position_list:
                 # print(record.id, j-shift, j, i)
-                list_of_position[i] = j-shift
+                list_of_position[i] = j - shift
             if aa != "-":
-                j = j+1
+                j = j + 1
 
 
 # Load rst
@@ -55,7 +55,7 @@ while 1:
     if line == "":
         break
     line = line.rstrip()
-    if "Prob distribution at node "+str(node+1)+", by site" in line:
+    if "Prob distribution at node " + str(node + 1) + ", by site" in line:
         tag = 0
     if tag == 1:
         tab = line.split()
@@ -69,20 +69,20 @@ while 1:
                     for aa_prob in prob_list:
                         prob_dict[aa_prob[0]] = float(aa_prob[2:7])
 
-                    sorted_x = sorted(prob_dict.items(),
-                                      key=operator.itemgetter(1),
-                                      reverse=True)
+                    sorted_x = sorted(
+                        prob_dict.items(), key=operator.itemgetter(1), reverse=True
+                    )
 
                     print(list_of_position[site], sorted_x[0:2])
                     site_list.append(list_of_position[site])
                     proba_list.append(sorted_x[0])
-    if "Prob distribution at node "+str(node)+", by site" in line:
+    if "Prob distribution at node " + str(node) + ", by site" in line:
         tag = 1
 
 file_in.close()
 
 site_str_list = [str(x) for x in site_list]
-proba_str_list = [str(x[0])+"("+str(x[1])+")" for x in proba_list]
+proba_str_list = [str(x[0]) + "(" + str(x[1]) + ")" for x in proba_list]
 
 print("\t".join(site_str_list))
 print("\t".join(proba_str_list))

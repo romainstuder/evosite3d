@@ -2,17 +2,18 @@
 
 """Remove ensembl name from tree"""
 
-import sys
+import argparse
 
 
 def parsed_tree(tree):
     """
+    Parse a Newick-formatted tree into components while extracting parts.
 
     Args:
-        tree:
+        tree (str): The raw Newick tree string.
 
     Returns:
-
+        list: Components of the tree split into a list.
     """
     tab_tree = []
     word = ""
@@ -59,26 +60,40 @@ def parsed_tree(tree):
     return tab_tree
 
 
-# Load tree
-tree_line = ""
-tree_file = open(sys.argv[1], "r")
-while 1:
-    line = tree_file.readline()
-    if line == "":
-        break
-    line = line.rstrip()
-    tree_line = tree_line + line
-tree_file.close()
+def clean_tree(input_path):
+    """Read, parse, and clean the tree by removing Ensembl names.
 
-# Disassemble tree into list
-tree_list = parsed_tree(tree_line)
+    Args:
+        input_path (str): Path to the file containing the tree.
 
-# Write new tree
-new_tree = ""
-for item in tree_list:
-    if "_" in item:
-        item = item.split("_")[0]  # Keep only gene id
-    new_tree = new_tree + item
-new_tree = new_tree+";"  # Add final ";"
+    Returns:
+        str: Cleaned Newick tree string.
+    """
+    with open(input_path, "r") as f:
+        tree_line = "".join(line.strip() for line in f)
 
-print(new_tree)
+    # Disassemble tree into list
+    tree_list = parsed_tree(tree_line)
+
+    # Write new tree
+    new_tree = ""
+    for item in tree_list:
+        if "_" in item:
+            item = item.split("_")[0]  # Keep only gene id
+        new_tree += item
+    return new_tree + ";"  # Add final ";"
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Remove Ensembl names from a Newick tree."
+    )
+    parser.add_argument("input_file", help="Path to the input Newick tree file")
+    args = parser.parse_args()
+
+    cleaned = clean_tree(args.input_file)
+    print(cleaned)
+
+
+if __name__ == "__main__":
+    main()
