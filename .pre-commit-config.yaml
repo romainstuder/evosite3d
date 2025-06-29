@@ -24,6 +24,7 @@ repos:
     hooks:
       - id: black
         language_version: python3
+        line_length: 100
 
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
