@@ -20,8 +20,7 @@ We can distinguish two types of positive selection: pervasive positive selection
 positive selection. The former implies that a site will be under continuous changes (i.e. adapting
 to pathogens under arm-race), while the later implies that a site will change once and then be kept
 in the clade (i.e. providing an advantage in a new environment). We can detect the later using the
-branch-site model, for which I wrote the previous tutorial:
-<http://evosite3d.blogspot.co.uk/2011/09/identifying-positive-selection-in.html>
+branch-site model, for which I wrote the previous [tutorial on branch-site](..//positive_selection/branch_site.md).
 
 To detect pervasive positive selection, we will use the site models from CodeML/PAML. Those models
 allow the clustering of aligned columns (sites) in different groups, each group having a different
