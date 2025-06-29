@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Parse the NCBI taxonomy """
+"""Parse the NCBI taxonomy"""
 
 import logging
 import random
@@ -10,18 +10,19 @@ LOGGER.setLevel(0)
 
 
 class Node:
-    """ Definition of the class Node """
+    """Definition of the class Node"""
+
     def __init__(self):
-        self.tax_id = "0"     # Number of the tax id.
-        self.parent = "0"     # Number of the parent of this node
-        self.children = []    # List of the children of this node
+        self.tax_id = "0"  # Number of the tax id.
+        self.parent = "0"  # Number of the parent of this node
+        self.children = []  # List of the children of this node
         self.division = None  # Division.
-        self.is_tip = True    # Tip = True if it's a terminal node, False if not.
-        self.name = ""        # Name of the node: taxa if it's a terminal node, number if not.
+        self.is_tip = True  # Tip = True if it's a terminal node, False if not.
+        self.name = ""  # Name of the node: taxa if it's a terminal node, number if not.
 
 
 def get_genealogy(name_object, leaf_node: str) -> List[str]:
-    """ Trace genealogy from root to leaf """
+    """Trace genealogy from root to leaf"""
     ancestors = []  # Initialise the list of all nodes from root to leaf.
     gen_tax_id = leaf_node  # Define leaf
     while 1:
@@ -39,7 +40,7 @@ def get_genealogy(name_object, leaf_node: str) -> List[str]:
 
 
 def _get_all_descendant_nodes(name_object, taxid: str) -> List[str]:
-    """ Get all descendant of a node """
+    """Get all descendant of a node"""
     descendant_nodes: List[str] = [taxid]
     if len(name_object[taxid].children) > 0:
         for child in name_object[taxid].children:
@@ -48,19 +49,17 @@ def _get_all_descendant_nodes(name_object, taxid: str) -> List[str]:
 
 
 def _keep_terminal(name_object, nodes_list) -> List[str]:
-    """ Keep only terminal nodes """
-    terminal_nodes = [x for x in nodes_list if name_object[x].is_tip]
-    return terminal_nodes
+    """Keep only terminal nodes"""
+    return [x for x in nodes_list if name_object[x].is_tip]
 
 
 def _keep_division(name_object, nodes_list, target_division) -> List[str]:
-    """ Keep only division nodes """
-    division_nodes = [x for x in nodes_list if name_object[x].division == target_division]
-    return division_nodes
+    """Keep only division nodes"""
+    return [x for x in nodes_list if name_object[x].division == target_division]
 
 
 def get_all_descendants(name_object, target_division: str, taxid: str) -> List[str]:
-    """ Get all taxa of a node """
+    """Get all taxa of a node"""
 
     terminal_nodes = _get_all_descendant_nodes(name_object, taxid)
     terminal_nodes = _keep_division(name_object, terminal_nodes, target_division)
@@ -69,8 +68,7 @@ def get_all_descendants(name_object, target_division: str, taxid: str) -> List[s
 
 
 def get_common_ancestor(name_object, node_list: List[str]):
-    """
-    Function to find common ancestor between two nodes or more
+    """Function to find common ancestor between two nodes or more
 
     Args:
         name_object (name_object): taxonomy to use
@@ -81,14 +79,10 @@ def get_common_ancestor(name_object, node_list: List[str]):
     """
 
     # global name_object
-    list1 = get_genealogy(
-        name_object, node_list[0]
-    )  # Define the whole genealogy of the first node
+    list1 = get_genealogy(name_object, node_list[0])  # Define the whole genealogy of the first node
     ancestral_list: List[str] = []
     for node in node_list:
-        list2 = get_genealogy(
-            name_object, node
-        )  # Define the whole genealogy of the second node
+        list2 = get_genealogy(name_object, node)  # Define the whole genealogy of the second node
         ancestral_list = []
         for taxid in list1:
             if taxid in list2:  # Identify common nodes between the two genealogy
@@ -174,16 +168,12 @@ def load_ncbi_taxonomy(name_dict, filename: str = "nodes.dmp"):
         # Add it has children to parents
         children_list = []
         if tax_id_parent in name_object:
-            children_list = name_object[
-                tax_id_parent
-            ].children  # If parent is in the object
+            children_list = name_object[tax_id_parent].children  # If parent is in the object
         else:
             name_object[tax_id_parent] = Node()
             name_object[tax_id_parent].tax_id = tax_id_parent  # Assign tax_id
         children_list.append(tax_id)  # ... we found its children.
-        name_object[
-            tax_id_parent
-        ].children = children_list  # ... so add them to the parent
+        name_object[tax_id_parent].children = children_list  # ... so add them to the parent
 
         # As the parent node is found, it is not a terminal node then
         name_object[tax_id_parent].is_tip = False
@@ -194,7 +184,7 @@ def load_ncbi_taxonomy(name_dict, filename: str = "nodes.dmp"):
 
 
 def main():
-    """ Main function """
+    """Main function"""
 
     # Load name_dict, name_dict_reverse and taxonomy
     name_dict, name_dict_reverse = load_ncbi_names(filename="names.dmp")  # Load names
