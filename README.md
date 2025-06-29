@@ -38,11 +38,16 @@ brew install clustal-omega \
              figtree \
              jalview \
              mafft \
-             newick-utils \
              paml \
              pymol \
              trimal
 ```
+
+Two packages are currently problematic, and would need to be installed from sources:
+- Newick-utils: https://github.com/tjunier/newick_utils
+- PhyML: https://github.com/stephaneguindon/phyml/
+
+
 
 
 Links:
