@@ -18,9 +18,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Translate DNA sequences from a FASTA file to protein sequences."
     )
-    parser.add_argument(
-        "fasta_file", help="Path to the input FASTA file containing DNA sequences"
-    )
+    parser.add_argument("fasta_file", help="Path to the input FASTA file containing DNA sequences")
     args = parser.parse_args()
 
     translate_fasta(args.fasta_file)

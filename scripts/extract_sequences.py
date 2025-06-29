@@ -25,12 +25,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Extract sequences from a FASTA file based on a list of gene IDs."
     )
-    parser.add_argument(
-        "gene_list_file", help="Path to the gene list file (one gene ID per line)."
-    )
-    parser.add_argument(
-        "fasta_file", help="Path to the FASTA file containing sequences."
-    )
+    parser.add_argument("gene_list_file", help="Path to the gene list file (one gene ID per line).")
+    parser.add_argument("fasta_file", help="Path to the FASTA file containing sequences.")
 
     args = parser.parse_args()
 

@@ -42,9 +42,7 @@ def extract_transitions(file_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Extract transitions between branches from a file"
-    )
+    parser = argparse.ArgumentParser(description="Extract transitions between branches from a file")
     parser.add_argument("input_file", help="Input file to parse")
     args = parser.parse_args()
 

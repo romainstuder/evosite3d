@@ -35,11 +35,7 @@ for record in SeqIO.parse(input_handle, "fasta"):
     if record.id == sequence_target:
         j = 0
         for i, aa in enumerate(str(record.seq)):
-            if (
-                (j - shift > 48)
-                and (j - shift < 179)
-                and (j - shift not in sites_found)
-            ):
+            if (j - shift > 48) and (j - shift < 179) and (j - shift not in sites_found):
                 sites_found.append(j - shift)
                 # print(record.id, j-shift, j, i)
                 list_of_position[i] = j - shift
@@ -80,9 +76,7 @@ while 1:
                     for aa_prob in prob_list:
                         prob_dict[aa_prob[0]] = float(aa_prob[2:7])
 
-                    sorted_x = sorted(
-                        prob_dict.items(), key=operator.itemgetter(1), reverse=True
-                    )
+                    sorted_x = sorted(prob_dict.items(), key=operator.itemgetter(1), reverse=True)
 
                     # print(list_of_position[site], site,
                     #       str(sorted_x[0][0]) +

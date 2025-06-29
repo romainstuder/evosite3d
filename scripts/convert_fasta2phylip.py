@@ -58,9 +58,7 @@ def main():
     print(f"Ratio (alignment length / 3): {alignment_length / 3:.2f}")
 
     if alignment_length % 3 != 0:
-        print(
-            "Warning: Alignment length is not divisible by 3; may not code for nucleotides."
-        )
+        print("Warning: Alignment length is not divisible by 3; may not code for nucleotides.")
 
     with open(args.output_phylip, "w") as phyfile:
         phyfile.write(f"{num_seqs}\t{alignment_length}\n")

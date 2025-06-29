@@ -19,9 +19,7 @@ def parse_rst_file(input_file):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Extract sequences from RST file nodes."
-    )
+    parser = argparse.ArgumentParser(description="Extract sequences from RST file nodes.")
     parser.add_argument("input_file", help="Path to the RST file.")
     args = parser.parse_args()
     parse_rst_file(args.input_file)

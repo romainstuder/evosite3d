@@ -30,12 +30,8 @@ def parse_arguments():
     )
     parser.add_argument("input_fasta", help="Input FASTA file containing alignment")
     parser.add_argument("output_fasta", help="Output FASTA file for extracted region")
-    parser.add_argument(
-        "target_sequence_id", help="ID of the reference sequence in the alignment"
-    )
-    parser.add_argument(
-        "start_pos", type=int, help="Start position (ungapped, 1-based)"
-    )
+    parser.add_argument("target_sequence_id", help="ID of the reference sequence in the alignment")
+    parser.add_argument("start_pos", type=int, help="Start position (ungapped, 1-based)")
     parser.add_argument("stop_pos", type=int, help="Stop position (ungapped, 1-based)")
     return parser.parse_args()
 
@@ -50,9 +46,7 @@ def main():
         sys.exit(f"Error: Sequence ID '{args.target_sequence_id}' not found in input.")
 
     target_sequence = sequence_dict[args.target_sequence_id]
-    aln_start, aln_stop = find_alignment_coordinates(
-        target_sequence, args.start_pos, args.stop_pos
-    )
+    aln_start, aln_stop = find_alignment_coordinates(target_sequence, args.start_pos, args.stop_pos)
 
     if aln_start is None or aln_stop is None:
         sys.exit("Error: Could not map specified sequence positions to alignment.")

@@ -44,9 +44,7 @@ def _get_all_descendant_nodes(name_object, taxid: str) -> List[str]:
     descendant_nodes: List[str] = [taxid]
     if len(name_object[taxid].children) > 0:
         for child in name_object[taxid].children:
-            descendant_nodes = descendant_nodes + _get_all_descendant_nodes(
-                name_object, child
-            )
+            descendant_nodes = descendant_nodes + _get_all_descendant_nodes(name_object, child)
     return descendant_nodes
 
 
@@ -81,14 +79,10 @@ def get_common_ancestor(name_object, node_list: List[str]):
     """
 
     # global name_object
-    list1 = get_genealogy(
-        name_object, node_list[0]
-    )  # Define the whole genealogy of the first node
+    list1 = get_genealogy(name_object, node_list[0])  # Define the whole genealogy of the first node
     ancestral_list: List[str] = []
     for node in node_list:
-        list2 = get_genealogy(
-            name_object, node
-        )  # Define the whole genealogy of the second node
+        list2 = get_genealogy(name_object, node)  # Define the whole genealogy of the second node
         ancestral_list = []
         for taxid in list1:
             if taxid in list2:  # Identify common nodes between the two genealogy
@@ -174,16 +168,12 @@ def load_ncbi_taxonomy(name_dict, filename: str = "nodes.dmp"):
         # Add it has children to parents
         children_list = []
         if tax_id_parent in name_object:
-            children_list = name_object[
-                tax_id_parent
-            ].children  # If parent is in the object
+            children_list = name_object[tax_id_parent].children  # If parent is in the object
         else:
             name_object[tax_id_parent] = Node()
             name_object[tax_id_parent].tax_id = tax_id_parent  # Assign tax_id
         children_list.append(tax_id)  # ... we found its children.
-        name_object[
-            tax_id_parent
-        ].children = children_list  # ... so add them to the parent
+        name_object[tax_id_parent].children = children_list  # ... so add them to the parent
 
         # As the parent node is found, it is not a terminal node then
         name_object[tax_id_parent].is_tip = False

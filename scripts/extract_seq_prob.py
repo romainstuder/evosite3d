@@ -44,13 +44,9 @@ def extract_site_probs(proba_dict):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Extract probabilities from file at given node."
-    )
+    parser = argparse.ArgumentParser(description="Extract probabilities from file at given node.")
     parser.add_argument("file_path", help="Path to the input file")
-    parser.add_argument(
-        "node", type=int, help="Node number to extract probabilities for"
-    )
+    parser.add_argument("node", type=int, help="Node number to extract probabilities for")
     args = parser.parse_args()
 
     proba_dict = parse_probabilities(args.file_path, args.node)

@@ -11,12 +11,8 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Extract transition positions between branches from a FASTA alignment."
     )
-    parser.add_argument(
-        "fasta_file", type=str, help="Input FASTA file with aligned sequences."
-    )
-    parser.add_argument(
-        "sequence_target", type=str, help="Target sequence ID to analyze."
-    )
+    parser.add_argument("fasta_file", type=str, help="Input FASTA file with aligned sequences.")
+    parser.add_argument("sequence_target", type=str, help="Target sequence ID to analyze.")
     parser.add_argument(
         "seq_of_interest",
         type=str,

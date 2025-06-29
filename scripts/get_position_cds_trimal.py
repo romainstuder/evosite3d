@@ -44,19 +44,13 @@ def build_position_mapping(sequences):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Map Trimal output columns to CDS positions."
-    )
+    parser = argparse.ArgumentParser(description="Map Trimal output columns to CDS positions.")
     parser.add_argument(
         "full_alignment",
         help="Path to the full (untrimmed) alignment FASTA file",
     )
-    parser.add_argument(
-        "trimal_output", help="Path to the Trimal output file with kept columns"
-    )
-    parser.add_argument(
-        "reference_gene", help="Reference gene ID present in the alignment"
-    )
+    parser.add_argument("trimal_output", help="Path to the Trimal output file with kept columns")
+    parser.add_argument("reference_gene", help="Reference gene ID present in the alignment")
     parser.add_argument(
         "site_index",
         type=int,
@@ -72,15 +66,11 @@ def main():
     column_list = load_trimal_columns(args.trimal_output)
 
     if args.reference_gene not in sequences:
-        raise KeyError(
-            f"Reference gene '{args.reference_gene}' not found in sequences."
-        )
+        raise KeyError(f"Reference gene '{args.reference_gene}' not found in sequences.")
 
     max_site_index = len(column_list) // 3 - 1
     if not (0 <= args.site_index <= max_site_index):
-        raise IndexError(
-            f"site_index {args.site_index} out of range (0 to {max_site_index})"
-        )
+        raise IndexError(f"site_index {args.site_index} out of range (0 to {max_site_index})")
 
     position_mappings = build_position_mapping(sequences)
 
@@ -95,11 +85,7 @@ def main():
         )
         cds_pos = "N/A"
 
-    aa = (
-        sequences[args.reference_gene][column_in_full - 1]
-        if column_in_full > 0
-        else "N/A"
-    )
+    aa = sequences[args.reference_gene][column_in_full - 1] if column_in_full > 0 else "N/A"
 
     print("column_list:", column_list)
     print("column_in_full:", column_in_full)

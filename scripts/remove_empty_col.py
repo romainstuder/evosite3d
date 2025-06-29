@@ -36,9 +36,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    sequences = {
-        record.id: str(record.seq) for record in SeqIO.parse(args.input_fasta, "fasta")
-    }
+    sequences = {record.id: str(record.seq) for record in SeqIO.parse(args.input_fasta, "fasta")}
     filtered_seqs = remove_empty_columns(sequences)
     with open(args.output_fasta, "w") as out_handle:
         for seq_id, seq_chars in filtered_seqs.items():

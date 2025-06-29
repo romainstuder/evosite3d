@@ -85,9 +85,7 @@ def clean_tree(input_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Remove Ensembl names from a Newick tree."
-    )
+    parser = argparse.ArgumentParser(description="Remove Ensembl names from a Newick tree.")
     parser.add_argument("input_file", help="Path to the input Newick tree file")
     args = parser.parse_args()
 

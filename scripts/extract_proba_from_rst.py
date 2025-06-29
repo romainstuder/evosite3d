@@ -30,9 +30,7 @@ def load_sequences(sequence_file, target_id, positions, shift):
         for record in SeqIO.parse(handle, "fasta"):
             matrix[record.id] = str(record.seq)
             if record.id == target_id:
-                position_map = parse_positions(
-                    str(record.seq), target_id, position_list, shift
-                )
+                position_map = parse_positions(str(record.seq), target_id, position_list, shift)
 
     return matrix, position_map
 
@@ -56,9 +54,7 @@ def extract_probabilities(rst_file, node, position_map):
                 if site in position_map:
                     probs = tab[3:24]
                     prob_dict = {entry[0]: float(entry[2:7]) for entry in probs}
-                    top_probs = sorted(
-                        prob_dict.items(), key=operator.itemgetter(1), reverse=True
-                    )
+                    top_probs = sorted(prob_dict.items(), key=operator.itemgetter(1), reverse=True)
                     site_list.append(position_map[site])
                     proba_list.append(top_probs[0])
                     print(position_map[site], top_probs[:2])
@@ -73,24 +69,16 @@ def main():
     parser.add_argument("sequence_file", help="FASTA file with sequences")
     parser.add_argument("rst_file", help="RST file with probability distributions")
     parser.add_argument("sequence_target", help="Target sequence ID to analyze")
-    parser.add_argument(
-        "seq_of_interest", help="Positions of interest (format: pos1+pos2+pos3...)"
-    )
-    parser.add_argument(
-        "shift", type=int, help="Shift to add to each position in seq_of_interest"
-    )
-    parser.add_argument(
-        "node", type=int, help="Node number to extract probabilities for"
-    )
+    parser.add_argument("seq_of_interest", help="Positions of interest (format: pos1+pos2+pos3...)")
+    parser.add_argument("shift", type=int, help="Shift to add to each position in seq_of_interest")
+    parser.add_argument("node", type=int, help="Node number to extract probabilities for")
 
     args = parser.parse_args()
 
     _, position_map = load_sequences(
         args.sequence_file, args.sequence_target, args.seq_of_interest, args.shift
     )
-    site_list, proba_list = extract_probabilities(
-        args.rst_file, args.node, position_map
-    )
+    site_list, proba_list = extract_probabilities(args.rst_file, args.node, position_map)
 
     print("\t".join(map(str, site_list)))
     print("\t".join(f"{aa}({prob})" for aa, prob in proba_list))
