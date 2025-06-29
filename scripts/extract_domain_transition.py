@@ -2,7 +2,7 @@
 
 """Extract transition between branches"""
 
-import sys
+import argparse
 
 # target_branches = ["197..199", "199.200",
 #                    "208..209",
@@ -21,25 +21,35 @@ target_branches = ["208..209", "209..210", "209..265", "208..230"]
 target_position = ["198", "204", "222", "234", "251", "270", "272", "307", "318"]
 
 
-tag = 0
-branch = ""
-file_in = open(sys.argv[1], "r")
-while 1:
-    line = file_in.readline()
-    if line == "":
-        break
-    line = line.rstrip()
-    if "List of extant and reconstructed sequences" in line:
-        tag = 0
-    if tag == 1:
-        tab = line.split()
-        if tab:
-            if tab[0] == "Branch":
-                branch = tab[2]
-            position = tab[0]
-            if position in target_position and branch in target_branches:
-                print(branch, position, line)
-    if "Summary of changes along branches" in line:
-        tag = 1
+def extract_transitions(file_path):
+    tag = 0
+    branch = ""
+    with open(file_path, "r") as file_in:
+        for line in file_in:
+            line = line.rstrip()
+            if "List of extant and reconstructed sequences" in line:
+                tag = 0
+            if tag == 1:
+                tab = line.split()
+                if tab:
+                    if tab[0] == "Branch":
+                        branch = tab[2]
+                    position = tab[0]
+                    if position in target_position and branch in target_branches:
+                        print(branch, position, line)
+            if "Summary of changes along branches" in line:
+                tag = 1
 
-file_in.close()
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Extract transitions between branches from a file"
+    )
+    parser.add_argument("input_file", help="Input file to parse")
+    args = parser.parse_args()
+
+    extract_transitions(args.input_file)
+
+
+if __name__ == "__main__":
+    main()

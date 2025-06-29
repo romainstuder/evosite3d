@@ -1,88 +1,100 @@
 #!/usr/bin/env python3
 
-"""Extract transition between branches"""
+"""Extract transition between branches in evolutionary sequence data."""
 
-import sys
+import argparse
 import operator
 
 from Bio import SeqIO
 
-# Load sequences
-matrix = {}
-# matrix_id = []
 
-sequence_file = sys.argv[1]
-rst_file = sys.argv[2]
-sequence_target = sys.argv[3]
-seq_of_interest = sys.argv[4]
-shift = int(sys.argv[5])
-node = int(sys.argv[6])
-aln_start = 0
-aln_stop = 0
-
-position_str_list = seq_of_interest.split("+")
-position_list = [int(x) + shift for x in position_str_list]
+def parse_positions(seq, target_id, positions, shift):
+    """Map alignment positions to sequence positions."""
+    position_map = {}
+    j = 0
+    for i, aa in enumerate(seq):
+        if j in positions:
+            position_map[i] = j - shift
+        if aa != "-":
+            j += 1
+    return position_map
 
 
-list_of_position = {}
+def load_sequences(sequence_file, target_id, positions, shift):
+    """Load sequences and find position mappings for the target sequence."""
+    matrix = {}
+    position_list = [int(pos) + shift for pos in positions.split("+")]
+    position_map = {}
 
-max_length = 0
-input_handle = open(sequence_file, "r")
-for record in SeqIO.parse(input_handle, "fasta"):
-    matrix[record.id] = str(record.seq)
-    # matrix_id.append(record.id)
-    if record.id == sequence_target:
-        j = 0
-        for i, aa in enumerate(str(record.seq)):
-            if j in position_list:
-                # print(record.id, j-shift, j, i)
-                list_of_position[i] = j - shift
-            if aa != "-":
-                j = j + 1
+    with open(sequence_file, "r") as handle:
+        for record in SeqIO.parse(handle, "fasta"):
+            matrix[record.id] = str(record.seq)
+            if record.id == target_id:
+                position_map = parse_positions(
+                    str(record.seq), target_id, position_list, shift
+                )
+
+    return matrix, position_map
 
 
-# Load rst
+def extract_probabilities(rst_file, node, position_map):
+    """Extract the top two most probable amino acids at specific positions."""
+    site_list = []
+    proba_list = []
+    tag = False
 
-tag = 0
-branch = ""
-file_in = open(rst_file, "r")
-
-site_list = []
-proba_list = []
-
-while 1:
-    line = file_in.readline()
-    if line == "":
-        break
-    line = line.rstrip()
-    if "Prob distribution at node " + str(node + 1) + ", by site" in line:
-        tag = 0
-    if tag == 1:
-        tab = line.split()
-        if len(tab) > 3:
-            # print(tab)
-            if tab[0] != "Prob":
+    with open(rst_file, "r") as f:
+        for line in f:
+            line = line.strip()
+            if f"Prob distribution at node {node + 1}, by site" in line:
+                tag = False
+            elif f"Prob distribution at node {node}, by site" in line:
+                tag = True
+            elif tag and line and len(line.split()) > 3 and not line.startswith("Prob"):
+                tab = line.split()
                 site = int(tab[0])
-                if site in list_of_position:
-                    prob_list = tab[3:24]
-                    prob_dict = {}
-                    for aa_prob in prob_list:
-                        prob_dict[aa_prob[0]] = float(aa_prob[2:7])
-
-                    sorted_x = sorted(
+                if site in position_map:
+                    probs = tab[3:24]
+                    prob_dict = {entry[0]: float(entry[2:7]) for entry in probs}
+                    top_probs = sorted(
                         prob_dict.items(), key=operator.itemgetter(1), reverse=True
                     )
+                    site_list.append(position_map[site])
+                    proba_list.append(top_probs[0])
+                    print(position_map[site], top_probs[:2])
 
-                    print(list_of_position[site], sorted_x[0:2])
-                    site_list.append(list_of_position[site])
-                    proba_list.append(sorted_x[0])
-    if "Prob distribution at node " + str(node) + ", by site" in line:
-        tag = 1
+    return site_list, proba_list
 
-file_in.close()
 
-site_str_list = [str(x) for x in site_list]
-proba_str_list = [str(x[0]) + "(" + str(x[1]) + ")" for x in proba_list]
+def main():
+    parser = argparse.ArgumentParser(
+        description="Extract transition probabilities between branches in sequences."
+    )
+    parser.add_argument("sequence_file", help="FASTA file with sequences")
+    parser.add_argument("rst_file", help="RST file with probability distributions")
+    parser.add_argument("sequence_target", help="Target sequence ID to analyze")
+    parser.add_argument(
+        "seq_of_interest", help="Positions of interest (format: pos1+pos2+pos3...)"
+    )
+    parser.add_argument(
+        "shift", type=int, help="Shift to add to each position in seq_of_interest"
+    )
+    parser.add_argument(
+        "node", type=int, help="Node number to extract probabilities for"
+    )
 
-print("\t".join(site_str_list))
-print("\t".join(proba_str_list))
+    args = parser.parse_args()
+
+    _, position_map = load_sequences(
+        args.sequence_file, args.sequence_target, args.seq_of_interest, args.shift
+    )
+    site_list, proba_list = extract_probabilities(
+        args.rst_file, args.node, position_map
+    )
+
+    print("\t".join(map(str, site_list)))
+    print("\t".join(f"{aa}({prob})" for aa, prob in proba_list))
+
+
+if __name__ == "__main__":
+    main()

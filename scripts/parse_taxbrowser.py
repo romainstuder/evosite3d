@@ -181,9 +181,9 @@ def load_ncbi_taxonomy(name_dict, filename: str = "nodes.dmp"):
             name_object[tax_id_parent] = Node()
             name_object[tax_id_parent].tax_id = tax_id_parent  # Assign tax_id
         children_list.append(tax_id)  # ... we found its children.
-        name_object[tax_id_parent].children = (
-            children_list  # ... so add them to the parent
-        )
+        name_object[
+            tax_id_parent
+        ].children = children_list  # ... so add them to the parent
 
         # As the parent node is found, it is not a terminal node then
         name_object[tax_id_parent].is_tip = False

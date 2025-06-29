@@ -2,52 +2,60 @@
 
 """Extract probabilities"""
 
-import operator
-import sys
+import argparse
+from operator import itemgetter
 
-TAG = 0
-BRANCH = ""
 
-file_in = open(sys.argv[1], "r")
-node = int(sys.argv[2])
+def parse_probabilities(file_path, node):
+    proba_dict = {}
+    tag = False
+    target_start = f"Prob distribution at node {node}, by site"
+    target_end = f"Prob distribution at node {node + 1}, by site"
 
-proba_dict = {}
+    with open(file_path, "r") as file_in:
+        for line in file_in:
+            line = line.rstrip()
+            if target_end in line:
+                tag = False
+            if tag:
+                tab = line.split()
+                if len(tab) > 3:
+                    site = tab[0]
+                    probs = tab[3:24]
+                    proba_dict[site] = probs
+            if target_start in line:
+                tag = True
 
-while 1:
-    line = file_in.readline()
-    if line == "":
-        break
-    line = line.rstrip()
-    if "Prob distribution at node " + str(node + 1) + ", by site" in line:
-        TAG = 0
-    if TAG == 1:
-        tab = line.split()
-        if len(tab) > 3:
-            # print(tab)
-            site = tab[0]
-            prob = tab[3:24]
-            proba_dict[site] = prob
-    if "Prob distribution at node " + str(node) + ", by site" in line:
-        TAG = 1
+    return proba_dict
 
-file_in.close()
 
-# print(proba_dict)
-for site, prob_list in proba_dict.items():
-    prob_aa_dict = {}
-    if (int(site) > 265) and (int(site) < 408):
-        for aa_prob in prob_list:
-            prob_aa_dict[aa_prob[0]] = float(aa_prob[2:7])
+def extract_site_probs(proba_dict):
+    for site_str, prob_list in proba_dict.items():
+        site = int(site_str)
+        if 265 < site < 408:
+            prob_aa_dict = {aa_prob[0]: float(aa_prob[2:7]) for aa_prob in prob_list}
 
-        sorted_x = sorted(
-            prob_aa_dict.items(), key=operator.itemgetter(1), reverse=True
-        )
+            # Sort by probability descending
+            sorted_probs = sorted(prob_aa_dict.items(), key=itemgetter(1), reverse=True)
 
-        site_domain = int(site) - 218
-        print(
-            str(site_domain),
-            str(sorted_x[0][0])
-            + "("
-            + str(round(sorted_x[0][1], 2)).ljust(4, "0")
-            + ")",
-        )
+            site_domain = site - 218
+            aa, prob = sorted_probs[0]
+            print(f"{site_domain} {aa}({prob:.2f})")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Extract probabilities from file at given node."
+    )
+    parser.add_argument("file_path", help="Path to the input file")
+    parser.add_argument(
+        "node", type=int, help="Node number to extract probabilities for"
+    )
+    args = parser.parse_args()
+
+    proba_dict = parse_probabilities(args.file_path, args.node)
+    extract_site_probs(proba_dict)
+
+
+if __name__ == "__main__":
+    main()

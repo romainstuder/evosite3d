@@ -7,6 +7,7 @@ Usage: script.py input.fasta output.phy [name_length=50]
 
 import argparse
 import sys
+
 from Bio import SeqIO
 
 

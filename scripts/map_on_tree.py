@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Module to map info on tree"""
 
-import sys
+import argparse
 from typing import List
 
 from Bio import SeqIO
@@ -27,14 +27,13 @@ def load_tree(file_path: str) -> List[str]:
         return tree_file.read().split()
 
 
-def map_pi_to_tree(tree_tab: List[str], node_dict: dict) -> str:
+def map_iso_point_to_tree(tree_tab: List[str], node_dict: dict) -> str:
     new_tree_line = ""
     for item in tree_tab:
         if "node" + item in node_dict:
             # print "node"+item, node_dict["node"+item]
-            pI = node_dict["node" + item]
-            pI = round(pI, 2)
-            item = str(pI)
+            iso_point = node_dict["node" + item]
+            item = str(round(iso_point, 2))
         new_tree_line = new_tree_line + item
     return new_tree_line
 
@@ -47,16 +46,15 @@ def map_pi_to_tree(tree_tab: List[str], node_dict: dict) -> str:
 
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: script.py <ancestral_fasta> <tree_file>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Map isoelectric points to tree nodes")
+    parser.add_argument("ancestral_fasta", help="Path to ancestral FASTA file")
+    parser.add_argument("tree_file", help="Path to tree file")
 
-    ancestral_file = sys.argv[1]
-    tree_file = sys.argv[2]
+    args = parser.parse_args()
 
-    node_dict = load_ancestral_sequences(ancestral_file)
-    tree_tokens = load_tree(tree_file)
-    new_tree = map_pI_to_tree(tree_tokens, node_dict)
+    node_dict = load_ancestral_sequences(args.ancestral_file)
+    tree_tokens = load_tree(args.tree_file)
+    new_tree = map_iso_point_to_tree(tree_tokens, node_dict)
 
     print(new_tree)
 

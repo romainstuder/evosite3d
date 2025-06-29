@@ -2,8 +2,9 @@
 """Extract transition between branches"""
 
 import argparse
-from Bio import SeqIO
 import sys
+
+from Bio import SeqIO
 
 
 def parse_args():

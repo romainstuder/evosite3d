@@ -2,7 +2,8 @@
 
 """Extract sequences from a FASTA file based on a list of gene IDs."""
 
-import sys
+import argparse
+
 from Bio import SeqIO
 
 
@@ -21,15 +22,20 @@ def extract_sequences(fasta_file, gene_set):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <gene_list.txt> <sequences.fasta>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Extract sequences from a FASTA file based on a list of gene IDs."
+    )
+    parser.add_argument(
+        "gene_list_file", help="Path to the gene list file (one gene ID per line)."
+    )
+    parser.add_argument(
+        "fasta_file", help="Path to the FASTA file containing sequences."
+    )
 
-    gene_list_file = sys.argv[1]
-    fasta_file = sys.argv[2]
+    args = parser.parse_args()
 
-    gene_set = load_gene_list(gene_list_file)
-    for record in extract_sequences(fasta_file, gene_set):
+    gene_set = load_gene_list(args.gene_list_file)
+    for record in extract_sequences(args.fasta_file, gene_set):
         print(f">{record.id}")
         print(str(record.seq))
 

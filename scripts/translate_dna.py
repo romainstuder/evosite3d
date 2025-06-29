@@ -2,7 +2,8 @@
 
 """Translate DNA sequences from a FASTA file to protein sequences."""
 
-import sys
+import argparse
+
 from Bio import SeqIO
 
 
@@ -13,8 +14,17 @@ def translate_fasta(file_path):
             print(record.seq.translate(to_stop=True))
 
 
+def main():
+    parser = argparse.ArgumentParser(
+        description="Translate DNA sequences from a FASTA file to protein sequences."
+    )
+    parser.add_argument(
+        "fasta_file", help="Path to the input FASTA file containing DNA sequences"
+    )
+    args = parser.parse_args()
+
+    translate_fasta(args.fasta_file)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <fasta_file>", file=sys.stderr)
-        sys.exit(1)
-    translate_fasta(sys.argv[1])
+    main()

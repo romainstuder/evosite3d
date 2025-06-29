@@ -4,6 +4,7 @@
 
 # Load libraries
 import argparse
+
 from Bio import SeqIO
 from Bio.SeqUtils import ProtParam
 

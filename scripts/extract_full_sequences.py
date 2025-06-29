@@ -1,35 +1,43 @@
 #!/usr/bin/env python3
 
-"""Extract full sequences"""
+"""Extract full sequences from a formatted input file."""
 
-import sys
+import argparse
 
-tag = 0
-branch = ""
-file_in = open(sys.argv[1], "r")
-while 1:
-    line = file_in.readline()
-    if line == "":
-        break
-    line = line.rstrip()
-    if "Overall accuracy of the 195 ancestral sequences" in line:
-        tag = 0
-    if tag == 1 and line:
-        if line[0] != " ":
-            line = line.replace("e #", "e_")
-            tab = line.split()
-            if len(tab) > 3:
-                # print(tab)
-                name = tab[0]
-                seq = "".join(tab[1:])
-                print(">" + name)
-                print(seq)
-                # print(tab)
-                # site = tab[0]
-                # prob = tab[3:24]
-                # print(site, prob)
-                # print(len(prob))
-    if "List of extant and reconstructed sequences" in line:
-        tag = 1
 
-file_in.close()
+def extract_sequences(input_file):
+    in_sequence_section = False
+
+    with open(input_file, "r") as f:
+        for line in f:
+            line = line.rstrip()
+
+            if "Overall accuracy of the 195 ancestral sequences" in line:
+                in_sequence_section = False
+
+            elif "List of extant and reconstructed sequences" in line:
+                in_sequence_section = True
+                continue
+
+            if in_sequence_section and line and not line.startswith(" "):
+                line = line.replace("e #", "e_")
+                parts = line.split()
+                if len(parts) > 3:
+                    name = parts[0]
+                    sequence = "".join(parts[1:])
+                    print(f">{name}")
+                    print(sequence)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Extract full sequences from a formatted input file."
+    )
+    parser.add_argument("input_file", help="Path to the input text file")
+    args = parser.parse_args()
+
+    extract_sequences(args.input_file)
+
+
+if __name__ == "__main__":
+    main()

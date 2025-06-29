@@ -3,6 +3,7 @@
 """Remove columns from FASTA alignment that are entirely gaps or 'X'."""
 
 import argparse
+
 from Bio import SeqIO
 
 
