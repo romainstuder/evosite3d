@@ -1,8 +1,11 @@
-Tutorial: estimating the stability effect of a mutation with FoldX
+# Tutorial: estimating the stability effect of a mutation with FoldX
 
-Introduction:
+## Introduction:
 
-Here is a brief tutorial on how to use FoldX to estimate the stability effect of a mutation in a 3D structure. The stability (ΔG) of a protein is defined by the free energy, which is express in kcal/mol. The lower it is, the more stable it is. G is difference of free energy between a wild-type and mutant. A mutation that brings energy (ΔΔG>kcal/mol) will destabilise the structure, while a mutation that remove energy (ΔΔG<kcal/mol) will stabilise the structure. A common threshold is to say that a mutation has a significant effect if ΔΔG is >1 kcal/mol, which roughly corresponds to a single hydrogen bond.
+Here is a brief tutorial on how to use FoldX to estimate the stability effect of a mutation in a 3D
+structure. The stability (ΔG) of a protein is defined by the free energy, which is express in
+kcal/mol. The lower it is, the more stable it is. G is difference of free energy between a wild-type
+and mutant. A mutation that brings energy (ΔΔG>kcal/mol) will destabilise the structure, while a mutation that remove energy (ΔΔG<kcal/mol) will stabilise the structure. A common threshold is to say that a mutation has a significant effect if ΔΔG is >1 kcal/mol, which roughly corresponds to a single hydrogen bond.
 
 A way to compute the free energy is to use molecular dynamics. Main problem: it can be very time-consuming.
 
@@ -33,7 +36,7 @@ FoldX has different modes to run it, but I use the mode "runfile", which contain
 
 FoldX works in two steps:
 
-1) Repair the structure.
+### 1) Repair the structure.
 
 There are frequently problems in PDB structures, like steric clashes. FoldX will try to fix them and lower the global energy (ΔG). The command "RepairPDB" is better than the "Optimize" command. Here is the command file "foldx_repair.txt":
 <TITLE>FOLDX_runscript;

@@ -48,7 +48,7 @@ We would like to test the stability of mutation at position 280, from a leucine 
 
 FoldX works in two steps:
 
-# 1) Repair the structure
+## 1) Repair the structure
 
 There are frequent problems in PDB structures, like steric clashes. FoldX will try to fix them and lower the global energy (ΔG). The "RepairPDB" command is better than the "Optimize" command. Here is how to launch FoldX:
 
@@ -74,7 +74,7 @@ The starting free energy ΔG was +73.22 kcal/mol, and it was lowered to -46.97 k
 
 Once it's finished, it will produce a file named "4TVF_Repair.pdb", which you will use in the next step.
 
-# 2) Perform the mutation
+## 2) Perform the mutation
 
 The mutation itself is performed by the BuildModel function. There are other methods, but the BuildModel is apparently the most robust (I said apparently, but there are no proper benchmarks against the other method PositionScan or PSSM). You also need to specify the mutation in a separate file "individual_list.txt". Here is the file "individual_list.txt" (yes, just one line):
 LA280D;
@@ -129,7 +129,6 @@ PS: A way to define the threshold is to use the standard deviation (SD) by multi
 
 The reported accuracy of FoldX is 0.46 kcal/mol (i.e., the SD of the difference
 between ΔΔGs calculated by FoldX and the experimental values). We can bin the ΔΔG values into seven categories:
-
 1. highly stabilising (ΔΔG < −1.84 kcal/mol);
 2. stabilising (−1.84 kcal/mol ≤ ΔΔG < −0.92 kcal/mol);
 3. slightly stabilising (−0.92 kcal/mol ≤ ΔΔG < −0.46 kcal/mol);
