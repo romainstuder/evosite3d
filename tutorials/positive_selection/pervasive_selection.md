@@ -8,7 +8,13 @@ computer, or any thing unclear, or even comments to improve it.
 
 When mutations are advantageous for the fitness, they are propagated at a higher rate in the
 population. The selective pressure can be computed by the dN/dS ratio (ω). dS represents the
-synonymous rate (keeping the same amino acid) and dN the non-synonymous rate (changing the amino acid). In the absence of evolutionary pressure (genetic drift), the synonymous and non-synonymous rates are supposed to be equal, so the dN/dS ratio is equal to 1. Under purifying selection, natural selection prevents the replacement of amino acidS, so the dN will be lower than the dS, and dN/dS < 1. And under positive selection, when mutations are advantageous for the fitness, they are propagated at a higher rate in the population, so the replacement rate of amino acid is favoured by selection, and dN/dS > 1.
+synonymous rate (keeping the same amino acid) and dN the non-synonymous rate (changing the amino
+acid). In the absence of evolutionary pressure (genetic drift), the synonymous and non-synonymous
+rates are supposed to be equal, so the dN/dS ratio is equal to 1. Under purifying selection, natural
+selection prevents the replacement of amino acidS, so the dN will be lower than the dS, and
+dN/dS < 1. And under positive selection, when mutations are advantageous for the fitness, they are
+propagated at a higher rate in the population, so the replacement rate of amino acid is favoured by
+selection, and dN/dS > 1.
 
 We can distinguish two types of positive selection: pervasive positive selection and episodic
 positive selection. The former implies that a site will be under continuous changes (i.e. adapting
@@ -36,42 +42,12 @@ Here are the different models we will use in this tutorial:
 - M8a: assumes 10 categories following a beta-distribution of sites, grouped, all with dN/dS <=1,
   and an additional 11th category with dN/dS =1 (no positive selection allowed).
 
-Requirements:
-
-For this practical, you will have to install some tools and downloadS some of my scripts.
-
-- Python2: <https://www.python.org/>
-- BioPython: <http://biopython.org/>
-- Jalview: <http://www.jalview.org/>
-- MAFFT: <http://mafft.cbrc.jp/alignment/software/>
-- Newick utilities: <http://cegg.unige.ch/newick_utils>
-- PAML: <http://abacus.gene.ucl.ac.uk/software/paml.html>
-- PyMOL: <https://www.pymol.org/>
-- R: <https://www.r-project.org/>
-- RevTrans: <http://www.cbs.dtu.dk/services/RevTrans-2.0/web/download.php>
-- TrimAl: <http://trimal.cgenomics.org/>
-
-You can install many of these packages with Homebrew or Linuxbrew:
-<http://evosite3d.blogspot.co.uk/2016/04/using-package-manager-homebrew-mac-osx.html>
-
-```shell
-brew tap brewsci/bio
-brew install clustal-omega fasttree figtree jalview mafft newick-utils paml pymol python R trimal
-```
-
-The python scripts you need to install are in <https://github.com/romainstuder/evosite3d/scripts/>:
-
-- convert_fasta2phylip.py
-- extract_sequences.py
-- get_position_cds_trimal.py
-- remove_ensembl_name_in_tree.py
-- translate_dna.py
-
-And install them in any accessible directory (i.e. in the working directory or in the $PATH list).
-
 ## Practical
 
-We will focus on the major histocompatibility complex (MHC) protein, which detects peptides from pathogens. As this gene is in the front line against invaders, it is submitted to strong selective pressure to rapidly detect new antigenic peptides. Early work on positive selection was focused on the MHC, so this is a very good example for this practical.
+We will focus on the major histocompatibility complex (MHC) protein, which detects peptides from
+pathogens. As this gene is in the front line against invaders, it is submitted to strong selective
+pressure to rapidly detect new antigenic peptides. Early work on positive selection was focused on
+the MHC, so this is a very good example for this practical.
 
 The uniprot code is HLA class II histocompatibility antigen, DQ beta 1 chain.
 The Ensembl gene id is: ENSG00000179344.
@@ -91,7 +67,7 @@ Then choose: Fasta, Unaligned sequences – CDS).
 
 Comparative Genomics => Gene tree
 Click on the blue node to select the following group: “Placental mammals ~100 MYA (Boreoeutheria)”
-Gene Count 32
+Gene Count 46
 
 => Export sub-tree Tree or Alignment
 => Format Newick, options "Full (web)" and "Final (merged) tree".
@@ -106,17 +82,17 @@ spurious sequences and columns.
 First, let’s rename these files to have shorter names
 
 ```shell
-cp Human_HLA_DQB1_orthologues.fa HLA_DQB1.cds.fasta
+cp Human_HLA_DQB1_orthologues.fa HLA_DQB1.cds.fasta;
 cp HLA_DQB1_gene_tree.nh HLA_DQB1.nh
 ```
 
 Remove the species tag in the gene name
 
 ```shell
-./remove_ensembl_name_in_tree.py HLA_DQB1.nh > HLA_DQB1.tree
+remove_ensembl_name_in_tree.py HLA_DQB1.nh > HLA_DQB1.tree
 ```
 
-Extract gene names with Newick Utilities
+Extract gene names with Newick Utils (https://gensoft.pasteur.fr/docs/newick-utils/1.6/nwutils_tutorial.pdf)
 
 ```shell
 nw_labels -I HLA_DQB1.tree > HLA_DQB1_names.txt
@@ -124,12 +100,12 @@ nw_labels -I HLA_DQB1.tree > HLA_DQB1_names.txt
 
 Extract CDS sequences that are in the tree, according to the extracted names
 ```shell
-./extract_sequences.py HLA_DQB1_names.txt HLA_DQB1.cds.fasta > HLA_DQB1_subset.cds.fasta
+extract_sequences.py HLA_DQB1_names.txt HLA_DQB1.cds.fasta > HLA_DQB1_subset.cds.fasta
 ```
 
 Translate CDS sequences to Amino Acid sequences using python script
 ```shell
-./translate_dna.py HLA_DQB1_subset.cds.fasta > HLA_DQB1_subset.aa.fasta
+translate_dna.py HLA_DQB1_subset.cds.fasta > HLA_DQB1_subset.aa.fasta
 ```
 
 Make an alignment of these Amino Acid sequences
@@ -138,16 +114,18 @@ mafft-linsi HLA_DQB1_subset.aa.fasta > HLA_DQB1_subset.aa.mafft.fasta
 ```
 Align CDS sequences by mapping them on the AA Alignment
 ```shell
-revtrans.py HLA_DQB1_subset.cds.fasta HLA_DQB1_subset.aa.mafft.fasta > HLA_DQB1_subset.cds.mafft.fasta
+realign_nuc_on_aa.py HLA_DQB1_subset.aa.mafft.fasta \
+      HLA_DQB1_subset.cds.fasta \
+      HLA_DQB1_subset.cds.mafft.fasta
 ```
 
-With Jalview, load the alignment `Human_HLA_DQB1_orthologues_subset.cds.mafft.fasta` and Visualise
+With Jalview, load the alignment `Human_HLA_DQB1_subset.cds.mafft.fasta` and Visualise
 it to see if there isn’t anything wrong
 
 Move human sequence (`ENSP00000364080`) on top (use the key arrows). This is to inform CodeML to
 use this sequence as reference.
-
 Save the alignment as FASTA file again (CTRL-S)
+#TODO: add script to automatise that.
 
 
 Remove spurious sequences and columns with TrimAl
@@ -165,9 +143,9 @@ grep ">" HLA_DQB1_subset.cds.mafft.trimal.fasta | cut -c 2- > id.list
 Using Newick Utilities, we load the id file to extract a pruned subtree from the starting tree
 (contains only the taxa from the alignment)
 ```shell
-id_list=`cat id.list`
+id_list=$(cat id.list | xargs)
 echo "$id_list"
-nw_prune -v HLA_DQB1.tree $id_list > HLA_DQB1_subset.tree
+eval "nw_prune -v HLA_DQB1.tree $id_list" > HLA_DQB1_subset.tree
 ```
 
 Now we end up with two files:
@@ -217,7 +195,7 @@ RateAncestor = 0       * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
 And execute it (this can take ~ 30-45 minutes):
 
 ```shell
-codeml HLA_DQB1_M0M1M2M3M7.ctl
+codeml HLA_DQB1_M0M1M2M3M7M8.ctl
 ```
 
 Important! Copy rst file to another name
@@ -394,7 +372,8 @@ a standard deviation of 0.608. As I said previously, the sites given by CodeML d
 the human sequence. You can use the following script to extract the real position in the human
 sequence:
 ```shell
-./get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000364080" 84
+get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta HLA_DQB1_subset.cds.mafft.trimal.
+cols "ENSP00000364080" 84
 ```
 
 => 84 89 D
@@ -514,7 +493,7 @@ select HLA_DQA1, chain A
 select HLA_DQB1, chain B
 select peptide,  chain C
 ```
-We highlight in cartoon/sticks and colour chains and peptide in different colours
+Highlight in cartoon/sticks and colour chains and peptide in different colours
 ```
 hide everything
 show cartoon, HLA_DQA1
@@ -532,7 +511,7 @@ So we have to renumber it
 alter HLA_DQB1, resi=int(resi)+32
 ```
 
-Highlight sites with BEB>95%
+Highlight sites with BEB>95%, and display as yellow spheres.
 
 ```
 select sites_BEB95, HLA_DQB1 and resi 58+89+117+119+121
@@ -540,7 +519,7 @@ show spheres, sites_BEB95
 colour yellow, sites_BEB95
 ```
 
-Highlight sites with 50%<BEB<95%
+Highlight sites with 50%<BEB<95%, and display them as yellow sticks.
 
 ```
 select sites_BEB50, HLA_DQB1 and resi 41+102+120+126+252
@@ -550,9 +529,9 @@ colour yellow, sites_BEB50
 
 => Most sites under positive selection (in yellow) are exactly in the binding site (in green),
 facing the target peptide. This example with the MHC has been widely described in the literature
-[Hugues AL et al. 1988]. To my disappointment, there are not so many examples that selective
-pressure, 3D structural and experimental validation:
-<http://evosite3d.blogspot.co.uk/2014/06/is-there-any-example-of-study-on-amino.html>
+[Hugues AL et al. 1988]. To my disappointment, and unless there was some development since my
+academic years, there are not so many examples that selective pressure, 3D structural and
+experimental validation.
 
 
 To have a nice finish as in the figure above, rotate the structure the way you want and type:
@@ -561,8 +540,10 @@ To have a nice finish as in the figure above, rotate the structure the way you w
 bg_color white
 util.cnc
 select none
+set ray_opaque_background, 1
 ray 2000
 save 1UVQ_positive_sites.png
 ```
 
-Et voila! I hope this tutorial was helpful.
+Et voila:
+![Picture of MHC with positively selected site](1UVQ_positive_sites.png "1UVQ_positive_sites")
