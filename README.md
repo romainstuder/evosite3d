@@ -11,7 +11,6 @@ Or you could you use Anaconda.
 ```shell
 brew install python \
              pyenv-virtualenv \
-             R \
              uv
 ```
 

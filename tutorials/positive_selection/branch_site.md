@@ -1,21 +1,40 @@
-Identifying positive selection in genomic sequences
+# Identifying positive selection in genomic sequences
 
-In this post, I will make a short tutorial on one of my favourite programs, CodeML, which is definitely not the easiest to use.
+In this tutorial, we will use CodeML to infer positive selection
 
-Theoretical principles:
+## Theoretical principles:
 
-The selective pressure in protein coding genes can be detected within the framework of comparative genomics. The selective pressure is assumed to be defined by the ratio (ω) dN/dS. dS represents the synonymous rate (keeping  the amino acid) and  dN the non-synonymous rate (changing the amino acid). In the absence of evolutionary pressure, the synonymous rate and the non-synonymous rate are equal, so the dN/dS ratio is equal to 1. Under purifying selection, natural selection prevents the replacement of amino acids, so the dN will be lower than the dS, and dN/dS < 1. And under positive selection, the replacement rate of amino acid is favoured by selection, and dN/dS > 1.
+The selective pressure in protein coding genes can be detected within the framework of comparative
+genomics. The selective pressure is assumed to be defined by the ratio (ω) dN/dS. dS represents the
+synonymous rate (keeping  the amino acid) and  dN the non-synonymous rate (changing the amino acid).
+In the absence of evolutionary pressure, the synonymous rate and the non-synonymous rate are equal,
+so the dN/dS ratio is equal to 1. Under purifying selection, natural selection prevents the
+replacement of amino acids, so the dN will be lower than the dS, and dN/dS < 1. And under positive
+selection, the replacement rate of amino acid is favoured by selection, and dN/dS > 1.
 
-CodeML and substitutions models:
+### CodeML and substitutions models:
 
-CodeML is a program from the package PAML, based on Maximum Likelihood, and developed in the lab of Ziheng Yang, University College London.
-It estimates various parameters (Ts/Tv, dN/dS, branch length) on the codon (nucleotide) alignment, based on a predefined topology (phylogenetic tree).
+CodeML is a program from the package PAML, based on Maximum Likelihood, and developed in the lab of
+Ziheng Yang, University College London.
+It estimates various parameters (Ts/Tv, dN/dS, branch length) on the codon (nucleotide) alignment,
+based on a predefined topology (phylogenetic tree).
 
-Different codon models exist in CodeML. The model 0 estimates a unique dN/dS ratio for the whole alignment. Not really interesting, except to define a null hypothesis to test against. The branch models estimate different dN/dS among lineages (ie ASPM, a gene expressed in the brain of primates). The site models estimate different dN/dS among sites (ie in the antigen-binding groove of the MHC). The branch-site models estimate different dN/dS among sites and among branches. It can detect episodic evolution in protein sequences, as in the interactions between chains in the avian MHC. In my opinion, this is the most powerful application and this is the one used in the Sectome database (to which I contributed during my PhD).
+Different codon models exist in CodeML. The model 0 estimates a unique dN/dS ratio for the whole
+alignment. Not really interesting, except to define a null hypothesis to test against. The branch
+models estimate different dN/dS among lineages (ie ASPM, a gene expressed in the brain of primates).
+The site models estimate different dN/dS among sites (ie in the antigen-binding groove of the MHC).
+The branch-site models estimate different dN/dS among sites and among branches. It can detect
+episodic evolution in protein sequences, as in the interactions between chains in the avian MHC.
+In my opinion, this is the most powerful application and this is the one used in the Selectome
+database (to which I contributed during my PhD).
 
-First, we have to define the branch where we think that position could have occurred. We will call this branch the "foreground branch" and all other branches in the tree will be the "background" branches. The background branches share the same distribution of ω = dN/dS value among sites, whereas different values can apply to the foreground branch.
+First, we have to define the branch where we think that position could have occurred. We will call
+this branch the "foreground branch" and all other branches in the tree will be the "background" branches. The background branches share the same distribution of ω = dN/dS value among sites, whereas different values can apply to the foreground branch.
 
-To compute the likelihood value, two models are computed: a null model, in which the foreground branch may have different proportions of sites under neutral selection to the background (i.e. relaxed purifying selection), and an alternative model, in which the foreground branch may have a proportion of sites under positive selection.
+To compute the likelihood value, two models are computed: a null model, in which the foreground
+branch may have different proportions of sites under neutral selection to the background (i.e.
+relaxed purifying selection), and an alternative model, in which the foreground branch may have
+a proportion of sites under positive selection.
 As the alternative model is the general case, it is easier to present it first.
 
 Four categories of sites are assumed in the branch-site model:
@@ -47,10 +66,12 @@ Sites with different dN/dS between  foreground and background branches:
   evolution (ω1 = 1) on background branches.
 
 
-For each model, we get the log likelihood value (lnL1 for the alternative and lnL0 for the null models), from which we compute the Likelihood Ratio Test (LRT).
-The 2×(lnL1-lnL0) follows a χ² curve with degree of freedom of 1, so we can get a p-value for this LRT.
+For each model, we get the log likelihood value (lnL1 for the alternative and lnL0 for the null
+models), from which we compute the Likelihood Ratio Test (LRT).
+The 2×(lnL1-lnL0) follows a χ² curve with degree of freedom of 1, so we can get a p-value for this
+LRT.
 
-Let's go in details.
+## Practical
 
 File Preparation:
 
@@ -107,7 +128,8 @@ RateAncestor = 0       * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
 
 Run command file (null model):
 
-The command file for the null model is the same as for the alternative model, except for two parameters (in red):
+The command file for the null model is the same as for the alternative model, except for two
+parameters (in red):
 
 1) The name of the output file (outfile) is different.
 2) The dN/dS ratio is fixed to 1 (fix_omega = 1).
@@ -120,7 +142,7 @@ The command file for the null model is the same as for the alternative model, ex
        noisy = 9   * 0,1,2,3,9: how much rubbish on the screen
      verbose = 1   * 1: detailed output, 0: concise output
      runmode = 0   * 0: user tree;  1: semi-automatic;  2: automatic
-                * 3: StepwiseAddition; (4,5):PerturbationNNI; -2: pairwise
+                   * 3: StepwiseAddition; (4,5):PerturbationNNI; -2: pairwise
 
      seqtype = 1   * 1:codons; 2:AAs; 3:codons-->AAs
    CodonFreq = 2   * 0:1/61 each, 1:F1X4, 2:F3X4, 3:codon table
@@ -144,7 +166,6 @@ RateAncestor = 0       * (0,1,2): rates (alpha>0) or ancestral states (1 or 2)
 ```
 
 Launch CodeML:
-In Unix (Linux, macOS), this will look like:
 
 ```shell
 codeml ./TF105351.Eut.3.53876.ctl
