@@ -51,6 +51,10 @@ the MHC, so this is a very good example for this practical.
 The uniprot code is HLA class II histocompatibility antigen, DQ beta 1 chain.
 The Ensembl gene id is: ENSG00000179344.
 
+### Installation
+
+Please refer to [README.md](../../README.md) to install packages and modules.
+
 ### Data preparation
 
 Download data from Ensembl: <http://www.ensembl.org>
