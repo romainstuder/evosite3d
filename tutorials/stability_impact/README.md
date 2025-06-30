@@ -1,7 +1,5 @@
 # Tutorial: estimating the stability effect of a mutation with FoldX - release 5.1
 
-Note: this is tutorial has been updated to use FoldX5.1.
-
 ## Introduction:
 Here is a brief tutorial on how to use FoldX to estimate the stability effect of a mutation in a 3D
 structure. The stability (ΔG) of a protein is defined by the free energy, which is express in
@@ -13,15 +11,16 @@ roughly corresponds to the energy of a single hydrogen bond.
 
 A good way to compute the free energy is to use molecular dynamics. Main problem: it can be very
 time-consuming. FoldX uses an empirical method to estimate the stability effect of a mutation.
-Website: <http://foldxsuite.crg.eu/>
-
+Website: <https://foldxsuite.crg.eu/>
+Manual: <https://foldxsuite.crg.eu/documentation>
 
 You need to register, but it is free for Academics.
 
 NB: I strongly encourage to read the manual (before or in parallel of this tutorial).
-[NB2 (20/04/2016): I haven't found a proper manual for FoldX4. Only html pages per command)]
 
-Manual: <http://foldxsuite.crg.eu/manual#manual>
+
+Note: this is tutorial has been updated to use FoldX5.1.
+
 
 ## Use cases
 
@@ -32,9 +31,11 @@ PLoS Comput Biol. 2008 Feb 29;4(2):e1000002 <http://dx.doi.org/10.1371/journal.p
 Dasmeh P, Serohijos AW, Kepp KP, Shakhnovich EI. Positively selected sites in cetacean myoglobins
 contribute to protein stability. PLoS Comput Biol. 2013;9(3):e1002929.
 <http://dx.doi.org/10.1371/journal.pcbi.1002929>
-And I personally used it in three of my studies:
+
+And I personally used it in some of my studies:
 Studer RA, Christin PA, Williams MA, Orengo CA. Stability-activity tradeoffs constrain the adaptive
-evolution of RubisCO. Proc Natl Acad Sci U S A. 2014 Feb 11;111(6):2223-8. <http://dx.doi.org/10.1073/pnas.1310811111>
+evolution of RubisCO. Proc Natl Acad Sci U S A. 2014 Feb 11;111(6):2223-8.
+<http://dx.doi.org/10.1073/pnas.1310811111>
 
 Rallapalli PM, Orengo CA, Studer RA, Perkins SJ. Positive selection during the evolution of the
 blood coagulation factors in the context of their disease-causing mutations. Mol Biol Evol. 2014
@@ -44,8 +45,7 @@ Nov;31(11):3040-56. <http://dx.doi.org/10.1093/molbev/msu248>
 ## Practical:
 The executable is available here: <http://foldxsuite.crg.eu/>
 
-=> Install the executable (i.e. `foldx_20251231`) in somewhere accessible.
-And create a link:
+=> Install the executable (i.e. `foldx_20251231`) in somewhere accessible and create a link:
 ```shell
 ln -s foldx_20251231 foldx
 ```
@@ -59,7 +59,19 @@ wget https://files.rcsb.org/download/4TVF.pdb
 We would like to test the stability of mutation at position 280, from a leucine (L) to an
 aspartic acid (D). Here is the original structure, with Leu280 in green, and residues around 6Å
 in yellow:
+![Picture of Leucine 280 highlighted](4TVF_L280.png "4TVF_L280")
 
+
+
+PS: Code to generate the figure in PyMOL:
+```
+bg_color white
+util.cnc
+select none
+set ray_opaque_background, 1
+ray 2000
+save 4TVF_L280.png
+```
 ￼
 
 FoldX works in two steps:
@@ -82,8 +94,8 @@ foldx --command=RepairPDB \
 ```
 
 We indicate which PDB file it needs to use, that we want to repair it (RepairPDB), that it will use
-water and metal bonds from the PDB file (--water=CRYSTAL) and that we want a PDB as output
-(--outPDB=true). All other parameter are by default.
+water and metal bonds from the PDB file (`--water=CRYSTAL`) and that we want a PDB as output
+(`--output-dir=.`). All other parameter are by default.
 
 This process is quite long (around 10 minutes). Here is the result (the original structure is now in
 white, while the repaired structure is in yellow/green):
@@ -151,7 +163,7 @@ oxygen atoms in red):
 
 The difference in free energy (ΔΔG) is given by `ΔGmut`-`ΔGwt`.
 
-In the file "Raw_4TVF_Repair.fxout", you can retrieve the energy of the three runs for both WT and
+In the file `Raw_4TVF_Repair.fxout`, you can retrieve the energy of the three runs for both WT and
 Mutant.
 
 Run1:

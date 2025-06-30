@@ -53,7 +53,7 @@ The Ensembl gene id is: ENSG00000179344.
 
 ### Installation
 
-Please refer to [README.md](../../README.md) to install packages and modules.
+Please refer to [INSTALL.md](../../INSTALL.md) to install packages and modules.
 
 ### Data preparation
 
