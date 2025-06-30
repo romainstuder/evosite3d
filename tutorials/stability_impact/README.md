@@ -13,6 +13,10 @@ if ΔΔG is >1 kcal/mol, which roughly corresponds to the energy of a single hyd
 A good way to compute the free energy is to use Molecular Dynamics (MD). Main problem: it can be
 very time-consuming. FoldX uses an empirical method to estimate the stability effect of a mutation.
 
+DISCLAIMER (JUne 2025): This tutorial was made long time ago, I haven't updated some references or
+proposed more actual tools. There was recent tools using Deep Learning, but this will be for another
+tutorial.
+
 ## Use cases
 
 FoldX was used in many studies, i.e.:
@@ -105,8 +109,8 @@ foldx --command=RepairPDB \
       --pdbHydrogens=false
 ```
 
-We indicate which PDB file it needs to use, that we want to repair it (RepairPDB), that it will use
-water and metal bonds from the PDB file (`--water=CRYSTAL`) and that we want a PDB as output
+We indicate which PDB file it needs to use, that we want to repair it (`RepairPDB`), that it will
+use water and metal bonds from the PDB file (`--water=CRYSTAL`) and that we want a PDB as output
 (`--output-dir=.`). All other parameter are by default.
 
 This process is quite long (around 10 minutes). Here is the result (the original structure is now in
@@ -122,8 +126,8 @@ step.
 
 ## 2) Perform the mutation
 
-The mutation itself is performed by the BuildModel function. There are other methods, but the
-BuildModel is apparently the most robust (I said apparently, but there are no proper benchmarks
+The mutation itself is performed by the `BuildModel` function. There are other methods, but the
+`BuildModel` is apparently the most robust (I said apparently, but there are no proper benchmarks
 against the other method PositionScan or PSSM). You also need to specify the mutation in a separate
 file `individual_list.txt`, which will be just one line (one per mutant):
 
@@ -167,8 +171,8 @@ side chains multiple times. We can see that Leu280 (green) was rotated: ￼
 => This is will give the free energy of the wild-type (let's call it `ΔGwt`).
 
 Then, it will mutate the target residue (L) to the desired mutant (D) and move it as well as all
-neighbouring side chains multiple times. We can see that Leu280 is mutated to Asp280 (see the two
-oxygen atoms in red): ￼
+neighbouring side chains multiple times. We can see that Leu280 is mutated to Asp280 (if you display
+it in PyMOL, you can see the two oxygen atoms in red).
 
 => This is will give the free energy of the mutant (let's call it `ΔGmut`).
 
