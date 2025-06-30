@@ -1,4 +1,4 @@
-# Tutorial: estimating the stability effect of a mutation with FoldX - release 5.1
+# Tutorial: estimating the stability effect of a mutation with FoldX 5.1
 
 ## Introduction:
 
@@ -12,34 +12,35 @@ if ΔΔG is >1 kcal/mol, which roughly corresponds to the energy of a single hyd
 
 A good way to compute the free energy is to use Molecular Dynamics (MD). Main problem: it can be
 very time-consuming. FoldX uses an empirical method to estimate the stability effect of a mutation.
-Manual
-
-You need to register, but it is free for Academics.
-
-NB: I strongly encourage to read the manual (before or in parallel of this tutorial):
-<https://foldxsuite.crg.eu/documentation>
 
 ## Use cases
 
-FoldX was used in many studies, i.e.: Tokuriki N, Stricher F, Serrano L, Tawfik DS. How protein
-stability and new functions trade off. PLoS Comput Biol. 2008 Feb 29;4(2):e1000002
-<http://dx.doi.org/10.1371/journal.pcbi.1000002>
+FoldX was used in many studies, i.e.:
 
-Dasmeh P, Serohijos AW, Kepp KP, Shakhnovich EI. Positively selected sites in cetacean myoglobins
-contribute to protein stability. PLoS Comput Biol. 2013;9(3):e1002929.
-<http://dx.doi.org/10.1371/journal.pcbi.1002929>
+- Tokuriki N, Stricher F, Serrano L, Tawfik DS. How protein stability and new functions trade off.
+  PLoS Comput Biol. 2008 Feb 29;4(2):e1000002 <http://dx.doi.org/10.1371/journal.pcbi.1000002>
 
-And I personally used it in some of my studies: Studer RA, Christin PA, Williams MA, Orengo CA.
-Stability-activity tradeoffs constrain the adaptive evolution of RubisCO. Proc Natl Acad Sci U S A.
-2014 Feb 11;111(6):2223-8. <http://dx.doi.org/10.1073/pnas.1310811111>
+- Dasmeh P, Serohijos AW, Kepp KP, Shakhnovich EI. Positively selected sites in cetacean myoglobins
+  contribute to protein stability. PLoS Comput Biol. 2013;9(3):e1002929.
+  <http://dx.doi.org/10.1371/journal.pcbi.1002929>
 
-Rallapalli PM, Orengo CA, Studer RA, Perkins SJ. Positive selection during the evolution of the
-blood coagulation factors in the context of their disease-causing mutations. Mol Biol Evol. 2014
-Nov;31(11):3040-56. <http://dx.doi.org/10.1093/molbev/msu248>
+And I personally used it in some of my studies:
+
+- Studer RA, Christin PA, Williams MA, Orengo CA. Stability-activity tradeoffs constrain the
+  adaptive evolution of RubisCO. Proc Natl Acad Sci U S A. 2014 Feb 11;111(6):2223-8.
+  <http://dx.doi.org/10.1073/pnas.1310811111>
+
+- Rallapalli PM, Orengo CA, Studer RA, Perkins SJ. Positive selection during the evolution of the
+  blood coagulation factors in the context of their disease-causing mutations. Mol Biol Evol. 2014
+  Nov;31(11):3040-56. <http://dx.doi.org/10.1093/molbev/msu248>
 
 ## Practical:
 
-The executable is available here: <http://foldxsuite.crg.eu/>
+The executable is available here: <http://foldxsuite.crg.eu/>. You will have to register, but it is
+free for Academics.
+
+NB: I strongly encourage to read the manual (before or in parallel of this tutorial):
+<https://foldxsuite.crg.eu/documentation>
 
 => Install the executable (i.e. `foldx_20251231`) in somewhere accessible and create a link:
 
@@ -47,8 +48,8 @@ The executable is available here: <http://foldxsuite.crg.eu/>
 ln -s foldx_20251231 foldx
 ```
 
-The structure is a bacterial cytochrome P450 (PDB:4TVF). You can download its PDB file (4TVF.pdb)
-from here: http://www.rcsb.org/pdb/explore.do?structureId=4TVF
+The structure we will use as example is a bacterial cytochrome P450 (PDB:4TVF). You can download its
+PDB file (4TVF.pdb) from here: http://www.rcsb.org/pdb/explore.do?structureId=4TVF
 
 ```shell
 wget https://files.rcsb.org/download/4TVF.pdb
@@ -58,7 +59,21 @@ We would like to test the stability of mutation at position 280, from a leucine 
 acid (D). Here is the original structure, with Leu280 in green, and residues around 6Å in yellow:
 ![Picture of Leucine 280 highlighted](4TVF_L280.png "4TVF_L280")
 
-PS: Code to generate the figure in PyMOL:
+Bonus: code to generate the figure in PyMOL:
+
+```
+select cyt_P450, chain A
+select heme, resn HEM
+select L280, resi 280
+hide everything
+show cartoon, cyt_P450
+show sticks, heme
+show sticks, L280
+colour grey60, cyt_P450
+colour slate, heme
+colour yellow, L280
+select none
+```
 
 ```
 bg_color white
