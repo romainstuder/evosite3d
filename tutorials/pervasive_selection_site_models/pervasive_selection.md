@@ -294,7 +294,7 @@ different selective pressures. This test is not used to detect positive selectio
 always significant.
 
 ```
-2x(L1-L0) = 2x[(-8127.631456) – (-8548.085)] = 840.9070
+2x(L1-L0) = 2x[(-8127.6315) – (-8548.085)] = 840.9070
 d.f. = 74-70 = 4
 => 1.06E-180
 ````
@@ -304,9 +304,9 @@ This test was the first site model developed to detect positive selection. We
 contrast a model with 2 classes of sites against a model with 3 classes of sites.
 Degree of freedom = 2.
 ```
-2x(L1-L0) = 2x[(-4692.7323) – (-4711.1080)] = 36.7513
-d.f. = 37-35 = 2
-=> 1.04608E-08
+2x(L1-L0) = 2x[(-8153.5810) – (-8204.1165)] = 36.7513
+d.f. = 73-71 = 2
+=> 1.13E-22
 ```
 The test is significant, so there is positive selection. This model is very conservative, and can
 lack power under certain conditions.
@@ -317,12 +317,13 @@ model with 11 classes of sites.
 Degree of freedom = 2.
 
 ```
-2x(L1-L0) = 2x[(-4690.5454) – (-4838.3278)] = 55.842832
-d.f. = 37-35 = 2
-=> 7.47968E-13
+2x(L1-L0) = 2x[(-8123.3498) – (-8196.6762)] = 146.6528
+d.f. = 73-71 = 2
+=> 1.43E-32
 ```
 
-The test is significant, so there is positive selection. However, this model can have problem power under certain conditions, and the following LRT is preferred.
+The test is significant, so there is positive selection. However, this model can have problem power
+under certain conditions, and the following LRT is preferred.
 
 #### 3.1.4) M8-M8a:
 This is the latest test. We contrast a model with 11 classes of sites where positive
@@ -331,9 +332,9 @@ is not allowed (dN/dS=1) against a model with 11 classes of sites where positive
 Degree of freedom = 1.
 
 ```
-2x(L1-L0) = 2x[(-4690.5454) – (-4706.2685)] = 31.446092
-d.f. = 37-36 = 1
-=> 1.48446E-07
+2x(L1-L0) = 2x[(-8123.3498) – (-8171.0616)] = 95.4235
+d.f. = 73-72 = 1
+=> 1.54E-22
 ```
 
 This is the preferred test, combining power and robustness.
