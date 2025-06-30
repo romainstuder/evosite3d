@@ -37,7 +37,9 @@ brew install clustal-omega \
              figtree \
              jalview \
              mafft \
+             newick-utils \
              paml \
+             phyml \
              pymol \
              trimal
 ```
