@@ -18,6 +18,13 @@ repos:
       - id: mixed-line-ending
         args: ['--fix=lf']
 
+  # Markdown specific
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        types: [markdown]
+
   # Python-specific hooks (remove if not using Python)
   - repo: https://github.com/psf/black
     rev: 23.3.0
