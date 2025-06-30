@@ -134,7 +134,13 @@ see if there isn’t anything wrong
 
 Remove spurious sequences and columns with TrimAl
 ```shell
-trimal -automated1 -in HLA_DQB1_subset.cds.mafft.fasta -resoverlap 0.75 -seqoverlap 85 -out HLA_DQB1_subset.cds.mafft.trimal.fasta -htmlout HLA_DQB1_subset.cds.mafft.trimal.html -colnumbering > HLA_DQB1_subset.cds.mafft.trimal.cols
+trimal -automated1 \
+       -in HLA_DQB1_subset.cds.mafft.fasta \
+       -resoverlap 0.75 \
+       -seqoverlap 85 \
+       -out HLA_DQB1_subset.cds.mafft.trimal.fasta \
+       -htmlout HLA_DQB1_subset.cds.mafft.trimal.html \
+       -colnumbering > HLA_DQB1_subset.cds.mafft.trimal.cols
 ```
 Convert trimmed sequences from FASTA to PHYLIP
 ```shell
@@ -399,7 +405,8 @@ a standard deviation of 0.608. As I said previously, the sites given by CodeML d
 the human sequence. You can use the following script to extract the real position in the human
 sequence:
 ```shell
-get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" 84
+get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta \
+HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" 84
 ```
 
 => 84 89 D
@@ -412,7 +419,8 @@ Let’s repeat the same for all these sites
 
 ```shell
 site_list="8 41 58 69 89 99 112 117 119 120 121 259 260 261"
-for site in $site_list; do get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" $site; done
+for site in $site_list; do get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta \
+HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" $site; done
 ```
 =>
 ```
@@ -434,7 +442,8 @@ site_index: 260	CDS pos: 260	AA: L
 We can do the same for sites with 50%<BEB<95%:
 ```shell
 site_list="15 33 45 46 70 93 102 103 107 126 199 217 252"
-for site in $site_list; do get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" $site; done
+for site in $site_list; do get_position_cds_trimal.py HLA_DQB1_subset.cds.mafft.fasta \
+HLA_DQB1_subset.cds.mafft.trimal.cols "ENSP00000407332" $site; done
 ```
 =>
 ```
