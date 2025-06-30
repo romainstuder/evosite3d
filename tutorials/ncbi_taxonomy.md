@@ -34,14 +34,6 @@ readme.txt
 
 Only `names.dmp` and `nodes.dmp` are important for the script.
 
-Download the script `parse_taxbrowser.py` from the Github and save it in the same folder:
-<https://github.com/romainstuder/evosite3d/blob/master/parse_taxbrowser.py>
-
-Then makes it executable:
-
-```shell
-chmod +x parse_taxbrowser.py
-```
 
 Then execute it in the same folder as "names.dmp and "nodes.dmp":
 

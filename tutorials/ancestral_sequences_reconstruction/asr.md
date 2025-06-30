@@ -14,42 +14,6 @@ In this practical, you will learn how to prepare files for CodeML, how to use it
 and how to compute the isoelectric point of protein sequences. There are a few scripts you will need to download during
 the practical.
 
-Tools used in this practical:
-
-```shell
-# Libraries for Python
-Biopython: http://biopython.org/wiki/Main_Page
-
-# Package for ancestral sequence reconstruction (and many other things)
-CodeML from PAML: http://abacus.gene.ucl.ac.uk/software/paml.html
-
-# Alignment tools
-MAFFT L-INS-i: http://mafft.cbrc.jp/alignment/software/
-Clustal-Omega: http://www.clustal.org/omega/
-(Clustal-Omega is the new aligner from ClustalW team, but much faster and more accurate)
-
-# Alignment visualisation
-Jalview: http://www.jalview.org/
-
-# Phylogenetics tools
-PhyML: http://www.atgc-montpellier.fr/phyml/binaries.php
-FastTree: http://www.microbesonline.org/fasttree/
-
-# Tree visualisation
-NJplot: http://doua.prabi.fr/software/njplot
-```
-
-On macOS, you can install many of them with homebrew: <https://brew.sh/>
-
-```shell
-brew tap brewsci/bio
-brew install clustal-omega fasttree figtree jalview mafft paml trimal
-```
-
-```shell
-brew install uv
-uv pip install biopython
-```
 
 This practical will focus on the lysozyme, an enzyme (EC 3.2.1.17) that damages bacterial cell walls.
 The Uniprot page is: <http://www.uniprot.org/uniprot/P61626>

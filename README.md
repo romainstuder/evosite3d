@@ -11,7 +11,6 @@ Or you could you use Anaconda.
 ```shell
 brew install python \
              pyenv-virtualenv \
-             R \
              uv
 ```
 
@@ -38,7 +37,9 @@ brew install clustal-omega \
              figtree \
              jalview \
              mafft \
+             newick-utils \
              paml \
+             phyml \
              pymol \
              trimal
 ```

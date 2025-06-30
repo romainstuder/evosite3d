@@ -13,7 +13,7 @@
       aaDist = 0   * 0:equal, +:geometric; -:linear, {1-5:G1974,Miyata,c,p,v}
        model = 0   * models for codons:
                    * 0:one, 1:b, 2:2 or more dN/dS ratios for branches
-     NSsites = 0 1 2 3 7 8 * 0:one w; 1:NearlyNeutral; 2:PositiveSelection;
+     NSsites = 8 * 0:one w; 1:NearlyNeutral; 2:PositiveSelection;
                            * 3:discrete; 4:freqs; 5:gamma;6:2gamma;
                            * 7:beta;8:beta&w;9:beta&gamma;10:3normal
        icode = 0   * 0:standard genetic code; 1:mammalian mt; 2-10:see below

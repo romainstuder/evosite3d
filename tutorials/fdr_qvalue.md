@@ -1,6 +1,8 @@
 False discovery rate correction for multiple testing of positive selection [Pratictal]
 
-When performing a test for the detection of positive selection (i.e. with CodeML/PAML) on multiple branches one by one, we need to correct your result to avoid false discovery rate (there are many methods (see the wiki page: <http://en.wikipedia.org/wiki/False_discovery_rate>).
+When performing a test for the detection of positive selection (i.e. with CodeML/PAML) on multiple
+branches one by one, we need to correct your result to avoid false discovery rate (there are many
+methods (see the wiki page: <http://en.wikipedia.org/wiki/False_discovery_rate>).
 
 One I like is the QVALUE package, for R:
 <http://www.bioconductor.org/packages/release/bioc/html/qvalue.html>
@@ -19,7 +21,8 @@ and load it:
 library(qvalue)
 ```
 
-We need to load the list of p-value into R. This is a single with only p-values. The order is really important, so we have in a separate file the ordered names of the branch and/or gene tested.
+We need to load the list of p-value into R. This is a single with only p-values. The order is really
+important, so we have in a separate file the ordered names of the branch and/or gene tested.
 
 ```shell
 
@@ -45,14 +48,16 @@ hist(p, breaks = 20, main = paste("Distribution of p-values"), xlab="Value")
 
 which will display this histogram:
 ￼
-The distribution is bimodal, as expected: when the test is negative, we will have a p-value = 1, and when the test is significant, the p-value is generally very low.
+The distribution is bimodal, as expected: when the test is negative, we will have a p-value = 1,
+and when the test is significant, the p-value is generally very low.
 
 Now, we can perform the qvalue correction:
 qobj <- qvalue(p, pi0.meth="bootstrap", fdr.level=0.05)
 
 Two comments:
 
-1. The option “bootstrap” is really important, as the distribution is bimodal (see page 11 of the QVALUE manual).
+1. The option “bootstrap” is really important, as the distribution is bimodal (see page 11 of the
+QVALUE manual).
 2. The fdr.level=0.05 is a threshold which estimates that 5% of our tests could be false-positive.
 
 Finally, we write the output into a file:
@@ -66,7 +71,7 @@ The output file has five columns:
 4. The significance of the test, based on the threshold (0 or 1).
 5. The fdr threshold used to assign as significant.
 
-```shell
+```
 "pvalue" "qvalue" "lfdr" "pi0" "significant" "fdr.level"
 0.00623359809654 0.00598773686818557 0.0291702400633863 0.323886639676113 1 0.05
 0.148525646364 0.0731203182099692 0.391218512376612 0.323886639676113 0 0.05
