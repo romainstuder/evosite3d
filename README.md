@@ -4,9 +4,9 @@ A repository scripts and tutorials around molecular evolution and structural bio
 
 ## Overview
 
-EvoSite3D is designed to identify and analyse evolutionarily significant sites within protein
-structures by integrating sequence evolution data with 3D structural information. These tools help
-researchers understand the relationship between protein protein function and structural constraints.
+EvoSite3D is designed to identify and analyse functionally significant sites within protein by
+integrating sequence evolution data with 3D structural information. These tools help researchers
+understand the relationship between protein evolution, protein function and structural constraints.
 
 ## Features
 

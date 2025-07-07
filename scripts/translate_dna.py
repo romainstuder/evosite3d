@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-"""Translate DNA sequences from a FASTA file to protein sequences."""
-
 import argparse
 
 from Bio import SeqIO
