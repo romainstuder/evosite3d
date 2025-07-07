@@ -2,7 +2,6 @@
 
 """Compute the isoelectric point (pI) and molecular weight (MW) of proteins from a FASTA file."""
 
-# Load libraries
 import argparse
 
 from Bio import SeqIO
