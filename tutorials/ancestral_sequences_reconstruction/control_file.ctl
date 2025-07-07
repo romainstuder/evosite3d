@@ -1,6 +1,6 @@
-      seqfile = lysozyme_primates.phy    * sequence data filename
-     treefile = lysozyme_primates.phy_phyml_tree.txt   * tree structure file name
-      outfile = lysozyme_primates.mlc    * main result file name
+      seqfile = lysozyme_primates.phy           * sequence data filename
+     treefile = lysozyme_primates_rooted.tree   * tree structure file name
+      outfile = lysozyme_primates.mlc           * main result file name
 
         noisy = 9  * 0,1,2,3,9: how much rubbish on the screen
       verbose = 2  * 0: concise; 1: detailed, 2: too much
@@ -23,7 +23,7 @@
                        * 6:FromCodon, 7:AAClasses, 8:REVaa_0, 9:REVaa(nr=189)
 
         icode = 0  * 0:universal code; 1:mammalian mt; 2-10:see below
-        Mgene = 0  * codon: 0:rates, 1:separate; 2:diff pi, 3:diff kapa, 4:all diff
+        Mgene = 0     * codon: 0:rates, 1:separate; 2:diff pi, 3:diff kapa, 4:all diff
                    * AA: 0:rates, 1:separate
 
     fix_alpha = 0   * 0: estimate gamma shape parameter; 1: fix it at alpha

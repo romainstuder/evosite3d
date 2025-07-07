@@ -2,7 +2,8 @@
 
 This tutorial was part of a course on protein evolution done during ECCB 2014 in Strasbourg.
 
-NB: If there are any question, comments or bugs, feel free to ask. ;) NB2: Revised in 2025
+NB: If there are any question, comments or bugs, feel free to ask. ;)  
+NB2: Revised in 2025
 
 ## Introduction
 
@@ -22,7 +23,7 @@ The quality of the ancestral reconstruction will heavily depend on the quality o
 the tree topology (branch lengths are re-estimated during the reconstruction).
 
 <https://www.ensembl.org/Homo_sapiens/Gene/Compara_Ortholog?db=core;g=ENSG00000090382;r=12:69348381-69354234>
-Please download the sequence file:
+Please download the sequence file (Unaligned sequences - proteins):
 
 ```shell
 cp Human_LYZ_orthologues.fa lysozyme_primates.seq
@@ -45,11 +46,11 @@ You can have a look at the alignment in Jalview:
 ```shell
 jalview ./lysozyme_primates.fasta
 ```
+#TODO CLEAN ALIGNMENT
+
 
 The format of the resulting alignment is FASTA. However, most phylogenetic software use PHYLIP
-format. So, you have to convert it into PHYLIP. Download the script "convert_fasta2phylip.py" and
-execute it:
-
+format. So, you have to convert it into PHYLIP with `convert_fasta2phylip.py`:
 ```shell
 convert_fasta2phylip.py lysozyme_primates.fasta lysozyme_primates.phy
 ```
@@ -93,11 +94,22 @@ Marmoset sequence (Callithrix jacchus):
 nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069
 ```
 
+
+```shell
+n_taxa=$(grep -c ">" lysozyme_primates.fasta)
+n_trees="1"
+echo "$id_list"
+echo "$n_taxa $n_trees" > lysozyme_primates_rooted.tree
+```
+
 We can rerun and save the output as `lysozyme_primates_rooted.tree`:
 
 ```shell
-nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069 > lysozyme_primates_rooted.tree
+nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069 >> lysozyme_primates_rooted.tree
 ```
+
+
+
 
 ## Part 3: Run ancestral sequence reconstruction
 
@@ -109,15 +121,15 @@ It is launched with
 codeml control_file.ctl
 ```
 
-You may have to copy the file "jones.dat" from the dat folder in the PAML package, or indicate its
+You may have to copy the file "wag.dat" from the dat folder in the PAML package, or indicate its
 location.
 
 The control file contains many parameters:
 
 ```
-      seqfile = lysozyme_primates.phy    * sequence data filename
-     treefile = lysozyme_primates_root.tree   * tree structure file name
-      outfile = lysozyme_primates.mlc    * main result file name
+      seqfile = lysozyme_primates.phy           * sequence data filename
+     treefile = lysozyme_primates_rooted.tree   * tree structure file name
+      outfile = lysozyme_primates.mlc          * main result file name
 
         noisy = 9  * 0,1,2,3,9: how much rubbish on the screen
       verbose = 2  * 0: concise; 1: detailed, 2: too much
@@ -128,7 +140,7 @@ The control file contains many parameters:
 
         clock = 0  * 0:no clock, 1:clock; 2:local clock; 3:CombinedAnalysis
        aaDist = 0  * 0:equal, +:geometric; -:linear, 1-6:G1974,Miyata,c,p,v,a
-   aaRatefile = ./jones.dat  * only used for aa seqs with model=empirical(_F)
+   aaRatefile = ./wag.dat  * only used for aa seqs with model=empirical(_F)
 
                    * dayhoff.dat, jones.dat, wag.dat, mtmam.dat, or your own
 
@@ -225,13 +237,13 @@ The following script will compute the pI for all sequences in a FASTA file: comp
 By launching it, we can retrieve the pI for modern primate lysozymes:
 
 ```shell
-compute_pI.py lysozyme_primates.fasta
+compute_iso_point.py lysozyme_primates.fasta
 ```
 
 And similarly for ancestral sequences:
 
 ```shell
-compute_pI.py ancestral_sequences.fasta
+compute_iso_point.py ancestral_sequences.fasta
 ```
 
 ## Part 5: Map properties on tree
