@@ -1,12 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "evosite3d"
-version = "0.1"
-requires-python = ">=3.9"
+version = "0.1.0"
+description = "Tools for evolutionary site analysis and 3D visualization"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Romain", email = "romain@example.com"},
+]
+maintainers = [
+    {name = "Romain", email = "romain@example.com"},
+]
+keywords = ["evolution", "phylogenetics", "bioinformatics", "3d-visualisation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
 dependencies = [
     "biopython>=1.85",
-    "matplotlib",
-    "pandas",
-    "seaborn"
+    "matplotlib>=3.6.0",
+    "numpy>=1.23.0",
+    "pandas>=1.5.0",
+    "seaborn>=0.12.0",
 ]
 
 [project.optional-dependencies]
@@ -14,15 +40,117 @@ dev = [
     "black>=23.0.0",
     "flake8>=7.3.0",
     "mypy>=1.5.0",
+    "pre-commit>=3.0.0",
     "pylint>=3.0.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]
+testing = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+docs = [
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+]
 
-[tool.pylint.format]
-max-line-length = "100"
+[project.urls]
+Homepage = "https://github.com/romain/evosite3d"
+"Bug Reports" = "https://github.com/romain/evosite3d/issues"
+"Source" = "https://github.com/romain/evosite3d"
 
 [tool.black]
 line-length = 100
-target-version = ['py39']
+target-version = ['py310', 'py311', 'py312', 'py313']
 include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-docstring",
+    "too-few-public-methods",
+    "too-many-arguments",
+    "too-many-locals",
+    "invalid-name",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m not slow')",
+    "integration: marks tests as integration tests",
+]
+
+[tool.coverage.run]
+source = ["evosite3d"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.flake8]
+max-line-length = 100
+max-complexity = 10
+ignore = [
+    "E203",  # whitespace before ':'
+    "E501",  # line too long (handled by black)
+    "W503",  # line break before binary operator
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".eggs",
+    ".mypy_cache",
+    ".tox",
+    ".venv",
+]
