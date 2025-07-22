@@ -6,6 +6,8 @@ dependencies = [
     "biopython>=1.85",
     "matplotlib",
     "pandas",
+    "scipy",
+    "statsmodels",
     "seaborn"
 ]
 
