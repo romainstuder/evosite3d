@@ -227,7 +227,7 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-### Finally, we can inspect the files:
+Finally, we can inspect the files:
 
 Link: https://openms.de/documentation/html/TOPP_FileInfo.html
 
