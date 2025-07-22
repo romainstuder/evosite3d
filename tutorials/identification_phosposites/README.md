@@ -8,9 +8,14 @@ OpenMS from raw data processing to phosphosite localisation.
 
 https://openms.de/
 
-````
-OpenMS offers an open-source C++ library (+ Python bindings) for LC/MS data management, analysis and visualization. It empowers rapid development of mass spectrometry related software. OpenMS is freely available under the three clause BSD license and runs under Windows, macOS and Linux. The OpenMS members have a strong commitment to creating an open, inclusive, and positive community. Please read the OpenMS Code of Conduct for guidance on how to interact with others in a way that makes the community thrive.```
-````
+```
+OpenMS offers an open-source C++ library (+ Python bindings) for LC/MS data management, analysis and
+visualization. It empowers rapid development of mass spectrometry related software. OpenMS is freely
+available under the three clause BSD license and runs under Windows, macOS and Linux. The OpenMS
+members have a strong commitment to creating an open, inclusive, and positive community. Please read
+the OpenMS Code of Conduct for guidance on how to interact with others in a way that makes the
+community thrive.
+```
 
 ## Prerequisites
 
