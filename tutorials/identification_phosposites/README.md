@@ -1,5 +1,21 @@
 # OpenMS Tutorial: Phosphosite Identification in Human Samples
 
+## Theoritical concept
+
+Phosphorylation is a fundamental post-translational modification where phosphate groups are
+covalently attached to proteins, typically on serine (S), threonine (T), and tyrosine (Y) residues.
+This reversible modification serves as a critical regulatory mechanism controlling protein function,
+localisation, stability, and interactions across virtually all cellular processes including signal
+transduction, metabolism, and cell cycle progression. The detection and quantification of
+phosphorylation events has been revolutionised by proteomics approaches utilising mass spectrometry
+(MS), which enable genome-wide identification and characterisation of phosphorylation sites. Modern
+phosphoproteomic workflows combine enrichment strategies such as immobilised metal affinity
+chromatography (IMAC) or titanium dioxide (TiO2) to selectively capture phosphopeptides, followed by
+high-resolution mass spectrometry analysis that can precisely localise phosphorylation sites and
+quantify their stoichiometry across different biological conditions. These technological advances
+have transformed our understanding of phosphorylation networks and their dysregulation in diseases,
+making phosphoproteomics an indispensable tool in systems biology and biomedical research.
+
 ## Overview
 
 This tutorial demonstrates how to identify phosphorylation sites (phosphosites) in human proteins
