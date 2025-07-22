@@ -3,8 +3,14 @@
 ## Overview
 
 This tutorial demonstrates how to identify phosphorylation sites (phosphosites) in human proteins
-using OpenMS with publicly available mass spectrometry data. We'll use a complete workflow from raw
-data processing to phosphosite localization.
+using OpenMS with publicly available mass spectrometry data. We will use a complete workflow with
+OpenMS from raw data processing to phosphosite localisation.
+
+https://openms.de/
+
+````
+OpenMS offers an open-source C++ library (+ Python bindings) for LC/MS data management, analysis and visualization. It empowers rapid development of mass spectrometry related software. OpenMS is freely available under the three clause BSD license and runs under Windows, macOS and Linux. The OpenMS members have a strong commitment to creating an open, inclusive, and positive community. Please read the OpenMS Code of Conduct for guidance on how to interact with others in a way that makes the community thrive.```
+````
 
 ## Prerequisites
 
@@ -18,7 +24,7 @@ data processing to phosphosite localization.
 
 #### macOS
 
-```bash
+```shell
 # Method 1: Download pre-built binaries
 # Visit: https://openms.de/downloads/
 # Download the macOS installer (.dmg file)
@@ -34,14 +40,14 @@ brew install openms
 
 #### Ubuntu/Debian
 
-```bash
+```shell
 sudo apt-get update
 sudo apt-get install openms openms-doc
 ```
 
 #### Windows
 
-```bash
+```shell
 # Download installer from: https://openms.de/downloads/
 # Or use conda:
 conda create -n openms-env python=3.9
@@ -139,7 +145,7 @@ wget -c -t 3 "${TUTORIAL_FILES[@]/#/$BASE_URL/}"
 
 ### Prepare Protein Database
 
-```bash
+```shell
 # Download human proteome from UniProt
 wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz
 wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000002311/UP000002311_559292.fasta.gz
@@ -192,11 +198,11 @@ FileInfo -in 20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6.mzML
 FileInfo -in 34160_e02555_ML040_phos_StressPool_PFP3.mzML
 ```
 
-### Step 2.2: Perform peak picking (batch processing)
+## Step 3: Perform peak picking (batch processing)
 
 https://openms.de/current_doxygen/html/TOPP_PeakPickerHiRes.html
 
-```bash
+```shell
 for base_name in "${FILES[@]}"; do
     mzml_file="${base_name}.mzML"
     picked_file="${base_name}_picked.mzML"
@@ -210,13 +216,13 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 3: Database Search Configuration
+## Step 4: Database Search
 
-### Step 3.1: Create Decoy Database
+### Step 4.1: Create Decoy Database
 
 https://www.openms.org/documentation/html/TOPP_DecoyDatabase.html
 
-```bash
+```shell
 DecoyDatabase -in human_proteome.fasta \
     -out human_proteome_decoy.fasta \
     -decoy_string "DECOY_" \
@@ -233,38 +239,17 @@ DecoyDatabase -in yeast_proteome.fasta \
 #TODO: Warning: Only one FASTA input file was provided, which might not contain contaminants. You
 probably want to have them! Just add the contaminant file to the input file list 'in'.
 
-### Step 3.2: Configure Search Parameters
+### Step 4.2: Configure Search Parameters
 
-Create a search parameter file (`search_params.xml`):
+We will use the following TOPP INI file (in XML format): [search_params.xml](./search_params.xml)
 
-```xml
+Ref: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
 
-<PARAMETERS>
-<NODE name="MSGFPlusAdapter">
-  <NODE name="1">
-    <!-- Use MS-GF+ for phospho searches -->
-    <ITEM name="instrument" value="Q_Exactive" type="string"/>
-    <ITEM name="enzyme" value="Trypsin/P" type="string"/>
-    <ITEM name="max_missed_cleavages" value="2" type="int"/>
-    <ITEM name="precursor_mass_tolerance" value="20.0" type="float"/>
-    <ITEM name="precursor_error_units" value="ppm" type="string"/>
-    <ITEM name="max_mods" value="2" type="int"/>
-    <!-- Fixed modifications -->
-    <ITEM name="fixed_modifications" value="Carbamidomethyl (C)" type="mods"/>
-    <!-- Variable modifications for phosphorylation -->
-    <ITEM name="variable_modifications" value="Oxidation (M), Phospho (STY)" type="mods"/>
-  </NODE>
-</NODE>
-</PARAMETERS>
-```
-
-## Step 4: Database Search
-
-### Step 4.1: Search for phosphopeptides, using batch process with MS-GF+
+### Step 4.3: Search for phosphopeptides, using batch process with MS-GF+
 
 https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
 
-```bash
+```shell
 SPECIES="yeast"
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
@@ -285,7 +270,7 @@ done
 
 Alternative with COMET:
 
-```bash
+```shell
 SPECIES="yeast"
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
@@ -307,7 +292,9 @@ done
 
 ### Step 5.1: Apply False Discovery Rate control
 
-```bash
+https://openms.de/documentation/html/TOPP_FalseDiscoveryRate.html
+
+```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_search_results.idXML"
     fdr_file="${base_name}_fdr.idXML"
@@ -326,7 +313,7 @@ done
 
 ### Step 5.2: Filter identifications by score and quality
 
-```bash
+```shell
 for base_name in "${FILES[@]}"; do
     fdr_file="${base_name}_fdr.idXML"
     filtered_file="${base_name}_fdr_filtered.idXML"
@@ -347,7 +334,7 @@ done
 
 ### ### Step 5.3: Peptide Indexing
 
-```bash
+```shell
 for base_name in "${FILES[@]}"; do
     filtered_file="${base_name}_fdr_filtered.idXML"
     indexed_file="${base_name}_indexed.idXML"
@@ -368,14 +355,14 @@ done
 
 https://openms.de/documentation/TOPP_PhosphoScoring.html
 
-```bash
+```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
     index_file="${base_name}_indexed.idXML"
     output_file="${base_name}_phosphoscoring_results.idXML"
     echo "Processing $input_file..."
 
-    # Use PhosphoScoring for site localization
+    # Use PhosphoScoring for site localisation
     PhosphoScoring -in "$input_file" \
         -id "$index_file" \
         -out "$output_file" \
@@ -389,7 +376,7 @@ done
 
 ### Step 7.1: Export to Text Format
 
-```bash
+```shell
 # Search for phosphopeptides, using batch process with MS-GF+
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_phosphoscoring_results.idXML"
@@ -421,7 +408,7 @@ IDFilter -in fdr_filtered.idXML \
 
 ### Step 7.2: Export Phosphosite Summary
 
-```bash
+```shell
 # Map peptide identifications to features for quantification
 for base_name in "${FILES[@]}"; do
     id_file="${base_name}_indexed.idXML"  # Use indexed results
@@ -440,14 +427,14 @@ done
 
 ### Visualization with TOPPView
 
-```bash
+```shell
 # Launch TOPPView for visual inspection
 TOPPView picked.mzML localized.idXML
 ```
 
 ### Quality Metrics
 
-```bash
+```shell
 # Generate QC report
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
@@ -464,7 +451,7 @@ done
 
 ### Step 9.1: Label-Free Quantification
 
-```bash
+```shell
 # After obtaining all search results, perform feature detection for quantification
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
@@ -481,7 +468,7 @@ done
 
 ### Link Features to Identifications
 
-```bash
+```shell
 # Map peptide identifications to features for quantification
 for base_name in "${FILES[@]}"; do
     id_file="${base_name}_phosphoscoring_results.idXML"
@@ -501,21 +488,21 @@ done
 ### Typical Outputs
 
 1. **Phosphosite identifications**: 1000-5000 sites (dataset dependent)
-2. **Localization confidence**: 60-80% with score >0.75
+2. **localisation confidence**: 60-80% with score >0.75
 3. **Common modifications**: pSer (85%), pThr (12%), pTyr (3%)
 
 ### Result Interpretation
 
-- **Localization score >0.75**: High confidence
-- **Localization score 0.5-0.75**: Medium confidence
-- **Localization score <0.5**: Low confidence (ambiguous)
+- **localisation score >0.75**: High confidence
+- **localisation score 0.5-0.75**: Medium confidence
+- **localisation score <0.5**: Low confidence (ambiguous)
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Low identification rate**: Check search parameters, enzyme specificity
-2. **Poor localization**: Verify fragment mass tolerance, neutral losses
+2. **Poor localisation**: Verify fragment mass tolerance, neutral losses
 3. **High FDR**: Increase database size, check decoy generation
 
 ### Performance Tips
@@ -528,7 +515,7 @@ done
 
 ### Quantitative Phosphoproteomics
 
-```bash
+```shell
 # For TMT/iTRAQ quantification
 IsobaricAnalyzer -in picked.mzML \
     -out quantified.idXML \
@@ -538,7 +525,7 @@ IsobaricAnalyzer -in picked.mzML \
 
 ### Time-Course Analysis
 
-```bash
+```shell
 # Process multiple time points
 for timepoint in T0 T15 T30 T60; do
     # Process each timepoint
