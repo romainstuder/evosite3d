@@ -121,8 +121,19 @@ def get_column_indexes(header: List[str]) -> Dict[str, int]:
         "modifications": ["modifications", "modification", "mods", "variable_modifications"],
     }
 
+    optional_columns = {
+        "localization_score": [
+            "opt_global_AScore_1",
+            "localization_score",
+            "localization_scores",
+            "phospho_score",
+            "mod_localization_score",
+        ],
+    }
+
     column_map = {}
 
+    # Handle required columns
     for key, possible_names in required_columns.items():
         found = False
         for name in possible_names:
@@ -141,6 +152,16 @@ def get_column_indexes(header: List[str]) -> Dict[str, int]:
                 f"Looked for: {possible_names}. "
                 f"Available columns (first 10): {available_cols}"
             )
+
+    # Handle optional columns
+    for key, possible_names in optional_columns.items():
+        for name in possible_names:
+            if name in header:
+                column_map[key] = header.index(name)
+                logger.debug(
+                    f"Found optional column '{key}' as '{name}' at index {header.index(name)}"
+                )
+                break
 
     return column_map
 
@@ -317,6 +338,11 @@ def extract_phosphosite_table(
             start = row[idx["start"]] if idx["start"] < len(row) else ""
             mods = row[idx["modifications"]] if idx["modifications"] < len(row) else ""
 
+            # Extract localization score if available
+            localization_score = ""
+            if "localization_score" in idx and idx["localization_score"] < len(row):
+                localization_score = row[idx["localization_score"]]
+
             # Skip rows with missing essential data
             if not seq or not acc or not start:
                 skipped_rows += 1
@@ -340,6 +366,7 @@ def extract_phosphosite_table(
                     "Phosphosite_Position": site_info["absolute_position"],
                     "Peptide": seq,
                     "Modification": site_info["modification_name"],
+                    "Localization_Score": localization_score,
                 }
 
                 # Add detailed information if requested

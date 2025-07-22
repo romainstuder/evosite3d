@@ -143,7 +143,10 @@ For a tutorial, start with these representative files (smaller subset):
 - Avoid downloading the entire dataset initially (>100 files, several TB)
 - Focus on technical replicates from the same condition first
 
-# https://www.ebi.ac.uk/pride/archive/projects/PXD035029
+Links for examples:
+
+- Human: https://www.ebi.ac.uk/pride/archive/projects/PXD035029
+- Yeast: https://www.ebi.ac.uk/pride/archive/projects/PXD000612
 
 **Download Methods:**
 
@@ -207,6 +210,8 @@ vendor-neutral way, making it compatible with various analysis software tools. C
 to mzML ensures data accessibility and reproducibility across different platforms while preserving
 all essential spectral information.
 
+Link: https://openms.de/documentation/html/TOPP_FileConverter.html
+
 ```shell
 for base_name in "${FILES[@]}"; do
     raw_file="${base_name}.raw"
@@ -222,10 +227,12 @@ done
 
 ### Finally, we can inspect the files:
 
+Link: https://openms.de/documentation/html/TOPP_FileInfo.html
+
 ```shell
 for base_name in "${FILES[@]}"; do
     mzml_file="${base_name}.mzML"
-    FileConverter -in "$mzml_file"
+    FileInfo -in "$mzml_file"
 done
 ```
 
@@ -238,7 +245,7 @@ intensities, and boundaries using signal-to-noise ratio calculations. Proper pea
 for accurate mass measurements and downstream identification algorithms, as it directly affects the
 quality of peptide spectrum matches.
 
-https://openms.de/current_doxygen/html/TOPP_PeakPickerHiRes.html
+Links: https://openms.de/current_doxygen/html/TOPP_PeakPickerHiRes.html
 https://openms.readthedocs.io/en/latest/getting-started/types-of-topp-tools/picking-peaks.html
 
 ```shell
@@ -283,7 +290,7 @@ gunzip "${PROTEOME}_${TAXID}.fasta.gz"
 mv "${PROTEOME}_${TAXID}.fasta" "${SPECIES}_proteome.fasta"
 ```
 
-### Step 4.3: Create Decoy Database
+### Step 4.2: Create Decoy Database
 
 Decoy databases contain reversed or shuffled protein sequences that serve as negative controls for
 statistical validation of peptide identifications in database searches. When searching against a
@@ -292,7 +299,7 @@ combined target-decoy database, false matches to decoy sequences estimate the fa
 setting FDR thresholds, typically 1-5%, ensuring that the majority of reported identifications are
 genuine matches rather than random coincidences.
 
-https://www.openms.org/documentation/html/TOPP_DecoyDatabase.html
+Link: https://www.openms.org/documentation/html/TOPP_DecoyDatabase.html
 
 ```shell
 DecoyDatabase -in "${SPECIES}_proteome.fasta" \
@@ -316,11 +323,11 @@ of thousands of peptides from complex proteome samples.
 We will use the following TOPP INI file (in XML format):
 [search_params.xml](./data/search_params.xml)
 
-Ref: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
+Link: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
 
-### Step 4.5: Search for phosphopeptides, using batch process with MS-GF+
+### Step 4.4: Search for phosphopeptides, using batch process with MS-GF+
 
-https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
+Link https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -359,7 +366,7 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-### Step 4.6: Peptide Indexing
+### Step 4.5: Peptide Indexing
 
 Peptide indexing maps identified peptides back to their parent proteins in the database,
 establishing the relationship between peptide sequences and protein accession numbers. This process
@@ -396,7 +403,7 @@ proportion of false positives in the identification list. Controlling FDR at the
 match (PSM) level is particularly important for phosphoproteomics due to the added complexity of
 modification site assignment and the lower abundance of phosphorylated species.
 
-https://openms.de/documentation/html/TOPP_FalseDiscoveryRate.html
+Link: https://openms.de/documentation/html/TOPP_FalseDiscoveryRate.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -424,7 +431,7 @@ spectral quality, unusual peptide properties, or low search engine confidence sc
 filtering significantly improves the reliability of downstream analyses by retaining only
 high-quality identifications that meet stringent analytical criteria.
 
-https://openms.de/documentation/html/TOPP_IDFilter.html
+Link: https://openms.de/documentation/html/TOPP_IDFilter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -454,7 +461,7 @@ fragmentation patterns to calculate localisation probabilities for each potentia
 High-confidence site localisation (typically >75% probability) is essential for understanding the
 biological significance of specific phosphorylation events and their regulatory roles.
 
-https://openms.de/documentation/TOPP_PhosphoScoring.html
+Link: https://openms.de/documentation/TOPP_PhosphoScoring.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -479,7 +486,7 @@ done
 
 We are simply converting the idXML file to tabular format file (mzTab).
 
-https://www.openms.org/documentation/html/TOPP_TextExporter.html
+Link: https://www.openms.org/documentation/html/TOPP_TextExporter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -496,6 +503,10 @@ done
 ```
 
 ### Step 7.2: Extract phosposite positions
+
+Finally use the following python script ([ms_extract_phosphosites_from_mztab.py](../../../
+/ms_extract_phosphosites_from_mztab.py)) to extract phosphosites from the mzTab files to a tabular
+file (.tsv), easier to view in spreadsheet editor like LibreOffice.
 
 ```shell
 for base_name in "${FILES[@]}"; do
