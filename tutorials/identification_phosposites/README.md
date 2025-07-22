@@ -504,9 +504,10 @@ done
 
 ### Step 7.2: Extract phosposite positions
 
-Finally use the following python script ([ms_extract_phosphosites_from_mztab.py](../../../
-/ms_extract_phosphosites_from_mztab.py)) to extract phosphosites from the mzTab files to a tabular
-file (.tsv), easier to view in spreadsheet editor like LibreOffice.
+Finally use the following python script
+([ms_extract_phosphosites_from_mztab.py](../../../ms_extract_phosphosites_from_mztab.py)) to extract
+phosphosites from the mzTab files to a tabular file (.tsv), easier to view in spreadsheet editor
+like LibreOffice.
 
 ```shell
 for base_name in "${FILES[@]}"; do
