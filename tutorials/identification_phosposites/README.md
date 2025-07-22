@@ -247,7 +247,7 @@ probably want to have them! Just add the contaminant file to the input file list
 ### Step 4.2: Configure Search Parameters
 
 We will use the following TOPP INI file (in XML format):
-[search_params.xml](./data/search_params.xml)
+[search_params.xml](./data/search_params.xml){:target="\_blank"}
 
 Ref: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
 
