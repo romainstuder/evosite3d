@@ -1,6 +1,6 @@
 # OpenMS Tutorial: Phosphosite Identification in Human Samples
 
-## Theoritical concept
+## Theoretical concept
 
 Phosphorylation is a fundamental post-translational modification where phosphate groups are
 covalently attached to proteins, typically on serine (S), threonine (T), and tyrosine (Y) residues.
@@ -38,6 +38,9 @@ community thrive.
 ### Software Requirements
 
 - OpenMS 3.0+ (with TOPP tools)
+
+Optional:
+
 - TOPPView (for visualization)
 - SearchGUI and PeptideShaker (optional, for alternative search)
 
@@ -46,7 +49,14 @@ community thrive.
 #### macOS
 
 ```shell
-# Method 1: Download pre-built binaries
+
+# Method 1: Using Homebrew
+brew install openms
+# Important, you need to add the $DYLD_LIBRARY_PATH path:
+export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
+
+
+# Method 2: Download pre-built binaries
 # Visit: https://openms.de/downloads/
 # Download the macOS installer (.dmg file)
 
@@ -54,9 +64,6 @@ community thrive.
 conda create -n openms-env python=3.9
 conda activate openms-env
 conda install -c bioconda openms
-
-# Method 3: Using Homebrew (if available)
-brew install openms
 ```
 
 #### Ubuntu/Debian
@@ -74,10 +81,6 @@ sudo apt-get install openms openms-doc
 conda create -n openms-env python=3.9
 conda activate openms-env
 conda install -c bioconda openms
-```
-
-```shell
-export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
 ```
 
 ### Required Files
@@ -164,39 +167,38 @@ TUTORIAL_FILES=(
 wget -c -t 3 "${TUTORIAL_FILES[@]/#/$BASE_URL/}"
 ```
 
-### Prepare Protein Database
-
-```shell
-# Download human proteome from UniProt
-wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640/UP000005640_9606.fasta.gz
-wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000002311/UP000002311_559292.fasta.gz
-
-# Decompress
-gunzip UP000005640_9606.fasta.gz
-gunzip UP000002311_559292.fasta.gz
-
-# Rename for clarity
-mv UP000005640_9606.fasta human_proteome.fasta
-mv UP000002311_559292.fasta yeast_proteome.fasta
-```
-
 ## Step 2: File Conversion and Preprocessing
 
-### Define files used downstream
+### Step 2.1: Define files used downstream
 
 ```shell
-FILES=(
-    "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6"
-    "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6"
-)
+SPECIES="yeast"
 
-FILES=(
-    "34160_e02555_ML040_phos_StressPool_PFP3"
-)
-
+case "$SPECIES" in
+  "human")
+    FILES=(
+        "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6"
+        "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6"
+    )
+    ;;
+  "yeast")
+    FILES=(
+        "34160_e02555_ML040_phos_StressPool_PFP3"
+    )
+    ;;
+esac
 ```
 
-### Step 2.1: Convert Raw Files to mzML
+### Step 2.2: Convert Raw Files to mzML
+
+First, we need to convert the raw dataset from MS to another format, mzML.
+
+Raw files (.raw) are proprietary binary formats produced by mass spectrometers that contain the
+original instrument data including scan metadata, ion intensities, and timing information. The mzML
+format is an open, standardized XML-based format that stores the same mass spectrometry data in a
+vendor-neutral way, making it compatible with various analysis software tools. Converting from raw
+to mzML ensures data accessibility and reproducibility across different platforms while preserving
+all essential spectral information.
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -211,17 +213,26 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-### We can inspect the files:
+### Finally, we can inspect the files:
 
 ```shell
-FileInfo -in 20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6.mzML
-FileInfo -in 20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6.mzML
-FileInfo -in 34160_e02555_ML040_phos_StressPool_PFP3.mzML
+for base_name in "${FILES[@]}"; do
+    mzml_file="${base_name}.mzML"
+    FileConverter -in "$mzml_file"
+done
 ```
 
 ## Step 3: Perform peak picking (batch processing)
 
+Peak picking is the process of identifying and extracting meaningful signals (peaks) from continuous
+mass spectrometry data by distinguishing real analyte signals from background noise and baseline
+fluctuations. This step converts profile-mode data into centroided data by determining peak centers,
+intensities, and boundaries using signal-to-noise ratio calculations. Proper peak picking is crucial
+for accurate mass measurements and downstream identification algorithms, as it directly affects the
+quality of peptide spectrum matches.
+
 https://openms.de/current_doxygen/html/TOPP_PeakPickerHiRes.html
+https://openms.readthedocs.io/en/latest/getting-started/types-of-topp-tools/picking-peaks.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -239,20 +250,46 @@ done
 
 ## Step 4: Database Search
 
-### Step 4.1: Create Decoy Database
+### Step 4.1: Prepare Protein Database
+
+```shell
+SPECIES="yeast"
+
+case "$SPECIES" in
+  "human")
+    TAXID="9606"
+    PROTEOME="UP000005640"
+    ;;
+  "yeast")
+    TAXID="559292"
+    PROTEOME="UP000002311"
+    ;;
+esac
+
+# Download human proteome from UniProt
+wget "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/${PROTEOME}/${PROTEOME}_${TAXID}.fasta.gz"
+
+# Decompress
+gunzip "${PROTEOME}_${TAXID}.fasta.gz"
+
+# Rename for clarity
+mv "${PROTEOME}_${TAXID}.fasta" "${SPECIES}_proteome.fasta"
+```
+
+### Step 4.3: Create Decoy Database
+
+Decoy databases contain reversed or shuffled protein sequences that serve as negative controls for
+statistical validation of peptide identifications in database searches. When searching against a
+combined target-decoy database, false matches to decoy sequences estimate the false discovery rate
+(FDR) of identifications. This approach allows researchers to control identification confidence by
+setting FDR thresholds, typically 1-5%, ensuring that the majority of reported identifications are
+genuine matches rather than random coincidences.
 
 https://www.openms.org/documentation/html/TOPP_DecoyDatabase.html
 
 ```shell
-DecoyDatabase -in human_proteome.fasta \
-    -out human_proteome_decoy.fasta \
-    -decoy_string "DECOY_" \
-    -method reverse
-```
-
-```shell
-DecoyDatabase -in yeast_proteome.fasta \
-    -out yeast_proteome_decoy.fasta \
+DecoyDatabase -in "${SPECIES}_proteome.fasta" \
+    -out "${SPECIES}_proteome_decoy.fasta"" \
     -decoy_string "DECOY_" \
     -method reverse
 ```
@@ -261,6 +298,13 @@ DecoyDatabase -in yeast_proteome.fasta \
 probably want to have them! Just add the contaminant file to the input file list 'in'.
 
 ### Step 4.2: Configure Search Parameters
+
+Database searching involves comparing experimental peptide mass spectra against theoretical spectra
+generated from a protein sequence database to identify which peptides produced the observed
+fragmentation patterns. Search engines like MS-GF+ and COMET score the similarity between
+experimental and theoretical spectra, considering factors like precursor mass accuracy, fragment ion
+matches, and modification states. This computational approach enables high-throughput identification
+of thousands of peptides from complex proteome samples.
 
 We will use the following TOPP INI file (in XML format):
 [search_params.xml](./data/search_params.xml)
@@ -272,7 +316,6 @@ Ref: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
 https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
 
 ```shell
-SPECIES="yeast"
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
     output_file="${base_name}_search_results.idXML"
@@ -293,7 +336,6 @@ done
 Alternative with COMET:
 
 ```shell
-SPECIES="yeast"
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
     output_file="${base_name}_search_results.idXML"
@@ -313,6 +355,13 @@ done
 ## Step 5: Post-Processing and Filtering
 
 ### Step 5.1: Apply False Discovery Rate control
+
+False Discovery Rate (FDR) control in phosphoproteomics ensures that a specified percentage
+(typically 1%) of reported phosphopeptide identifications are expected to be incorrect matches. FDR
+calculation uses the ratio of decoy hits to target hits, multiplied by 100, to estimate the
+proportion of false positives in the identification list. Controlling FDR at the peptide-spectrum
+match (PSM) level is particularly important for phosphoproteomics due to the added complexity of
+modification site assignment and the lower abundance of phosphorylated species.
 
 https://openms.de/documentation/html/TOPP_FalseDiscoveryRate.html
 
@@ -335,6 +384,13 @@ done
 
 ### Step 5.2: Filter identifications by score and quality
 
+Identification filtering applies quality criteria to remove low-confidence peptide matches based on
+multiple parameters including identification scores, peptide length, precursor charge state, and
+mass accuracy. These filters eliminate identifications that are likely to be incorrect due to poor
+spectral quality, unusual peptide properties, or low search engine confidence scores. Proper
+filtering significantly improves the reliability of downstream analyses by retaining only
+high-quality identifications that meet stringent analytical criteria.
+
 ```shell
 for base_name in "${FILES[@]}"; do
     fdr_file="${base_name}_fdr.idXML"
@@ -356,6 +412,13 @@ done
 
 ### ### Step 5.3: Peptide Indexing
 
+Peptide indexing maps identified peptides back to their parent proteins in the database,
+establishing the relationship between peptide sequences and protein accession numbers. This process
+handles cases where peptides match multiple proteins (shared peptides) and ensures proper protein
+grouping for quantification and functional analysis. Indexing also validates that identified
+peptides conform to expected enzyme cleavage patterns and protein sequence boundaries, providing
+additional confidence in the identification results.
+
 ```shell
 for base_name in "${FILES[@]}"; do
     filtered_file="${base_name}_fdr_filtered.idXML"
@@ -374,6 +437,13 @@ done
 ```
 
 ## Step 6: Phosphosite Localisation
+
+Phosphosite localisation determines the exact amino acid residue(s) within a peptide that carry the
+phosphorylation modification, which is critical since multiple serine, threonine, or tyrosine
+residues may be present in the same peptide. Algorithms like PhosphoRS or Ascore analyse
+fragmentation patterns to calculate localisation probabilities for each potential modification site.
+High-confidence site localisation (typically >75% probability) is essential for understanding the
+biological significance of specific phosphorylation events and their regulatory roles.
 
 https://openms.de/documentation/TOPP_PhosphoScoring.html
 
@@ -447,7 +517,7 @@ done
 
 ## Step 8: Quality Control and Validation
 
-### Visualization with TOPPView
+### Visualisation with TOPPView
 
 ```shell
 # Launch TOPPView for visual inspection
