@@ -1,4 +1,4 @@
-# OpenMS Tutorial: Phosphosite Identification in Human and Yeast Samples
+# OpenMS Tutorial: Phosphosite Identification in Yeast Samples
 
 ## Theoretical concept
 
