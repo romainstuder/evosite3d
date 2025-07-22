@@ -18,7 +18,7 @@ making phosphoproteomics an indispensable tool in systems biology and biomedical
 
 ## Overview
 
-This tutorial demonstrates how to identify phosphorylation sites (phosphosites) in human proteins
+This tutorial demonstrates how to identify phosphorylation sites (phosphosites) in yeast proteins
 using OpenMS with publicly available mass spectrometry data. We will use a complete workflow with
 OpenMS from raw data processing to phosphosite localisation.
 
@@ -102,41 +102,18 @@ conda install -c bioconda openms
 
 ### Download Public Dataset - PXD000612
 
-We will use the "Ultra-deep human phosphoproteome" dataset from HeLa cells:
+This tutorial demonstrates how to identify phosphorylation sites in Saccharomyces cerevisiae using
+mass spectrometry data from the PXD035029 dataset. This dataset represents an ultra-deep yeast
+phosphoproteome study that investigated stress-responsive phosphorylation networks across 101
+environmental and chemical perturbations. Dataset Information
 
-**Dataset Information:**
-
-- **PXD ID**: PXD000612
-- **Title**: Ultra-deep human phosphoproteome reveals different regulatory nature of Tyr and
-  Ser/Thr-based signaling
-- **Organism**: Homo sapiens (HeLa cells)
-- **Instrument**: Q Exactive
-- **Contains**: >50,000 phosphorylated peptides
-
-**Recommended Files to Download:**
-
-For a tutorial, start with these representative files (smaller subset):
-
-```
-# Access the dataset at: https://www.ebi.ac.uk/pride/archive/projects/PXD000612
-
-# Recommended starting files (choose 2-3 for tutorial):
-# 1. Control/baseline samples:
-#    - HeLa_Control_1.raw
-#    - HeLa_Control_2.raw
-
-# 2. Stimulated samples (if doing comparative analysis):
-#    - HeLa_EGF_1.raw
-#    - HeLa_EGF_2.raw
-
-# 3. Alternative: Pick any 2-3 .raw files from the file list
-#    (The exact filenames may vary - check the FTP download section)
-
-# Additional files that might be helpful:
-# - mqpar.xml (MaxQuant parameters used in original study)
-# - Any .fasta database files provided
-# - Peak lists (.mgf files) if available
-```
+- Dataset: PXD035029 - "The regulatory landscape of the yeast phosphoproteome"
+- Organism: Saccharomyces cerevisiae (Baker's yeast)
+- Study: Ultra-deep reference phosphoproteomic DDA data
+- Coverage: Phosphosites on 59% of the yeast proteome
+- Scope: 18% of the proteome harbors regulated phosphosites within 5 minutes of stress exposure
+- Reference Database: SGD (Saccharomyces Genome Database)
+- Link: https://www.ebi.ac.uk/pride/archive/projects/PXD035029
 
 **File Selection Tips:**
 
@@ -145,36 +122,18 @@ For a tutorial, start with these representative files (smaller subset):
 - Avoid downloading the entire dataset initially (>100 files, several TB)
 - Focus on technical replicates from the same condition first
 
-Links for examples:
-
-- Human: https://www.ebi.ac.uk/pride/archive/projects/PXD035029
-- Yeast: https://www.ebi.ac.uk/pride/archive/projects/PXD000612
-
 **Download Methods:**
 
 ```shell
 # Method 1: Direct download from PRIDE web interface
-# 1. Go to https://www.ebi.ac.uk/pride/archive/projects/PXD000612
+# 1. Go to https://www.ebi.ac.uk/pride/archive/projects/PXD035029
 # 2. Click "FTP Download"
 # 3. Select representative .raw files
 
 # Method 2: Automated download using wget (recommended)
-BASE_URL="ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2014/08/PXD000612"
-FILES=(
-    "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6.raw"
-    "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep2_pH6.raw"
-    "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep3_pH6.raw"
-    "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6.raw"
-    "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep2_pH6.raw"
-    "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep3_pH6.raw"
-)
-wget -c -t 3 "${FILES[@]/#/$BASE_URL/}"
-
-# Alternative: Download subset for faster tutorial
-BASE_URL="ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2014/08/PXD000612"
+BASE_URL="ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2023/08/PXD035029"
 TUTORIAL_FILES=(
-    "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6.raw"
-    "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6.raw"
+    "34160_e02555_ML040_phos_StressPool_PFP3.raw"
 )
 wget -c -t 3 "${TUTORIAL_FILES[@]/#/$BASE_URL/}"
 ```
@@ -187,12 +146,6 @@ wget -c -t 3 "${TUTORIAL_FILES[@]/#/$BASE_URL/}"
 SPECIES="yeast"
 
 case "$SPECIES" in
-  "human")
-    FILES=(
-        "20120302_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_EGF5_rep1_pH6"
-        "20111219_EXQ5_KiSh_SA_LabelFree_HeLa_Proteome_Control_rep1_pH6"
-    )
-    ;;
   "yeast")
     FILES=(
         "34160_e02555_ML040_phos_StressPool_PFP3"
@@ -283,7 +236,7 @@ case "$SPECIES" in
     ;;
 esac
 
-# Download human proteome from UniProt
+# Download proteome from UniProt
 wget "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/${PROTEOME}/${PROTEOME}_${TAXID}.fasta.gz"
 
 # Decompress
