@@ -42,13 +42,15 @@ The tutorial will follow eight different steps:
 5. [Post-Processing and Filtering](#postprocessing)
 6. [Phosphosite Localisation](#phosphositeslocalisation)
 7. [Results Export and Analysis](#resultsexport)
-8. [Quality Control and Validation](#qualitycontrol)
 
 ## Prerequisites
 
 ### Software Requirements
 
-- OpenMS 3.0+ (with TOPP tools) Optional:
+- OpenMS 3.0+ (with TOPP tools)
+
+Optional:
+
 - TOPPView (for visualization)
 - SearchGUI and PeptideShaker (optional, for alternative search)
 
@@ -100,7 +102,7 @@ conda install -c bioconda openms
 
 ### Download Public Dataset - PXD000612
 
-We'll use the "Ultra-deep human phosphoproteome" dataset from HeLa cells:
+We will use the "Ultra-deep human phosphoproteome" dataset from HeLa cells:
 
 **Dataset Information:**
 
@@ -246,6 +248,7 @@ for accurate mass measurements and downstream identification algorithms, as it d
 quality of peptide spectrum matches.
 
 Links: https://openms.de/current_doxygen/html/TOPP_PeakPickerHiRes.html
+
 https://openms.readthedocs.io/en/latest/getting-started/types-of-topp-tools/picking-peaks.html
 
 ```shell
@@ -262,7 +265,7 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 4: Database Search for Peptide Identification
+## Step 4: Database Search for Peptide Identification <a name="dataaquisition"></a>
 
 ### Step 4.1: Prepare Protein Database
 
@@ -308,10 +311,7 @@ DecoyDatabase -in "${SPECIES}_proteome.fasta" \
     -method reverse
 ```
 
-#TODO: Warning: Only one FASTA input file was provided, which might not contain contaminants. You
-probably want to have them! Just add the contaminant file to the input file list 'in'.
-
-### Step 4.3: Configure Search Parameters
+### Step 4.3: Configure Search Search for phosphopeptides, using batch process with MS-GF+
 
 Database searching involves comparing experimental peptide mass spectra against theoretical spectra
 generated from a protein sequence database to identify which peptides produced the observed
@@ -320,14 +320,11 @@ experimental and theoretical spectra, considering factors like precursor mass ac
 matches, and modification states. This computational approach enables high-throughput identification
 of thousands of peptides from complex proteome samples.
 
-We will use the following TOPP INI file (in XML format):
+We will use the following TOPP INI file (in XML format) to define the parameters for the search:
 [search_params.xml](./data/search_params.xml)
 
 Link: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
-
-### Step 4.4: Search for phosphopeptides, using batch process with MS-GF+
-
-Link https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
+https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -348,6 +345,8 @@ done
 ```
 
 Alternative with COMET:
+
+Link: https://www.openms.org/documentation/html/TOPP_CometAdapter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
@@ -375,6 +374,8 @@ grouping for quantification and functional analysis. Indexing also validates tha
 peptides conform to expected enzyme cleavage patterns and protein sequence boundaries, providing
 additional confidence in the identification results.
 
+Link: https://openms.de/documentation/html/TOPP_PeptideIndexer.html
+
 ```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_search_results.idXML"
@@ -392,9 +393,9 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 5: False Discovery Rate (FDR) Control
+## Step 5: Post-processing <a name="postprocessing"></a>
 
-### Step 5.1: Apply False Discovery Rate control
+### Step 5.1: Apply False Discovery Rate (FDR) Control
 
 False Discovery Rate (FDR) control in phosphoproteomics ensures that a specified percentage
 (typically 1%) of reported phosphopeptide identifications are expected to be incorrect matches. FDR
@@ -436,7 +437,7 @@ Link: https://openms.de/documentation/html/TOPP_IDFilter.html
 ```shell
 for base_name in "${FILES[@]}"; do
     fdr_file="${base_name}_fdr.idXML"
-    filtered_file="${base_name}_fdr_filtered.idXML"
+    filtered_file="${base_name}_filtered.idXML"
 
     echo "Filtering identifications..."
 
@@ -452,7 +453,20 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 6: Phosphosite Localisation
+More stringent filtering for phospho analysis:
+
+```
+IDFilter -in fdr_filtered.idXML \
+    -out filtered.idXML \
+    -score:pep 0.01 \
+    -remove_decoys \
+    -precursor:length '8:50' \
+    -precursor:charge '2:5' \
+    -whitelist:modifications 'Phospho (STY)' \  # Only phosphorylated peptides
+    -score:prot 0.05                            # Protein-level score threshold
+```
+
+## Step 6: Phosphosite Localisation <a name="phosphositeslocalisation"></a>
 
 Phosphosite localisation determines the exact amino acid residue(s) within a peptide that carry the
 phosphorylation modification, which is critical since multiple serine, threonine, or tyrosine
@@ -466,7 +480,7 @@ Link: https://openms.de/documentation/TOPP_PhosphoScoring.html
 ```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
-    index_file="${base_name}_fdr_filtered.idXML"
+    index_file="${base_name}_filtered.idXML"
     output_file="${base_name}_phosphoscoring_results.idXML"
     echo "Processing $input_file..."
 
@@ -480,59 +494,36 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 7: Results Export and Analysis
+## Step 7: Results Export and Analysis <a name="resultsexport"></a>
 
-### Step 7.1: Export to Text Format
+### Step 7.1: Export to Text Format and extract phosposite positions
 
-We are simply converting the idXML file to tabular format file (mzTab).
+We are simply converting the idXML file to tabular format file (mzTab), and then we use the
+following python script
+([ms_extract_phosphosites_from_mztab.py](../../scripts/ms_extract_phosphosites_from_mztab.py)) to
+extract phosphosites from the mzTab files to a tabular file (.tsv), easier to view in spreadsheet
+editor like LibreOffice.
 
 Link: https://www.openms.org/documentation/html/TOPP_TextExporter.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_phosphoscoring_results.idXML"
-    output_file="${base_name}_phosphosite_results.mzTab"
+    mztab_file="${base_name}_phosphosite_results.mzTab"
+    phospho_file="${base_name}_phosphosite_results.tsv"
     echo "Processing TextExporter on $input_file..."
 
     # Export identification results
     MzTabExporter -in "$input_file" \
-        -out "$output_file" \
+        -out "$mztab_file" \
         -threads 4
+
+    # Extract phosposite positions on protein
+    ms_extract_phosphosites_from_mztab.py -in "$mztab_file" \
+        -out "$phospho_file"
+
     echo "MzTabExporter completed for: $output_file"
 done
-```
-
-### Step 7.2: Extract phosposite positions
-
-Finally use the following python script
-([ms_extract_phosphosites_from_mztab.py](../../scripts/ms_extract_phosphosites_from_mztab.py)) to
-extract phosphosites from the mzTab files to a tabular file (.tsv), easier to view in spreadsheet
-editor like LibreOffice.
-
-```shell
-for base_name in "${FILES[@]}"; do
-    input_file="${base_name}_phosphosite_results.mzTab"
-    output_file="${base_name}_phosphosite_results.tsv"
-    echo "Processing TextExporter on $input_file..."
-
-    # Export identification results
-    ms_extract_phosphosites_from_mztab.py -in "$input_file" \
-        -out "$output_file"
-    echo "Phosphosites extraction completed for: $output_file"
-done
-```
-
-# More stringent filtering for phospho analysis
-
-```
-IDFilter -in fdr_filtered.idXML \
-    -out filtered.idXML \
-    -score:pep 0.01 \
-    -remove_decoys \
-    -precursor:length '8:50' \
-    -precursor:charge '2:5' \
-    -whitelist:modifications 'Phospho (STY)' \  # Only phosphorylated peptides
-    -score:prot 0.05                            # Protein-level score threshold
 ```
 
 ## Troubleshooting
