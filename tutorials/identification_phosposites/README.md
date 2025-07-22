@@ -1,4 +1,4 @@
-# OpenMS Tutorial: Phosphosite Identification in Human Samples
+# OpenMS Tutorial: Phosphosite Identification in Human and Yeast Samples
 
 ## Theoretical concept
 
@@ -33,14 +33,22 @@ the OpenMS Code of Conduct for guidance on how to interact with others in a way 
 community thrive.
 ```
 
+The tutorial will follow eight different steps:
+
+1. [Data Acquisition](#dataaquisition)
+2. [File Conversion](#fileconversion)
+3. [Peak picking](#peakpicking)
+4. [Database Search](#databasesearch)
+5. [Post-Processing and Filtering](#postprocessing)
+6. [Phosphosite Localisation](#phosphositeslocalisation)
+7. [Results Export and Analysis](#resultsexport)
+8. [Quality Control and Validation](#qualitycontrol)
+
 ## Prerequisites
 
 ### Software Requirements
 
-- OpenMS 3.0+ (with TOPP tools)
-
-Optional:
-
+- OpenMS 3.0+ (with TOPP tools) Optional:
 - TOPPView (for visualization)
 - SearchGUI and PeptideShaker (optional, for alternative search)
 
@@ -54,7 +62,6 @@ Optional:
 brew install openms
 # Important, you need to add the $DYLD_LIBRARY_PATH path:
 export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
-
 
 # Method 2: Download pre-built binaries
 # Visit: https://openms.de/downloads/
@@ -89,7 +96,7 @@ conda install -c bioconda openms
 - Phosphorylation modification database
 - Public phosphoproteomics dataset
 
-## Step 1: Data Acquisition
+## Step 1: Data Acquisition <a name="dataaquisition"></a>
 
 ### Download Public Dataset - PXD000612
 
@@ -167,7 +174,7 @@ TUTORIAL_FILES=(
 wget -c -t 3 "${TUTORIAL_FILES[@]/#/$BASE_URL/}"
 ```
 
-## Step 2: File Conversion and Preprocessing
+## Step 2: File Conversion <a name="fileconversion"></a>
 
 ### Step 2.1: Define files used downstream
 
@@ -222,7 +229,7 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 3: Perform peak picking (batch processing)
+## Step 3: Peak picking <a name="peakpicking"></a>
 
 Peak picking is the process of identifying and extracting meaningful signals (peaks) from continuous
 mass spectrometry data by distinguishing real analyte signals from background noise and baseline
@@ -248,7 +255,7 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 4: Database Search
+## Step 4: Database Search for Peptide Identification
 
 ### Step 4.1: Prepare Protein Database
 
@@ -297,7 +304,7 @@ DecoyDatabase -in "${SPECIES}_proteome.fasta" \
 #TODO: Warning: Only one FASTA input file was provided, which might not contain contaminants. You
 probably want to have them! Just add the contaminant file to the input file list 'in'.
 
-### Step 4.2: Configure Search Parameters
+### Step 4.3: Configure Search Parameters
 
 Database searching involves comparing experimental peptide mass spectra against theoretical spectra
 generated from a protein sequence database to identify which peptides produced the observed
@@ -311,7 +318,7 @@ We will use the following TOPP INI file (in XML format):
 
 Ref: https://openms.readthedocs.io/en/latest/getting-started/topp-tools.html
 
-### Step 4.3: Search for phosphopeptides, using batch process with MS-GF+
+### Step 4.5: Search for phosphopeptides, using batch process with MS-GF+
 
 https://www.openms.org/documentation/html/TOPP_MSGFPlusAdapter.html
 
@@ -352,7 +359,33 @@ for base_name in "${FILES[@]}"; do
 done
 ```
 
-## Step 5: Post-Processing and Filtering
+### Step 4.6: Peptide Indexing
+
+Peptide indexing maps identified peptides back to their parent proteins in the database,
+establishing the relationship between peptide sequences and protein accession numbers. This process
+handles cases where peptides match multiple proteins (shared peptides) and ensures proper protein
+grouping for quantification and functional analysis. Indexing also validates that identified
+peptides conform to expected enzyme cleavage patterns and protein sequence boundaries, providing
+additional confidence in the identification results.
+
+```shell
+for base_name in "${FILES[@]}"; do
+    input_file="${base_name}_search_results.idXML"
+    indexed_file="${base_name}_indexed.idXML"
+
+    echo "Processing $input_file..."
+
+    # Index peptides to proteins
+    PeptideIndexer -in "${input_file}" \
+        -out "${indexed_file}" \
+        -fasta "./${SPECIES}_proteome_decoy.fasta" \
+        -enzyme:specificity full
+
+    echo "PeptideIndexer Completed for: $output_file"
+done
+```
+
+## Step 5: False Discovery Rate (FDR) Control
 
 ### Step 5.1: Apply False Discovery Rate control
 
@@ -367,7 +400,7 @@ https://openms.de/documentation/html/TOPP_FalseDiscoveryRate.html
 
 ```shell
 for base_name in "${FILES[@]}"; do
-    input_file="${base_name}_search_results.idXML"
+    input_file="${base_name}_indexed.idXML"
     fdr_file="${base_name}_fdr.idXML"
 
     echo "Processing $input_file..."
@@ -391,6 +424,8 @@ spectral quality, unusual peptide properties, or low search engine confidence sc
 filtering significantly improves the reliability of downstream analyses by retaining only
 high-quality identifications that meet stringent analytical criteria.
 
+https://openms.de/documentation/html/TOPP_IDFilter.html
+
 ```shell
 for base_name in "${FILES[@]}"; do
     fdr_file="${base_name}_fdr.idXML"
@@ -406,33 +441,7 @@ for base_name in "${FILES[@]}"; do
         -precursor:length '8:50' \
         -precursor:charge '2:5'
 
-    echo "Completed: $output_file"
-done
-```
-
-### ### Step 5.3: Peptide Indexing
-
-Peptide indexing maps identified peptides back to their parent proteins in the database,
-establishing the relationship between peptide sequences and protein accession numbers. This process
-handles cases where peptides match multiple proteins (shared peptides) and ensures proper protein
-grouping for quantification and functional analysis. Indexing also validates that identified
-peptides conform to expected enzyme cleavage patterns and protein sequence boundaries, providing
-additional confidence in the identification results.
-
-```shell
-for base_name in "${FILES[@]}"; do
-    filtered_file="${base_name}_fdr_filtered.idXML"
-    indexed_file="${base_name}_indexed.idXML"
-
-    echo "Processing $input_file..."
-
-    # Index peptides to proteins
-    PeptideIndexer -in "$filtered_file" \
-        -out "$indexed_file" \
-        -fasta "./${SPECIES}_proteome_decoy.fasta" \
-        -enzyme:specificity full
-
-    echo "Completed: $output_file"
+    echo "IDFilter completed for: $output_file"
 done
 ```
 
@@ -450,7 +459,7 @@ https://openms.de/documentation/TOPP_PhosphoScoring.html
 ```shell
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_picked.mzML"
-    index_file="${base_name}_indexed.idXML"
+    index_file="${base_name}_fdr_filtered.idXML"
     output_file="${base_name}_phosphoscoring_results.idXML"
     echo "Processing $input_file..."
 
@@ -460,7 +469,7 @@ for base_name in "${FILES[@]}"; do
         -out "$output_file" \
         -threads 4
 
-    echo "Completed: $output_file"
+    echo "PhosphoScoring completed for: $output_file"
 done
 ```
 
@@ -468,20 +477,36 @@ done
 
 ### Step 7.1: Export to Text Format
 
+We are simply converting the idXML file to tabular format file (mzTab).
+
+https://www.openms.org/documentation/html/TOPP_TextExporter.html
+
 ```shell
-# Search for phosphopeptides, using batch process with MS-GF+
 for base_name in "${FILES[@]}"; do
     input_file="${base_name}_phosphoscoring_results.idXML"
-    output_file="${base_name}_phosphosite_results.tsv"
-    echo "Processing $input_file..."
+    output_file="${base_name}_phosphosite_results.mzTab"
+    echo "Processing TextExporter on $input_file..."
 
     # Export identification results
-    TextExporter -in "$input_file" \
+    MzTabExporter -in "$input_file" \
         -out "$output_file" \
-        -out_type tsv \
-        -id:peptides_only \
-        -id:first_dim_rt
-    echo "Completed: $output_file"
+        -threads 4
+    echo "MzTabExporter completed for: $output_file"
+done
+```
+
+### Step 7.2: Extract phosposite positions
+
+```shell
+for base_name in "${FILES[@]}"; do
+    input_file="${base_name}_phosphosite_results.mzTab"
+    output_file="${base_name}_phosphosite_results.tsv"
+    echo "Processing TextExporter on $input_file..."
+
+    # Export identification results
+    ms_extract_phosphosites_from_mztab.py -in "$input_file" \
+        -out "$output_file"
+    echo "Phosphosites extraction completed for: $output_file"
 done
 ```
 
@@ -498,97 +523,6 @@ IDFilter -in fdr_filtered.idXML \
     -score:prot 0.05                            # Protein-level score threshold
 ```
 
-### Step 7.2: Export Phosphosite Summary
-
-```shell
-# Map peptide identifications to features for quantification
-for base_name in "${FILES[@]}"; do
-    id_file="${base_name}_indexed.idXML"  # Use indexed results
-    feature_file="${base_name}_features.featureXML"
-    output_file="${base_name}_quantified.featureXML"
-
-    IDMapper -id "$id_file" \
-        -in "$feature_file" \
-        -out "$output_file" \
-        -rt_tolerance 30.0 \
-        -mz_tolerance 0.01
-done
-```
-
-## Step 8: Quality Control and Validation
-
-### Visualisation with TOPPView
-
-```shell
-# Launch TOPPView for visual inspection
-TOPPView picked.mzML localized.idXML
-```
-
-### Quality Metrics
-
-```shell
-# Generate QC report
-for base_name in "${FILES[@]}"; do
-    input_file="${base_name}_picked.mzML"
-    qc_report="${base_name}_qc_report.qcML"
-    phosphoscoring_results="${base_name}_phosphoscoring_results.idXML"
-
-    QCCalculator -in "$input_file" \
-        -out "$qc_report" \
-        -id "$phosphoscoring_results"
-done
-```
-
-## Step 9: Quantitative Comparison (Control vs EGF5)
-
-### Step 9.1: Label-Free Quantification
-
-```shell
-# After obtaining all search results, perform feature detection for quantification
-for base_name in "${FILES[@]}"; do
-    input_file="${base_name}_picked.mzML"
-    output_file="${base_name}_features.featureXML"
-
-    echo "Feature detection for $input_file..."
-    FeatureFinderCentroided -in "$input_file" \
-        -out "$output_file" \
-        -algorithm:mass_trace:mz_tolerance 0.005 \
-        -algorithm:mass_trace:min_spectra 5 \
-        -algorithm:isotopic_pattern:mz_tolerance 0.005
-done
-```
-
-### Link Features to Identifications
-
-```shell
-# Map peptide identifications to features for quantification
-for base_name in "${FILES[@]}"; do
-    id_file="${base_name}_phosphoscoring_results.idXML"
-    feature_file="${base_name}_features.featureXML"
-    output_file="${base_name}_quantified.featureXML"
-
-    IDMapper -id "$id_file" \
-        -in "$feature_file" \
-        -out "$output_file" \
-        -rt_tolerance 30.0 \
-        -mz_tolerance 0.01
-done
-```
-
-## Expected Results
-
-### Typical Outputs
-
-1. **Phosphosite identifications**: 1000-5000 sites (dataset dependent)
-2. **localisation confidence**: 60-80% with score >0.75
-3. **Common modifications**: pSer (85%), pThr (12%), pTyr (3%)
-
-### Result Interpretation
-
-- **localisation score >0.75**: High confidence
-- **localisation score 0.5-0.75**: Medium confidence
-- **localisation score <0.5**: Low confidence (ambiguous)
-
 ## Troubleshooting
 
 ### Common Issues
@@ -602,29 +536,6 @@ done
 - Use SSD storage for faster I/O
 - Allocate sufficient RAM (8GB+ recommended)
 - Consider parallel processing for multiple files
-
-## Advanced Applications
-
-### Quantitative Phosphoproteomics
-
-```shell
-# For TMT/iTRAQ quantification
-IsobaricAnalyzer -in picked.mzML \
-    -out quantified.idXML \
-    -extraction:select_activation HCD \
-    -extraction:reporter_mass_shift 0.002
-```
-
-### Time-Course Analysis
-
-```shell
-# Process multiple time points
-for timepoint in T0 T15 T30 T60; do
-    # Process each timepoint
-    echo "Processing $timepoint"
-    # Run complete pipeline
-done
-```
 
 ## References and Further Reading
 
