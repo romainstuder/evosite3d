@@ -113,19 +113,21 @@ conda install -c bioconda openms
 
 ### Installation of ThermoRawFileParser (used in FileConverter)
 
-The file `ThermoRawFileParser.exe` can be retrieved from here:
-https://github.com/CompOmics/ThermoRawFileParser/releases/ The release used in this tutorial is
-`1.4.5` The file needs to be in an available path.
+- URL: https://github.com/CompOmics/ThermoRawFileParser/releases/
+- The file `ThermoRawFileParser.exe` needs to be in an available path.
+- The release used in this tutorial is `1.4.5`.
 
 ### Installation of MSGFPlusAdapter (used in MSGFPlusAdapter)
 
-The file `MSGFPlus.jar` can be retrieved from here: https://github.com/MSGFPlus/msgfplus/releases
-The release used in this tutorial is `2024.03.26` The file needs to be in an available path.
+- URL: https://github.com/MSGFPlus/msgfplus/releases
+- The file`MSGFPlus.jar` needs to be in an available path.
+- The release used in this tutorial is `2024.03.26`.
 
 ### Installation of Comet (used in CometAdapter)
 
-The file `comet.exe` can be retrieved from here: https://github.com/UWPR/Comet/releases The release
-used in this tutorial is `2025.02.0` The file needs to be in an available path.
+- URL: https://github.com/UWPR/Comet/releases
+- The file `comet.exe` needs to be in an available path.
+- The release used in this tutorial is `2025.02.0`
 
 ## Step 1: Data Acquisition <a name="dataaquisition"></a>
 
@@ -134,7 +136,6 @@ used in this tutorial is `2025.02.0` The file needs to be in an available path.
 - Human protein database (UniProt)
 - Phosphorylation modification database
 - Public phosphoproteomics dataset
--
 
 ### Download Public Dataset - PXD035029
 
