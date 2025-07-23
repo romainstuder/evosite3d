@@ -60,14 +60,18 @@ Optional:
 
 ```shell
 
-# Method 1: Using Homebrew
-brew install openms
-# Important, you need to add the $DYLD_LIBRARY_PATH path:
-export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
+# Method 1: Download pre-built binaries
+# Visit: https://abibuilder.cs.uni-tuebingen.de/archive/openms/OpenMSInstaller/release/latest/
+# Download the macOS installer (.pkg file) for Silicon or x66.
+# Install it. If problems, follow instruction: https://openms.readthedocs.io/en/latest/about/installation/installation-on-macos.html#install-via-macos-installer
+export PATH="/Applications/OpenMS-3.4.1/bin:$PATH"
 
-# Method 2: Download pre-built binaries
-# Visit: https://openms.de/downloads/
-# Download the macOS installer (.dmg file)
+# Method 2: Using Homebrew (WIP)
+#brew tap brewsci/bio
+#brew install openms
+# Important, you need to add the $DYLD_LIBRARY_PATH path:
+#export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
+
 
 # Method 3: Build from source using conda
 conda create -n openms-env python=3.9
@@ -75,17 +79,24 @@ conda activate openms-env
 conda install -c bioconda openms
 ```
 
-#### Ubuntu/Debian
+#### GNU Linux - Ubuntu/Debian
+
+https://openms.readthedocs.io/en/latest/about/installation/installation-on-gnu-linux.html
 
 ```shell
+# Download installer from: https://abibuilder.cs.uni-tuebingen.de/archive/openms/OpenMSInstaller/release/latest/
+
+# or:
 sudo apt-get update
 sudo apt-get install openms openms-doc
 ```
 
 #### Windows
 
+https://openms.readthedocs.io/en/latest/about/installation/installation-on-windows.html
+
 ```shell
-# Download installer from: https://openms.de/downloads/
+# Download installer from: https://abibuilder.cs.uni-tuebingen.de/archive/openms/OpenMSInstaller/release/latest/
 # Or use conda:
 conda create -n openms-env python=3.9
 conda activate openms-env
