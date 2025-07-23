@@ -58,12 +58,12 @@ Optional:
 
 #### macOS
 
-```shell
+https://openms.readthedocs.io/en/latest/about/installation/installation-on-macos.html#install-via-macos-installer
 
+```shell
 # Method 1: Download pre-built binaries
 # Visit: https://abibuilder.cs.uni-tuebingen.de/archive/openms/OpenMSInstaller/release/latest/
-# Download the macOS installer (.pkg file) for Silicon or x66.
-# Install it. If problems, follow instruction: https://openms.readthedocs.io/en/latest/about/installation/installation-on-macos.html#install-via-macos-installer
+# Download the macOS installer (.pkg file) for Silicon or x66 and install it.
 export PATH="/Applications/OpenMS-3.4.1/bin:$PATH"
 
 # Method 2: Using Homebrew (WIP)
