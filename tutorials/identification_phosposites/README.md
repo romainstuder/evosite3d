@@ -33,7 +33,7 @@ the OpenMS Code of Conduct for guidance on how to interact with others in a way 
 community thrive.
 ```
 
-The tutorial will follow eight different steps:
+The tutorial will follow different steps:
 
 1. [Data Acquisition](#dataaquisition)
 2. [File Conversion](#fileconversion)
