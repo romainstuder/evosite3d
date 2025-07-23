@@ -48,32 +48,40 @@ The tutorial will follow eight different steps:
 ### Software Requirements
 
 - OpenMS 3.0+ (with TOPP tools)
+-
 
 Optional:
 
 - TOPPView (for visualization)
 - SearchGUI and PeptideShaker (optional, for alternative search)
 
-### Installation
+### Installation of OpenMS
 
 #### macOS
 
 https://openms.readthedocs.io/en/latest/about/installation/installation-on-macos.html#install-via-macos-installer
 
+Method 1: Download pre-built binaries
+
 ```shell
-# Method 1: Download pre-built binaries
 # Visit: https://abibuilder.cs.uni-tuebingen.de/archive/openms/OpenMSInstaller/release/latest/
 # Download the macOS installer (.pkg file) for Silicon or x66 and install it.
 export PATH="/Applications/OpenMS-3.4.1/bin:$PATH"
+```
 
+Method 2: Using Homebrew (still WIP)
+
+```shell
 # Method 2: Using Homebrew (WIP)
 #brew tap brewsci/bio
 #brew install openms
 # Important, you need to add the $DYLD_LIBRARY_PATH path:
 #export DYLD_LIBRARY_PATH="/opt/homebrew/opt/openms/lib:$DYLD_LIBRARY_PATH"
+```
 
+Method 3: Build from source using conda
 
-# Method 3: Build from source using conda
+```shell
 conda create -n openms-env python=3.9
 conda activate openms-env
 conda install -c bioconda openms
@@ -103,15 +111,32 @@ conda activate openms-env
 conda install -c bioconda openms
 ```
 
+### Installation of ThermoRawFileParser (used in FileConverter)
+
+The file `ThermoRawFileParser.exe` can be retrieved from here:
+https://github.com/CompOmics/ThermoRawFileParser/releases/ The release used in this tutorial is
+`1.4.5` The file needs to be in an available path.
+
+### Installation of MSGFPlusAdapter (used in MSGFPlusAdapter)
+
+The file `MSGFPlus.jar` can be retrieved from here: https://github.com/MSGFPlus/msgfplus/releases
+The release used in this tutorial is `2024.03.26` The file needs to be in an available path.
+
+### Installation of Comet (used in CometAdapter)
+
+The file `comet.exe` can be retrieved from here: https://github.com/UWPR/Comet/releases The release
+used in this tutorial is `2025.02.0` The file needs to be in an available path.
+
+## Step 1: Data Acquisition <a name="dataaquisition"></a>
+
 ### Required Files
 
 - Human protein database (UniProt)
 - Phosphorylation modification database
 - Public phosphoproteomics dataset
+-
 
-## Step 1: Data Acquisition <a name="dataaquisition"></a>
-
-### Download Public Dataset - PXD000612
+### Download Public Dataset - PXD035029
 
 This tutorial demonstrates how to identify phosphorylation sites in Saccharomyces cerevisiae using
 mass spectrometry data from the PXD035029 dataset. This dataset represents an ultra-deep yeast
