@@ -2,8 +2,7 @@
 
 This tutorial was part of a course on protein evolution done during ECCB 2014 in Strasbourg.
 
-NB: If there are any question, comments or bugs, feel free to ask. ;)  
-NB2: Revised in 2025
+NB: If there are any question, comments or bugs, feel free to ask. ;) NB2: Revised in 2025
 
 ## Introduction
 
@@ -46,11 +45,12 @@ You can have a look at the alignment in Jalview:
 ```shell
 jalview ./lysozyme_primates.fasta
 ```
-#TODO CLEAN ALIGNMENT
 
+#TODO CLEAN ALIGNMENT
 
 The format of the resulting alignment is FASTA. However, most phylogenetic software use PHYLIP
 format. So, you have to convert it into PHYLIP with `convert_fasta2phylip.py`:
+
 ```shell
 convert_fasta2phylip.py lysozyme_primates.fasta lysozyme_primates.phy
 ```
@@ -94,7 +94,6 @@ Marmoset sequence (Callithrix jacchus):
 nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069
 ```
 
-
 ```shell
 n_taxa=$(grep -c ">" lysozyme_primates.fasta)
 n_trees="1"
@@ -107,9 +106,6 @@ We can rerun and save the output as `lysozyme_primates_rooted.tree`:
 ```shell
 nw_reroot lysozyme_primates.tree ENSCATP00000036951 ENSMLEP00000013069 >> lysozyme_primates_rooted.tree
 ```
-
-
-
 
 ## Part 3: Run ancestral sequence reconstruction
 
@@ -266,3 +262,5 @@ and load the tree.
 
 In FigTree, set the following parameters: Appearance->Colour by:label Setup: Colours -> Scheme:
 Colour gradient Tick gradient Line Weight 4
+
+![Picture of dN/dS per sites](lysozyme_primates_annotated_pI.tree.png "dN/dS per sites")

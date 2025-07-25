@@ -52,7 +52,7 @@ def main():
 
     args = parser.parse_args()
 
-    node_dict = load_ancestral_sequences(args.ancestral_file)
+    node_dict = load_ancestral_sequences(args.ancestral_fasta)
     tree_tokens = load_tree(args.tree_file)
     new_tree = map_iso_point_to_tree(tree_tokens, node_dict)
 
