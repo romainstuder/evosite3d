@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "evosite3d"
 version = "0.1.0"
@@ -62,7 +58,7 @@ Homepage = "https://github.com/romain/evosite3d"
 
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312', 'py313']
+target-version = ['py310', 'py311']
 include = '\.pyi?$'
 exclude = '''
 (
