@@ -1,0 +1,13 @@
+defaults:
+  - base_inference
+
+inference:
+  input_pdb: null
+  output_prefix: "design"
+  num_designs: 1
+  ckpt_override_path: null
+
+contig_map:
+  contigs: null
+  inpaint_seq: null
+  length: null
