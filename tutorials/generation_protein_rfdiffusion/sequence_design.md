@@ -33,63 +33,40 @@ zinc-finger motifs as structural scaffolds or functional elements.
 
 First, extract or create a zinc-finger motif PDB file:
 
-```bash
+```shell
 # Download a zinc-finger protein (example: 1ZAA - classic C2H2)
 wget https://files.rcsb.org/download/1ZAA.pdb
-
-# Extract just the zinc-finger domain (residues 11-39)
-python extract_motif.py --input 1ZAA.pdb --chain A --residues 11-39 --output zf_motif.pdb
 ```
+
+```shell
+# Optional: visualise it
+pymol 1ZAA.pdb
+```
+
+```shell
+# Extract just the zinc-finger domain (residues 11-39)
+rfd_extract_motif.py --input 1ZAA.pdb --chain A --residues 11-39 --output zf_motif.pdb
+```
+```shell
+# Optional: visualise it
+pymol zf_motif.pdb
+```
+
 
 **Python script to extract motif (extract_motif.py):**
 
-```python
-import sys
-from Bio.PDB import PDBParser, PDBIO, Select
-
-class ResidueSelect(Select):
-    def __init__(self, chain, start, end):
-        self.chain = chain
-        self.start = start
-        self.end = end
-
-    def accept_residue(self, residue):
-        return (residue.parent.id == self.chain and
-                self.start <= residue.id[1] <= self.end)
-
-def extract_motif(input_pdb, chain, start, end, output_pdb):
-    parser = PDBParser(QUIET=True)
-    structure = parser.get_structure('protein', input_pdb)
-
-    io = PDBIO()
-    io.set_structure(structure)
-    io.save(output_pdb, ResidueSelect(chain, start, end))
-
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input', required=True)
-    parser.add_argument('--chain', default='A')
-    parser.add_argument('--residues', required=True, help='start-end format')
-    parser.add_argument('--output', required=True)
-
-    args = parser.parse_args()
-    start, end = map(int, args.residues.split('-'))
-    extract_motif(args.input, args.chain, start, end, args.output)
-```
 
 ### Step 2: Design Scaffold Around Motif
 
 ```bash
-python scripts/run_inference.py \
+pyenv local 3.10.16
+python $RFD_SCRIPTS/run_inference.py \
     inference.output_prefix=zf_scaffold \
     inference.input_pdb=zf_motif.pdb \
-    'contig_map.contigs=[20-40/A11-39/20-40]' \
-    'ppi.hotspot_res=[A14,A17,A32,A35]' \
     inference.num_designs=10 \
     inference.ckpt_override_path=./models/Base_ckpt.pt \
-    denoiser.noise_scale_ca=1.0 \
-    denoiser.noise_scale_frame=1.0
+    '+contigs=[20-40/A11-39/20-40]' \
+    '+hotspot_res=[A14,A17,A32,A35]'
 ```
 
 **Parameters explained:**
@@ -102,53 +79,18 @@ python scripts/run_inference.py \
 
 ### Step 1: Create Zinc-Finger Template
 
-```python
-# create_zf_template.py
-import numpy as np
-from Bio.PDB import Structure, Model, Chain, Residue, Atom
-
-def create_zf_template():
-    """Create a minimal zinc-finger template structure"""
-
-    # Idealized C2H2 zinc finger coordinates (simplified)
-    zf_coords = {
-        'CYS_1': {'CA': [0.0, 0.0, 0.0], 'CB': [1.5, 0.0, 0.0], 'SG': [2.0, 1.5, 0.0]},
-        'CYS_2': {'CA': [8.0, 2.0, 1.0], 'CB': [9.0, 2.5, 1.0], 'SG': [10.0, 1.8, 2.0]},
-        'HIS_1': {'CA': [15.0, 8.0, 5.0], 'CB': [15.5, 9.0, 6.0], 'CG': [16.0, 8.5, 7.0]},
-        'HIS_2': {'CA': [18.0, 12.0, 8.0], 'CB': [18.5, 13.0, 7.0], 'CG': [19.0, 12.5, 6.0]}
-    }
-
-    structure = Structure.Structure('ZF_template')
-    model = Model.Model(0)
-    chain = Chain.Chain('A')
-
-    for i, (res_name, coords) in enumerate(zf_coords.items(), 1):
-        residue = Residue.Residue((' ', i, ' '), res_name[:3], ' ')
-        for atom_name, coord in coords.items():
-            atom = Atom.Atom(atom_name, coord, 0.0, 1.0, ' ', atom_name, i)
-            residue.add(atom)
-        chain.add(residue)
-
-    model.add(chain)
-    structure.add(model)
-    return structure
-
-# Save template
-from Bio.PDB import PDBIO
-structure = create_zf_template()
-io = PDBIO()
-io.set_structure(structure)
-io.save('zf_template.pdb')
-```
+```shell
+rfd_create_zf_template.py
+``
 
 ### Step 2: Design with Template Constraints
 
 ```bash
-python scripts/run_inference.py \
+python run_inference.py \
     inference.output_prefix=denovo_zf \
     inference.input_pdb=zf_template.pdb \
-    'contig_map.contigs=[10-20/A1-4/15-25/A1-4/10-20]' \
-    'ppi.hotspot_res=[A1,A2,A3,A4]' \
+    '+contig_map.contigs=[10-20/A1-4/15-25/A1-4/10-20]' \
+    '+ppi.hotspot_res=[A1,A2,A3,A4]' \
     inference.num_designs=15 \
     inference.ckpt_override_path=./models/Base_ckpt.pt \
     potentials.guiding_potentials=["type:olig_contacts,weight_intra:1,weight_inter:0.1"] \
@@ -235,7 +177,7 @@ if __name__ == "__main__":
 ### Step 2: Design Multi-Finger Protein
 
 ```bash
-python scripts/run_inference.py \
+python run_inference.py \
     inference.output_prefix=multi_zf_protein \
     inference.input_pdb=triple_zf.pdb \
     'contig_map.contigs=[20-40/A1-97/20-40]' \
@@ -276,7 +218,7 @@ print('Extracted zinc finger motif to zf_finger1.pdb')
 ### Step 2: Design Scaffold
 
 ```bash
-python scripts/run_inference.py \
+python run_inference.py \
     inference.output_prefix=zf_scaffold_example \
     inference.input_pdb=zf_finger1.pdb \
     'contig_map.contigs=[15-30/A32-61/15-30]' \

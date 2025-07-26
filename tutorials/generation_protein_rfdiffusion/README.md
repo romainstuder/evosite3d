@@ -51,6 +51,9 @@ cd ..
 ## Basic Usage
 
 ### Command Structure
+```
+ export RFD_SCRIPTS=/Users/romain/Github/RFdiffusion/scripts/
+```
 
 ```bash
 python scripts/run_inference.py \
