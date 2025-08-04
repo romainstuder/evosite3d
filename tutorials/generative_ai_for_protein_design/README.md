@@ -45,6 +45,8 @@ Before starting, ensure you have the following tools installed:
 
    - Repository: https://github.com/RosettaCommons/RFdiffusion
    - Requires: PyTorch, CUDA-enabled GPU
+   - Note: macOS users could follow the installation there:
+     https://github.com/romainstuder/RFdiffusion/blob/update-readme/README-macos.md
 
 2. **ProteinMPNN** (latest version)
 

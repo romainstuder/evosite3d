@@ -25,71 +25,47 @@ structures, enabling it to generate new structures from random noise.
 
 ### Step 1: Environment Setup
 
-```bash
+```shell
 # Activate your conda environment
 conda activate rfdiffusion
-
-# Verify installation
-python -c "import torch; print(torch.cuda.is_available())"  # Should return True
 ```
 
-### Step 2: Prepare Configuration File
+### Step 2: Run RFdiffusion
 
-Create a configuration file `two_helix_config.yaml`:
-
-```yaml
-inference:
-  num_designs: 10 # Generate 10 different designs
-  design_startnum: 0
-
-contigmap:
-  contigs:
-    - "A20-25/0 A15-20" # Two helices: 20-25 residues, loop, 15-20 residues
-
-model_runner:
-  model_name: "RFdiffusion_base"
-
-diffusion:
-  T: 50 # Number of diffusion steps
-
-potentials:
-  guide_secondary_structure: True
-  secondary_structure_target: "HHHHHHHHHHHHHHHHHHHH LLLL HHHHHHHHHHHHHHHH"
-  ss_bias: 10.0 # Strength of secondary structure guidance
+```shell
+export RFD_SCRIPTS=$HOME/Github/RFdiffusion/scripts
+export RFD_MODELS=$HOME/Github/RFdiffusion/models
 ```
-
-### Step 3: Run RFdiffusion
 
 ```bash
 # Basic command structure
-python run_inference.py \
-    --config two_helix_config.yaml \
-    --output_dir ./output/two_helix_designs \
-    --device cuda:0
-
-# Alternative with more control
-python scripts/run_inference.py \
-    hydra.output_subdir=./output/two_helix_designs \
+python $RFD_SCRIPTS/run_inference.py \
+    'contigmap.contigs=[40-60]' \
     inference.num_designs=10 \
-    'contigmap.contigs=[A20-25/0 A15-20]' \
-    inference.ckpt_path=./weights/RFdiffusion_base.pt \
-    diffusion.T=50
+    inference.output_prefix=output/small_segment_designs/design
+
 ```
 
-### Step 4: Understanding the Output
+### Step 3: Understanding the Output
 
 RFdiffusion will generate PDB files in your output directory:
 
 - `design_0.pdb` through `design_9.pdb`: Your generated structures
 - `design_*.trb` files: Trajectory files containing metadata
 
-### Step 5: Analyse Generated Structures
+### Step 4: Analyse Generated Structures
+
+```shell
+export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+```
+
+python $EVOSITE3D_SCRIPTS/rfd_analyse_structures.py --prefix=output/small_segment_designs/design
 
 ### Step 6: Visualise Results
 
 ```bash
 # Open in PyMOL
-pymol ./output/two_helix_designs/design_0.pdb
+pymol ./output/small_segment_designs/design_0.pdb
 
 # PyMOL commands for visualisation
 # Color by secondary structure
@@ -101,11 +77,11 @@ color green, ss l+''
 
 # Align all designs to see diversity
 for i in range(1, 10):
-    cmd.load(f'./output/two_helix_designs/design_{i}.pdb', f'design_{i}')
+    cmd.load(f'./output/small_segment_designs/design_{i}.pdb', f'design_{i}')
     cmd.align(f'design_{i}', 'design_0')
 ```
 
-### Step 7: Select Best Design
+### Step 6: Select Best Design
 
 Criteria for selection:
 
@@ -114,27 +90,7 @@ Criteria for selection:
 3. **Loop Geometry**: Proper connection between helices
 4. **No Clashes**: Check for steric clashes
 
-select_best_design.py
-
-## Understanding RFdiffusion Parameters
-
-### Key Parameters Explained:
-
-1. **Contigs Format**: `'A20-25/0 A15-20'`
-
-   - `A`: Chain identifier
-   - `20-25`: Generate between 20-25 residues
-   - `/0`: No gap (0 residues) between segments
-   - Space separates different segments
-
-2. **Diffusion Steps (T)**:
-
-   - More steps = higher quality but slower
-   - Typical range: 25-100 steps
-
-3. **Secondary Structure Bias**:
-   - `H`: Helix, `E`: Sheet, `L`: Loop
-   - Higher bias = stronger enforcement
+python $EVOSITE3D_SCRIPTS/rfd_select_best_design.py --prefix=output/small_segment_designs/design
 
 ## Common Issues and Solutions
 

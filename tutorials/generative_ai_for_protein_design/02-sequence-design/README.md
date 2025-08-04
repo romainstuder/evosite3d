@@ -30,7 +30,10 @@ into it? The model uses:
 
 First, ensure your scaffold from Tutorial 1 is properly formatted:
 
-prepare_scaffold.py
+```shell
+export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+python $EVOSITE3D_SCRIPTS/mpnn_prepare_scaffold.py
+```
 
 ### Step 2: Create ProteinMPNN Configuration
 
@@ -48,26 +51,18 @@ Where `X` represents designable positions (length should match your scaffold).
 
 ### Step 3: Run ProteinMPNN
 
+```shell
+export MPNN_SCRIPTS=$HOME/Github/ProteinMPNN
+```
+
 ```bash
 # Basic sequence design
-python run_ProteinMPNN.py \
+python $MPNN_SCRIPTS/protein_mpnn_run.py \
     --pdb_path scaffold_clean.pdb \
     --out_folder ./output/sequences \
     --num_seq_per_target 100 \
     --sampling_temp 0.1 \
     --batch_size 1
-
-# With more options
-python run_ProteinMPNN.py \
-    --pdb_path scaffold_clean.pdb \
-    --pdb_path_chains "A" \
-    --out_folder ./output/sequences \
-    --num_seq_per_target 100 \
-    --sampling_temp 0.1 \
-    --seed 42 \
-    --batch_size 1 \
-    --score_only 0 \
-    --use_soluble_design True
 ```
 
 ### Step 4: Understanding ProteinMPNN Output
@@ -88,11 +83,18 @@ MSEELKKAHEAAKLFKDVVLKHLKKLVELHKAAKLFKDVVL
 
 ### Step 5: Analyse Sequence Properties
 
-rfd_analyse_sequences.py
+```shell
+python $EVOSITE3D_SCRIPTS/mpnn_analyse_sequences.py \
+   --fasta_file=output/sequences/seqs/scaffold_clean.fa
+
+```
 
 ### Step 6: Filter and Select Sequences
 
-rfd_select_sequences.py
+```shell
+python $EVOSITE3D_SCRIPTS/mpnn_select_sequences.py \
+   --input_file=output/sequences/seqs/scaffold_clean.fa
+```
 
 ### Step 7: Advanced ProteinMPNN Options
 
@@ -113,7 +115,7 @@ with open('fixed_positions.json', 'w') as f:
 
 ```bash
 # Run with constraints
-python run_ProteinMPNN.py \
+python $MPNN_SCRIPTS/protein_mpnn_run.py \
     --pdb_path scaffold_clean.pdb \
     --fixed_positions_jsonl fixed_positions.json \
     --out_folder ./output/sequences_constrained \
@@ -141,7 +143,18 @@ done
 
 ### Step 8: Validate Sequence-Structure Compatibility
 
-rfd_validate_design.py
+(You will need `mkdssp`. To install it on macOS:
+
+```shell
+brew tap brewsci/bio
+brew install dssp
+```
+
+```shell
+python $EVOSITE3D_SCRIPTS/mpnn_validate_design.py \
+   --sequences-file=output/sequences/seqs/scaffold_clean.fa \
+   --structure-file=scaffold_clean.pdb
+```
 
 ## Understanding ProteinMPNN Parameters
 
