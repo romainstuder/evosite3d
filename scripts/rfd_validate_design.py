@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 from Bio import PDB, SeqIO
 from Bio.PDB import DSSP
@@ -37,7 +35,15 @@ def check_sequence_structure_compatibility(sequence, structure_file):
     return np.mean(scores) if scores else 0
 
 
-# Validate top sequences
-for seq_record in SeqIO.parse("filtered_sequences.fasta", "fasta"):
-    score = check_sequence_structure_compatibility(str(seq_record.seq), "scaffold_clean.pdb")
-    print(f"{seq_record.id}: Compatibility score = {score:.2f}")
+def main():
+    # Validate top sequences
+    sequences_file = "sequences.fasta"  # Generic filename
+    structure_file = "scaffold.pdb"  # Generic filename
+
+    for seq_record in SeqIO.parse(sequences_file, "fasta"):
+        score = check_sequence_structure_compatibility(str(seq_record.seq), structure_file)
+        print(f"{seq_record.id}: Compatibility score = {score:.2f}")
+
+
+if __name__ == "__main__":
+    main()
