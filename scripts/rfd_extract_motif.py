@@ -14,8 +14,7 @@ class ResidueSelect(Select):
 
 
 def extract_motif(input_pdb, chain, start, end, output_pdb):
-    parser = PDBParser(QUIET=True)
-    structure = parser.get_structure("protein", input_pdb)
+    structure = PDBParser(QUIET=True).get_structure("protein", input_pdb)
 
     io = PDBIO()
     io.set_structure(structure)
@@ -32,5 +31,5 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True)
 
     args = parser.parse_args()
-    start, end = map(int, args.residues.split("-"))
-    extract_motif(args.input, args.chain, start, end, args.output)
+    start_pos, end_pos = map(int, args.residues.split("-"))
+    extract_motif(args.input, args.chain, start_pos, end_pos, args.output)

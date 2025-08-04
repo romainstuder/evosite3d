@@ -29,6 +29,13 @@ zinc-finger motifs as structural scaffolds or functional elements.
 
 ## Method 1: Motif Scaffolding with Existing Zinc-Finger
 
+```shell
+export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+export RFD_SCRIPTS=$HOME/Github/RFdiffusion/scripts
+export RFD_MODELS=$HOME/Github/RFdiffusion/models
+export ProteinMPNN=$HOME/Github/ProteinMPNN
+```
+
 ### Step 1: Prepare Input Structure
 
 First, extract or create a zinc-finger motif PDB file:
@@ -45,57 +52,65 @@ pymol 1ZAA.pdb
 
 ```shell
 # Extract just the zinc-finger domain (residues 11-39)
-rfd_extract_motif.py --input 1ZAA.pdb --chain A --residues 11-39 --output zf_motif.pdb
+python $EVOSITE3D_SCRIPTS/rfd_extract_motif.py --input 1ZAA.pdb  \
+   --chain C \
+   --residues 6-31 \
+   --output zf_motif.pdb
 ```
+
 ```shell
 # Optional: visualise it
 pymol zf_motif.pdb
 ```
 
-
 **Python script to extract motif (extract_motif.py):**
-
 
 ### Step 2: Design Scaffold Around Motif
 
 ```bash
-pyenv local 3.10.16
 python $RFD_SCRIPTS/run_inference.py \
-    inference.output_prefix=zf_scaffold \
+    inference.output_prefix=outputs/zf_scaffold \
     inference.input_pdb=zf_motif.pdb \
     inference.num_designs=10 \
-    inference.ckpt_override_path=./models/Base_ckpt.pt \
-    '+contigs=[20-40/A11-39/20-40]' \
-    '+hotspot_res=[A14,A17,A32,A35]'
+    'contigmap.contigs=[20-40/C6-31/20-40]'
 ```
 
 **Parameters explained:**
 
-- `20-40/A11-39/20-40`: Design 20-40 residues before motif, keep motif (A11-39), design 20-40 after
-- `hotspot_res`: Zinc-coordinating residues (Cys14, Cys17, His32, His35)
+- `20-40/C11-39/20-40`: Design 20-40 residues before motif, keep motif (C11-39), design 20-40 after
+- `ppi.hotspot_res`: Zinc-coordinating residues (Czs7, Cys12, His25, His29)
 - Generates scaffolds of 71-119 total residues
 
 ## Method 2: De Novo Design with Zinc-Finger Constraints
 
 ### Step 1: Create Zinc-Finger Template
 
-```shell
-rfd_create_zf_template.py
+````shell
+python $EVOSITE3D_SCRIPTS/rfd_create_zf_template.py
 ``
 
 ### Step 2: Design with Template Constraints
 
 ```bash
-python run_inference.py \
-    inference.output_prefix=denovo_zf \
-    inference.input_pdb=zf_template.pdb \
-    '+contig_map.contigs=[10-20/A1-4/15-25/A1-4/10-20]' \
-    '+ppi.hotspot_res=[A1,A2,A3,A4]' \
-    inference.num_designs=15 \
-    inference.ckpt_override_path=./models/Base_ckpt.pt \
-    potentials.guiding_potentials=["type:olig_contacts,weight_intra:1,weight_inter:0.1"] \
-    potentials.guide_scale=2.0 \
-    potentials.guide_decay="quadratic"
+python $RFD_SCRIPTS/run_inference.py \
+    inference.output_prefix=outputs/denovo_zf \
+    inference.input_pdb=zf_template_corrected_translated.pdb \
+    'contigmap.contigs=[10-20/A1-1/3-4/A2-2/3-4/A3-3/3-4/A4-4/10-20]' \
+    inference.num_designs=1 \
+    inference.ckpt_override_path=$RFD_MODELS/Base_ckpt.pt \
+    'potentials.guiding_potentials=["type:substrate_contacts"]' \
+    'potentials.substrate="ZN"'
+````
+
+```bash
+python $RFD_SCRIPTS/run_inference.py \
+    inference.output_prefix=outputs/denovo_zf \
+    inference.input_pdb=1ZAA.pdb \
+    'contigmap.contigs=[10-20/C7-7/3-4/C12-12/3-4/C25-25/3-4/C29-29/10-20]' \
+    'potentials.guiding_potentials=["type:substrate_contacts,s:1,r_0:8,rep_r_0:5.0,rep_s:2,rep_r_min:1"]' \
+    'potentials.substrate="ZN"' \
+    inference.ckpt_override_path=$RFD_MODELS/ActiveSite_ckpt.pt \
+    inference.num_designs=1
 ```
 
 ## Method 3: Multi-Finger Domain Design
@@ -304,11 +319,13 @@ for i in range(5):
 # Install ProteinMPNN if not available
 git clone https://github.com/dauparas/ProteinMPNN.git
 
+echo '{"denovo_zf_0": {"A": [13,18,23,28]}}' >> fixed_pdbs.jsonl
+
 # Design sequences for the best scaffold
-python ProteinMPNN/protein_mpnn_run.py \
-    --pdb_path zf_scaffold_example_0.pdb \
+python $ProteinMPNN/protein_mpnn_run.py \
+    --pdb_path ./outputs/denovo_zf_0.pdb \
     --pdb_path_chains A \
-    --fixed_positions "35,38,52,55" \
+    --fixed_positions_jsonl fixed_pdbs.jsonl \
     --num_seq_per_target 10 \
     --out_folder sequences/
 ```

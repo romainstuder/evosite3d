@@ -6,12 +6,25 @@ from Bio.PDB import PDBIO, Atom, Chain, Model, Residue, Structure
 def create_zf_template():
     """Create a minimal zinc-finger template structure"""
 
-    # Idealized C2H2 zinc finger coordinates (simplified)
+    # Realistic C2H2 zinc finger coordinates based on typical zinc finger geometry
+    # Zinc ion positioned at origin with tetrahedral coordination
     zf_coords = {
-        "CYS_1": {"CA": [0.0, 0.0, 0.0], "CB": [1.5, 0.0, 0.0], "SG": [2.0, 1.5, 0.0]},
-        "CYS_2": {"CA": [8.0, 2.0, 1.0], "CB": [9.0, 2.5, 1.0], "SG": [10.0, 1.8, 2.0]},
-        "HIS_1": {"CA": [15.0, 8.0, 5.0], "CB": [15.5, 9.0, 6.0], "CG": [16.0, 8.5, 7.0]},
-        "HIS_2": {"CA": [18.0, 12.0, 8.0], "CB": [18.5, 13.0, 7.0], "CG": [19.0, 12.5, 6.0]},
+        "CYS_1": {"CA": [-2.1, 1.8, -1.2], "CB": [-1.2, 0.9, -2.1], "SG": [0.3, 1.4, -1.8]},
+        "CYS_2": {"CA": [1.8, -2.1, -1.2], "CB": [0.9, -1.2, -2.1], "SG": [-0.3, -1.4, -1.8]},
+        "HIS_1": {
+            "CA": [-1.8, -1.8, 1.8],
+            "CB": [-0.9, -0.9, 2.7],
+            "CG": [0.2, -1.2, 2.1],
+            "ND1": [0.8, -0.5, 1.2],
+            "NE2": [1.1, -2.1, 2.4],
+        },
+        "HIS_2": {
+            "CA": [2.1, 1.8, 1.2],
+            "CB": [1.2, 0.9, 2.1],
+            "CG": [-0.2, 1.2, 2.1],
+            "ND1": [-0.8, 0.5, 1.2],
+            "NE2": [-1.1, 2.1, 2.4],
+        },
     }
 
     zf_structure = Structure.Structure("ZF_template")
