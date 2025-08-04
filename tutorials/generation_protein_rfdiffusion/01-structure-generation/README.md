@@ -56,7 +56,7 @@ RFdiffusion will generate PDB files in your output directory:
 ### Step 4: Analyse Generated Structures
 
 ```shell
-export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+export EVOSITE3D_SCRIPTS=../scripts
 ```
 
 python $EVOSITE3D_SCRIPTS/rfd_analyse_structures.py --prefix=output/small_segment_designs/design

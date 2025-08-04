@@ -31,7 +31,7 @@ into it? The model uses:
 First, ensure your scaffold from Tutorial 1 is properly formatted:
 
 ```shell
-export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+export EVOSITE3D_SCRIPTS=../scripts
 python $EVOSITE3D_SCRIPTS/mpnn_prepare_scaffold.py
 ```
 

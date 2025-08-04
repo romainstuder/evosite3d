@@ -36,7 +36,7 @@ conda install -c salilab modeller
 ```
 
 ```shell
-export EVOSITE3D_SCRIPTS=$HOME/Github/evosite3d/scripts
+export EVOSITE3D_SCRIPTS=../scripts
 ```
 
 ### Step 1: Prepare Input Files
