@@ -7,7 +7,7 @@ from typing import List, Tuple
 import pandas as pd
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-from rfd_analyse_sequences import analyse_sequences
+from mpnn_analyse_sequences import analyse_sequences
 
 
 class SequenceSelector:
@@ -70,7 +70,7 @@ class SequenceSelector:
 def main():
     """Main function with command line interface"""
     parser = argparse.ArgumentParser(description="Select sequences based on biophysical properties")
-    parser.add_argument("input_file", type=str, help="Input FASTA file")
+    parser.add_argument("--input_file", type=str, help="Input FASTA file")
     parser.add_argument(
         "-o",
         "--output",

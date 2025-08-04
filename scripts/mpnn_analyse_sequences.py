@@ -89,19 +89,38 @@ def calculate_helix_propensity(sequence):
     return sum(helix_scale.get(aa, 1.0) for aa in sequence) / len(sequence)
 
 
-# Analyse designed sequences
-df = analyse_sequences("./output/sequences/sequences.fasta")
-print(df.describe())
+def main():
+    """Main function to analyse sequences"""
+    import argparse
 
-# Plot distributions
-fig, axes = plt.subplots(2, 2, figsize=(10, 8))
-df["charge"].hist(ax=axes[0, 0], bins=20)
-axes[0, 0].set_title("Charge Distribution")
-df["hydrophobicity"].hist(ax=axes[0, 1], bins=20)
-axes[0, 1].set_title("Hydrophobicity Distribution")
-df["helix_propensity"].hist(ax=axes[1, 0], bins=20)
-axes[1, 0].set_title("Helix Propensity Distribution")
-df["aromatic_content"].hist(ax=axes[1, 1], bins=20)
-axes[1, 1].set_title("Aromatic Content Distribution")
-plt.tight_layout()
-plt.savefig("sequence_properties.png")
+    parser = argparse.ArgumentParser(description="Analyse properties of designed sequences")
+    parser.add_argument("--fasta_file", help="Input FASTA file containing sequences")
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="sequence_properties.png",
+        help="Output plot file (default: sequence_properties.png)",
+    )
+
+    args = parser.parse_args()
+
+    # Analyse designed sequences
+    df = analyse_sequences(args.fasta_file)
+    print(df.describe())
+
+    # Plot distributions
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    df["charge"].hist(ax=axes[0, 0], bins=20)
+    axes[0, 0].set_title("Charge Distribution")
+    df["hydrophobicity"].hist(ax=axes[0, 1], bins=20)
+    axes[0, 1].set_title("Hydrophobicity Distribution")
+    df["helix_propensity"].hist(ax=axes[1, 0], bins=20)
+    axes[1, 0].set_title("Helix Propensity Distribution")
+    df["aromatic_content"].hist(ax=axes[1, 1], bins=20)
+    axes[1, 1].set_title("Aromatic Content Distribution")
+    plt.tight_layout()
+    plt.savefig(args.output)
+
+
+if __name__ == "__main__":
+    main()

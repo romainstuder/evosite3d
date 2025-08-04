@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import argparse
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from Bio import PDB
@@ -74,50 +76,70 @@ def check_clashes(structure, clash_distance=2.5):
     return clash_count
 
 
-# Analyze all designs
-designs = []
-for i in range(10):
-    pdb_file = f"./output/two_helix_designs/design_{i}.pdb"
-
-    # Parse structure
-    parser = PDB.PDBParser(QUIET=True)
-    structure = parser.get_structure("protein", pdb_file)
-
-    # Calculate all metrics
-    helix_content = calculate_helix_content(pdb_file)
-    rg = calculate_radius_of_gyration(structure)
-    clashes = check_clashes(structure)
-
-    designs.append(
-        {
-            "design": i,
-            "file": pdb_file,
-            "helix_content": helix_content,
-            "radius_of_gyration": rg,
-            "clash_score": clashes,
-        }
+def main():
+    """Main function to analyze all designs"""
+    parser = argparse.ArgumentParser(description="Analyze protein structure designs")
+    parser.add_argument(
+        "--prefix", help="File prefix for PDB files (e.g., " "'output/designs/design')"
+    )
+    parser.add_argument(
+        "-n",
+        "--num-designs",
+        type=int,
+        default=10,
+        help="Number of designs to analyze (default: 10)",
     )
 
-# Convert to DataFrame for easier analysis
-df_designs = pd.DataFrame(designs)
-print("\nDesign Analysis Summary:")
-print(df_designs)
+    args = parser.parse_args()
 
-# Visualize results
-fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    # Analyze all designs
+    designs = []
+    for i in range(args.num_designs):
+        pdb_file = f"{args.prefix}_{i}.pdb"
 
-df_designs["helix_content"].plot(kind="bar", ax=axes[0])
-axes[0].set_title("Helix Content by Design")
-axes[0].set_ylabel("Helix Content (%)")
+        # Parse structure
+        parser = PDB.PDBParser(QUIET=True)
+        structure = parser.get_structure("protein", pdb_file)
 
-df_designs["radius_of_gyration"].plot(kind="bar", ax=axes[1])
-axes[1].set_title("Radius of Gyration by Design")
-axes[1].set_ylabel("Rg (Å)")
+        # Calculate all metrics
+        helix_content = calculate_helix_content(pdb_file)
+        rg = calculate_radius_of_gyration(structure)
+        clashes = check_clashes(structure)
 
-df_designs["clash_score"].plot(kind="bar", ax=axes[2])
-axes[2].set_title("Clash Score by Design")
-axes[2].set_ylabel("Number of Clashes")
+        designs.append(
+            {
+                "design": i,
+                "file": pdb_file,
+                "helix_content": helix_content,
+                "radius_of_gyration": rg,
+                "clash_score": clashes,
+            }
+        )
 
-plt.tight_layout()
-plt.savefig("design_analysis.png")
-plt.show()
+    # Convert to DataFrame for easier analysis
+    df_designs = pd.DataFrame(designs)
+    print("\nDesign Analysis Summary:")
+    print(df_designs)
+
+    # Visualize results
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+    df_designs["helix_content"].plot(kind="bar", ax=axes[0])
+    axes[0].set_title("Helix Content by Design")
+    axes[0].set_ylabel("Helix Content (%)")
+
+    df_designs["radius_of_gyration"].plot(kind="bar", ax=axes[1])
+    axes[1].set_title("Radius of Gyration by Design")
+    axes[1].set_ylabel("Rg (Å)")
+
+    df_designs["clash_score"].plot(kind="bar", ax=axes[2])
+    axes[2].set_title("Clash Score by Design")
+    axes[2].set_ylabel("Number of Clashes")
+
+    plt.tight_layout()
+    plt.savefig("design_analysis.png")
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()

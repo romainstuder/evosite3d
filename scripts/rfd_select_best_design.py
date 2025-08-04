@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import argparse
+
 from Bio import PDB
 from rfd_analyse_structures import calculate_helix_content, calculate_radius_of_gyration
 
@@ -47,30 +49,52 @@ def evaluate_design(pdb_file):
     return total_score, scores
 
 
-# Analyze all designs
-designs = []
-for i in range(10):
-    pdb_file = f"./output/two_helix_designs/design_{i}.pdb"
-
-    # Parse structure
-    parser = PDB.PDBParser(QUIET=True)
-    structure = parser.get_structure("protein", pdb_file)
-
-    # Calculate all metrics
-    helix_content = calculate_helix_content(pdb_file)
-    rg = calculate_radius_of_gyration(structure)
-    clashes = check_clashes(structure)
-
-    designs.append(
-        {
-            "design": i,
-            "file": pdb_file,
-            "helix_content": helix_content,
-            "radius_of_gyration": rg,
-            "clash_score": clashes,
-        }
+def main():
+    """Main function to select best design"""
+    parser = argparse.ArgumentParser(
+        description="Select best protein design from multiple candidates"
+    )
+    parser.add_argument(
+        "--prefix", help="File prefix for PDB files (e.g., " "'output/designs/design')"
+    )
+    parser.add_argument(
+        "-n",
+        "--num-designs",
+        type=int,
+        default=10,
+        help="Number of designs to analyze (default: 10)",
     )
 
-# Evaluate all designs and select best
-best_design = max(designs, key=lambda x: evaluate_design(x["file"])[0])
-print(f"Best design: {best_design['file']}")
+    args = parser.parse_args()
+
+    # Analyze all designs
+    designs = []
+    for i in range(args.num_designs):
+        pdb_file = f"{args.prefix}_{i}.pdb"
+
+        # Parse structure
+        parser = PDB.PDBParser(QUIET=True)
+        structure = parser.get_structure("protein", pdb_file)
+
+        # Calculate all metrics
+        helix_content = calculate_helix_content(pdb_file)
+        rg = calculate_radius_of_gyration(structure)
+        clashes = check_clashes(structure)
+
+        designs.append(
+            {
+                "design": i,
+                "file": pdb_file,
+                "helix_content": helix_content,
+                "radius_of_gyration": rg,
+                "clash_score": clashes,
+            }
+        )
+
+    # Evaluate all designs and select best
+    best_design = max(designs, key=lambda x: evaluate_design(x["file"])[0])
+    print(f"Best design: {best_design['file']}")
+
+
+if __name__ == "__main__":
+    main()
