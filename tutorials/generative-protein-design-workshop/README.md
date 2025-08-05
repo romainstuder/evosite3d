@@ -11,11 +11,12 @@ methods with established structural biology tools.
 This tutorial series consists of three interconnected practicals that demonstrate a modern approach
 to de novo protein design:
 
-1. **Structure Generation with RFdiffusion** - Generate novel protein backbone structures using
-   diffusion models
-2. **Sequence Design with ProteinMPNN** - Design amino acid sequences that fold into your generated
-   structures
-3. **Full Atomic Modeling with MODELLER** - Build complete protein models with all atoms
+1. **[Structure Generation with RFdiffusion](./01-structure-generation/README.md)** - Generate novel
+   protein backbone structures using diffusion models
+2. **[Sequence Design with ProteinMPNN](./02-sequence-design/README.md)** - Design amino acid
+   sequences that fold into your generated structures
+3. **[Full Atomic Modeling with MODELLER](./03-atomic-modelling/README.md)** - Build complete
+   protein models with all atoms
 
 ### Learning Objectives
 
@@ -79,7 +80,7 @@ RFdiffusion → ProteinMPNN → MODELLER
 
 ### What You'll Create
 
-In this tutorial series, you'll design a small two-helix bundle protein:
+In this tutorial series, you will design a small two-helix bundle protein:
 
 - **Size**: Approximately 40-60 amino acids
 - **Structure**: Two alpha helices connected by a loop
@@ -101,4 +102,5 @@ If you encounter issues:
 3. Ensure all dependencies are correctly installed
 4. Consult the troubleshooting section at the end of each tutorial
 
-Let's begin with Tutorial 1: Generating a protein backbone structure with RFdiffusion!
+Let's begin with [Tutorial 1](./01-structure-generation/README.md): Generating a protein backbone
+structure with RFdiffusion!

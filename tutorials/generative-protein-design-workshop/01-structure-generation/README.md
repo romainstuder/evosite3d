@@ -56,10 +56,12 @@ RFdiffusion will generate PDB files in your output directory:
 ### Step 4: Analyse Generated Structures
 
 ```shell
-export EVOSITE3D_SCRIPTS=../scripts
+export EVOSITE3D_SCRIPTS=./utils
 ```
 
-python $EVOSITE3D_SCRIPTS/rfd_analyse_structures.py --prefix=output/small_segment_designs/design
+```shell
+python $EVOSITE3D_SCRIPTS/analyse_structures.py --prefix=output/small_segment_designs/design
+```
 
 ### Step 6: Visualise Results
 
@@ -76,9 +78,8 @@ color yellow, ss s
 color green, ss l+''
 
 # Align all designs to see diversity
-for i in range(1, 10):
-    cmd.load(f'./output/small_segment_designs/design_{i}.pdb', f'design_{i}')
-    cmd.align(f'design_{i}', 'design_0')
+for i in range(1, 10): cmd.load(f'./output/small_segment_designs/design_{i}.pdb', f'design_{i}')
+for i in range(1, 10): cmd.align(f'design_{i}', 'design_0')
 ```
 
 ### Step 6: Select Best Design
@@ -90,7 +91,7 @@ Criteria for selection:
 3. **Loop Geometry**: Proper connection between helices
 4. **No Clashes**: Check for steric clashes
 
-python $EVOSITE3D_SCRIPTS/rfd_select_best_design.py --prefix=output/small_segment_designs/design
+python $EVOSITE3D_SCRIPTS/select_best_design.py --prefix=output/small_segment_designs/design
 
 ## Common Issues and Solutions
 
@@ -131,10 +132,15 @@ Your final structure should have:
 
 Save your best design as `two_helix_scaffold.pdb` for use in Tutorial 2.
 
+```shell
+# Assuming number 4 is the best, but adjust accordingly.
+cp output/small_segment_designs/design_4.pdb  ../02-sequence-design/two_helix_scaffold.pdb
+```
+
 ## Next Steps
 
-With your scaffold structure ready, proceed to Tutorial 2 where you'll use ProteinMPNN to design an
-amino acid sequence that will fold into this structure.
+With your scaffold structure ready, proceed to [Tutorial 2](../02-sequence-design/README.md) where
+you will use ProteinMPNN to design an amino acid sequence that will fold into this structure.
 
 ## Additional Resources
 

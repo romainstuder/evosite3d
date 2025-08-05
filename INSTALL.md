@@ -23,6 +23,7 @@ https://github.com/brewsci/homebrew-bio
 ```shell
 brew tap brewsci/bio
 brew install clustal-omega \
+             dssp \
              fasttree \
              figtree \
              jalview \

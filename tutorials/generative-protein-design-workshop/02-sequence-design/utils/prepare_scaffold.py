@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import argparse
+
 from Bio import PDB
 
 
@@ -20,5 +22,14 @@ def clean_pdb_for_mpnn(input_pdb, output_pdb):
     print(f"Cleaned structure saved to {output_pdb}")
 
 
-# Clean your scaffold
-clean_pdb_for_mpnn("two_helix_scaffold.pdb", "scaffold_clean.pdb")
+def main():
+    parser = argparse.ArgumentParser(description="Clean and prepare PDB file for ProteinMPNN")
+    parser.add_argument("--input_pdb", help="Input PDB file path")
+    parser.add_argument("--output_pdb", help="Output cleaned PDB file path")
+
+    args = parser.parse_args()
+    clean_pdb_for_mpnn(args.input_pdb, args.output_pdb)
+
+
+if __name__ == "__main__":
+    main()
