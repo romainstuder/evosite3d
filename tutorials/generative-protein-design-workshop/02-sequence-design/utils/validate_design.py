@@ -8,19 +8,12 @@ from Bio.PDB import DSSP
 
 
 def check_sequence_structure_compatibility(
-    sequence, structure_file, hydrophobic_residues="ILMFWYV", helix_offsets=None
+    sequence, dssp, hydrophobic_residues="ILMFWYV", helix_offsets=None
 ):
     """Check sequence-structure compatibility with configurable parameters"""
     if helix_offsets is None:
         helix_offsets = [0, 3, 4, 7]
 
-    # Parse structure
-    parser = PDB.PDBParser(QUIET=True)
-    structure = parser.get_structure("protein", structure_file)
-
-    # Get secondary structure
-    model = structure[0]
-    dssp = DSSP(model, structure_file)
     # Check helix positions match hydrophobic pattern
     helix_positions = []
     for i, ss in enumerate(dssp):
@@ -65,10 +58,18 @@ def main():
 
     args = parser.parse_args()
 
+    # Parse structure
+    parser = PDB.PDBParser(QUIET=True)
+    structure = parser.get_structure("protein", args.structure_file)
+
+    # Get secondary structure
+    model = structure[0]
+    dssp = DSSP(model, args.structure_file)
+
     # Validate top sequences
     for seq_record in SeqIO.parse(args.sequences_file, "fasta"):
         score = check_sequence_structure_compatibility(
-            str(seq_record.seq), args.structure_file, args.hydrophobic_residues, args.helix_offsets
+            str(seq_record.seq), dssp, args.hydrophobic_residues, args.helix_offsets
         )
         print(f"{seq_record.id}: Compatibility score = {score:.2f}")
 

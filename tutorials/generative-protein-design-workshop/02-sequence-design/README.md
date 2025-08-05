@@ -31,25 +31,13 @@ into it? The model uses:
 First, ensure your scaffold from Tutorial 1 is properly formatted:
 
 ```shell
-export EVOSITE3D_SCRIPTS=../scripts
-python $EVOSITE3D_SCRIPTS/mpnn_prepare_scaffold.py
+export EVOSITE3D_SCRIPTS=./utils
+python $EVOSITE3D_SCRIPTS/prepare_scaffold.py \
+  --input_pdb=two_helix_scaffold.pdb \
+  --output_pdb=scaffold_clean.pdb
 ```
 
-### Step 2: Create ProteinMPNN Configuration
-
-Create a JSON file for chain specifications (`chains.json`):
-
-```json
-{
-  "scaffold_clean": {
-    "A": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  }
-}
-```
-
-Where `X` represents designable positions (length should match your scaffold).
-
-### Step 3: Run ProteinMPNN
+### Step 2: Run ProteinMPNN
 
 ```shell
 export MPNN_SCRIPTS=$HOME/Github/ProteinMPNN
@@ -65,7 +53,7 @@ python $MPNN_SCRIPTS/protein_mpnn_run.py \
     --batch_size 1
 ```
 
-### Step 4: Understanding ProteinMPNN Output
+### Step 3: Understanding ProteinMPNN Output
 
 The output includes:
 
@@ -81,10 +69,10 @@ MAEELKKLHEAVKLFEDVVLKHLKELVKLHEAAKLFEDVVL
 MSEELKKAHEAAKLFKDVVLKHLKKLVELHKAAKLFKDVVL
 ```
 
-### Step 5: Analyse Sequence Properties
+### Step 4: Analyse Sequence Properties
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mpnn_analyse_sequences.py \
+python $EVOSITE3D_SCRIPTS/analyse_sequences.py \
    --fasta_file=output/sequences/seqs/scaffold_clean.fa
 
 ```
@@ -92,7 +80,7 @@ python $EVOSITE3D_SCRIPTS/mpnn_analyse_sequences.py \
 ### Step 6: Filter and Select Sequences
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mpnn_select_sequences.py \
+python $EVOSITE3D_SCRIPTS/select_sequences.py \
    --input_file=output/sequences/seqs/scaffold_clean.fa
 ```
 
@@ -151,7 +139,7 @@ brew install dssp
 ```
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mpnn_validate_design.py \
+python $EVOSITE3D_SCRIPTS/validate_design.py \
    --sequences-file=output/sequences/seqs/scaffold_clean.fa \
    --structure-file=scaffold_clean.pdb
 ```
@@ -193,7 +181,7 @@ python $EVOSITE3D_SCRIPTS/mpnn_validate_design.py \
 # Use soluble design model
 --model_name v_48_030
 # Check your structure quality
-python check_structure.py scaffold_clean.pdb
+# python check_structure.py scaffold_clean.pdb
 ```
 
 ### Issue 3: Unusual Amino Acid Composition
@@ -218,10 +206,19 @@ Your designed sequences should have:
 
 Select your best sequence and save it as `designed_sequence.fasta` for Tutorial 3.
 
+```shell
+python $EVOSITE3D_SCRIPTS/extract_best_sequence.py \
+    --input_fasta=filtered_sequences.fasta \
+    --output_fasta=designed_sequence.fasta
+cp scaffold_clean.pdb  ../03-atomic-modelling/scaffold_clean.pdb
+cp designed_sequence.fasta  ../03-atomic-modelling/designed_sequence.fasta
+```
+
 ## Next Steps
 
-With your sequence designed, proceed to Tutorial 3 where you'll use MODELLER to build a full atomic
-model combining your scaffold structure and designed sequence.
+With your sequence designed, proceed to [Tutorial 3](../03-atomic-modelling/README.md) where you
+will use MODELLER to build a full atomic model combining your scaffold structure and designed
+sequence.
 
 ## Additional Resources
 

@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import List, Tuple
 
 import pandas as pd
+from analyse_sequences import analyse_sequences
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-from mpnn_analyse_sequences import analyse_sequences
 
 
 class SequenceSelector:

@@ -2,8 +2,8 @@
 
 import argparse
 
+from analyse_structures import calculate_helix_content, calculate_radius_of_gyration
 from Bio import PDB
-from rfd_analyse_structures import calculate_helix_content, calculate_radius_of_gyration
 
 
 def check_clashes(structure, clash_distance=2.5):

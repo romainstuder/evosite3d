@@ -36,7 +36,7 @@ conda install -c salilab modeller
 ```
 
 ```shell
-export EVOSITE3D_SCRIPTS=../scripts
+export EVOSITE3D_SCRIPTS=./utils
 ```
 
 ### Step 1: Prepare Input Files
@@ -44,7 +44,7 @@ export EVOSITE3D_SCRIPTS=../scripts
 First, we need to prepare our scaffold and sequence:
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mod_prepare_inputs.py \
+python $EVOSITE3D_SCRIPTS/prepare_inputs.py \
 --scaffold-pdb scaffold_clean.pdb \
 --sequence-file designed_sequence.fasta \
 --verbose
@@ -52,7 +52,7 @@ python $EVOSITE3D_SCRIPTS/mod_prepare_inputs.py \
 
 ### Step 2: Create MODELLER Script
 
-mod_build_model.py
+build_model.py
 
 ### Step 3: Run MODELLER
 
@@ -60,7 +60,7 @@ mod_build_model.py
 # Make sure MODELLER is properly licensed
 
 # Run the complete script
-python $EVOSITE3D_SCRIPTS/mod_build_model.py
+python $EVOSITE3D_SCRIPTS/build_model.py
 
 # The script will output something like:
 # Prepared files for MODELLER:
@@ -79,10 +79,16 @@ python $EVOSITE3D_SCRIPTS/mod_build_model.py
 
 ### Step 4: Analyse Generated Models
 
-After MODELLER completes, you'll have several model files. Let's analyze them:
+After MODELLER completes, you will have several model files. Let's analyze them:
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mod_analyse_models.py
+python $EVOSITE3D_SCRIPTS/analyse_models.py
+```
+
+Choose the best model and save as `best_model.pdb`
+
+```shell
+cp target.B99990005.pdb best_model.pdb
 ```
 
 ### Step 5: Validate the Best Model
@@ -90,7 +96,7 @@ python $EVOSITE3D_SCRIPTS/mod_analyse_models.py
 Now let's thoroughly validate our best model:
 
 ```shell
-python $EVOSITE3D_SCRIPTS/mod_validate_best_model.py
+python $EVOSITE3D_SCRIPTS/validate_best_model.py
 ```
 
 ### Step 6: Visualise the Final Model
@@ -108,9 +114,9 @@ align best_model and name CA, scaffold_clean and name CA
 # 2. Color by structure
 hide all
 show cartoon
-color red, best_model and ss h
+color paleyellow, best_model and ss h
 color yellow, best_model and ss s
-color green, best_model and ss l+''
+color grey60, best_model and ss l+''
 
 # 3. Show side chains
 show sticks, best_model
@@ -120,7 +126,7 @@ hide sticks, name c+n+o
 select hydrophobic, best_model and resn ILE+LEU+VAL+PHE+TRP+TYR+MET
 show surface, hydrophobic
 color orange, hydrophobic
-set transparency, 0.5
+set transparency, 0.9
 
 # 5. Save the session
 save final_design_session.pse
