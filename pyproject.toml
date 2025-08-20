@@ -7,8 +7,12 @@ dependencies = [
     "matplotlib",
     "pandas",
     "scipy",
-    "statsmodels",
     "seaborn"
+    "statsmodels",
+    "torch==2.5.1",
+    "torchaudio==2.5.1",
+    "torchdata==0.8.0",
+    "torchvision==0.20.1",
 ]
 
 [project.optional-dependencies]
@@ -23,6 +27,9 @@ dev = [
 
 [tool.pylint.format]
 max-line-length = "100"
+
+[tool.setuptools.packages.find]
+exclude = ["outputs*", "tutorials*", "ncbi_data*", "test_outputs*"]
 
 [tool.black]
 line-length = 100
