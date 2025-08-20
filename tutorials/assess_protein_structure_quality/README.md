@@ -1,6 +1,7 @@
 # Comprehensive Guide to Protein Structure Quality Assessment
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Resolution-Based Metrics](#resolution-based-metrics)
 3. [Geometric Validation](#geometric-validation)
@@ -16,9 +17,12 @@
 
 ## Introduction
 
-Protein structure quality assessment is crucial for determining the reliability of structural data for downstream applications. Quality metrics fall into several categories: experimental data quality, geometric validity, completeness, and agreement with known structural principles.
+Protein structure quality assessment is crucial for determining the reliability of structural data
+for downstream applications. Quality metrics fall into several categories: experimental data
+quality, geometric validity, completeness, and agreement with known structural principles.
 
 **File Formats:**
+
 - **PDB format**: Legacy text format, limited precision
 - **mmCIF format**: Modern format with higher precision and extensibility
 - **Both contain**: Atomic coordinates, experimental metadata, validation metrics
@@ -28,9 +32,12 @@ Protein structure quality assessment is crucial for determining the reliability 
 ## Resolution-Based Metrics
 
 ### 1. Resolution
-**Description**: Measure of the finest detail visible in the electron density map (X-ray) or reconstruction (cryo-EM).
+
+**Description**: Measure of the finest detail visible in the electron density map (X-ray) or
+reconstruction (cryo-EM).
 
 **Interpretation**:
+
 - **X-ray crystallography**: < 2.0 Å (excellent), 2.0-3.0 Å (good), > 3.0 Å (lower detail)
 - **Cryo-EM**: < 3.0 Å (excellent), 3.0-4.0 Å (good), > 4.0 Å (lower detail)
 - **NMR**: Not applicable (reports ensemble of structures)
@@ -50,9 +57,12 @@ print(f"Resolution: {resolution} Å")
 ```
 
 ### 2. Wilson B-factor
-**Description**: Overall temperature factor indicating atomic displacement parameters and data quality.
+
+**Description**: Overall temperature factor indicating atomic displacement parameters and data
+quality.
 
 **Interpretation**:
+
 - **Low values (< 20 Å²)**: Well-ordered, high-quality crystals
 - **High values (> 50 Å²)**: Disorder, radiation damage, or poor crystals
 
@@ -68,9 +78,11 @@ wilson_b = structure.info.get("_reflns.B_iso_Wilson_estimate")
 ## Geometric Validation
 
 ### 3. Ramachandran Plot Analysis
+
 **Description**: φ/ψ dihedral angle distribution validation against known protein geometry.
 
 **Metrics**:
+
 - **Favored regions**: > 95% expected
 - **Allowed regions**: 4-5% acceptable
 - **Outliers**: < 1% for high-quality structures
@@ -88,26 +100,26 @@ def calculate_dihedral(p1, p2, p3, p4):
     b1 = p2 - p1
     b2 = p3 - p2
     b3 = p4 - p3
-    
+
     n1 = np.cross(b1, b2)
     n2 = np.cross(b2, b3)
-    
+
     n1 = n1 / np.linalg.norm(n1)
     n2 = n2 / np.linalg.norm(n2)
-    
+
     m1 = np.cross(n1, b2/np.linalg.norm(b2))
-    
+
     x = np.dot(n1, n2)
     y = np.dot(m1, n2)
-    
+
     return np.degrees(np.arctan2(y, x))
 
 def ramachandran_analysis(structure_file):
     parser = PDBParser()
     structure = parser.get_structure("protein", structure_file)
-    
+
     phi_psi_angles = []
-    
+
     for model in structure:
         for chain in model:
             residues = list(chain.get_residues())
@@ -119,15 +131,15 @@ def ramachandran_analysis(structure_file):
                     curr_ca = residues[i]['CA'].coord
                     curr_c = residues[i]['C'].coord
                     next_n = residues[i+1]['N'].coord
-                    
+
                     # Calculate phi and psi angles
                     phi = calculate_dihedral(prev_c, curr_n, curr_ca, curr_c)
                     psi = calculate_dihedral(curr_n, curr_ca, curr_c, next_n)
-                    
+
                     phi_psi_angles.append((phi, psi, residues[i].resname))
                 except KeyError:
                     continue
-    
+
     return phi_psi_angles
 
 # Usage
@@ -135,6 +147,7 @@ angles = ramachandran_analysis("structure.pdb")
 ```
 
 **Using MolProbity via command line**:
+
 ```bash
 # Install MolProbity suite
 phenix.molprobity structure.pdb
@@ -144,9 +157,11 @@ wget http://molprobity.biochem.duke.edu/
 ```
 
 ### 4. Bond Lengths and Angles
+
 **Description**: Validation of covalent geometry against ideal values.
 
 **Expected Values**:
+
 - **Bond length RMSD**: < 0.02 Å for high-quality structures
 - **Bond angle RMSD**: < 2.0° for high-quality structures
 
@@ -156,14 +171,14 @@ import gemmi
 
 def validate_geometry(structure_file):
     structure = gemmi.read_structure(structure_file)
-    
+
     # Get restraints (ideal geometry)
     try:
         restraints = gemmi.read_monomer_lib()
-        
+
         bond_deviations = []
         angle_deviations = []
-        
+
         for model in structure:
             for chain in model:
                 for residue in chain:
@@ -175,7 +190,7 @@ def validate_geometry(structure_file):
                             if ideal_dist:
                                 deviation = abs(distance - ideal_dist)
                                 bond_deviations.append(deviation)
-        
+
         return {
             'bond_rmsd': np.sqrt(np.mean([d**2 for d in bond_deviations])),
             'angle_rmsd': np.sqrt(np.mean([d**2 for d in angle_deviations]))
@@ -186,9 +201,11 @@ def validate_geometry(structure_file):
 ```
 
 ### 5. Clash Detection
+
 **Description**: Identification of atoms that are too close together (van der Waals overlaps).
 
 **Criteria**:
+
 - **Serious clashes**: > 0.4 Å overlap
 - **Acceptable**: < 1% of atoms involved in serious clashes
 
@@ -196,7 +213,7 @@ def validate_geometry(structure_file):
 def detect_clashes(structure_file, cutoff=0.4):
     parser = PDBParser()
     structure = parser.get_structure("protein", structure_file)
-    
+
     atoms = []
     for model in structure:
         for chain in model:
@@ -204,22 +221,22 @@ def detect_clashes(structure_file, cutoff=0.4):
                 for atom in residue:
                     if atom.element != 'H':  # Skip hydrogens
                         atoms.append(atom)
-    
+
     clashes = []
     vdw_radii = {'C': 1.70, 'N': 1.55, 'O': 1.52, 'S': 1.80}  # Simplified
-    
+
     for i in range(len(atoms)):
         for j in range(i+1, len(atoms)):
             atom1, atom2 = atoms[i], atoms[j]
-            
+
             # Skip bonded atoms (simplified check)
-            if (atom1.parent == atom2.parent and 
+            if (atom1.parent == atom2.parent and
                 abs(atom1.serial_number - atom2.serial_number) <= 2):
                 continue
-                
+
             distance = atom1 - atom2
             vdw_sum = vdw_radii.get(atom1.element, 1.7) + vdw_radii.get(atom2.element, 1.7)
-            
+
             overlap = vdw_sum - distance
             if overlap > cutoff:
                 clashes.append({
@@ -228,7 +245,7 @@ def detect_clashes(structure_file, cutoff=0.4):
                     'overlap': overlap,
                     'distance': distance
                 })
-    
+
     return clashes
 ```
 
@@ -237,14 +254,17 @@ def detect_clashes(structure_file, cutoff=0.4):
 ## Model vs. Data Agreement
 
 ### 6. R-factors (X-ray crystallography)
+
 **Description**: Measure of agreement between observed and calculated structure factors.
 
 **Types**:
+
 - **R-work**: Calculated from working set (used in refinement)
 - **R-free**: Calculated from test set (not used in refinement)
 - **R-free - R-work**: Should be < 5% for valid refinement
 
 **Interpretation**:
+
 - **Excellent**: R-free < 20%, gap < 3%
 - **Good**: R-free 20-25%, gap < 5%
 - **Questionable**: R-free > 30% or gap > 7%
@@ -262,14 +282,16 @@ def extract_r_factors(pdb_file):
                 r_work = float(line.split()[-1])
             elif "FREE R VALUE" in line:
                 r_free = float(line.split()[-1])
-    
+
     return {'r_work': r_work, 'r_free': r_free, 'gap': r_free - r_work}
 ```
 
 ### 7. Cross-Correlation (Cryo-EM)
+
 **Description**: Measure of agreement between atomic model and electron density map.
 
 **Metrics**:
+
 - **FSC (Fourier Shell Correlation)**: Overall model-map correlation
 - **Local correlation**: Per-residue agreement
 - **Q-score**: Quality measure at atomic level
@@ -287,45 +309,46 @@ def extract_r_factors(pdb_file):
 ## Structural Completeness
 
 ### 8. Missing Residues and Atoms
+
 **Description**: Assessment of model completeness relative to the full sequence.
 
 ```python
 def assess_completeness(structure_file, sequence=None):
     parser = PDBParser()
     structure = parser.get_structure("protein", structure_file)
-    
+
     results = {}
-    
+
     for model in structure:
         for chain in model:
             residues = list(chain.get_residues())
-            
+
             # Count missing atoms per residue
             missing_atoms = 0
             total_expected = 0
-            
+
             for residue in residues:
                 expected_atoms = get_expected_atoms(residue.resname)
                 present_atoms = len(residue)
-                
+
                 missing_atoms += max(0, expected_atoms - present_atoms)
                 total_expected += expected_atoms
-            
+
             # Check for missing residues (gaps in numbering)
             residue_numbers = [res.id[1] for res in residues]
             missing_residues = []
-            
+
             if len(residue_numbers) > 1:
                 for i in range(min(residue_numbers), max(residue_numbers) + 1):
                     if i not in residue_numbers:
                         missing_residues.append(i)
-            
+
             results[chain.id] = {
                 'missing_atoms': missing_atoms,
                 'completeness': (total_expected - missing_atoms) / total_expected * 100,
                 'missing_residues': missing_residues
             }
-    
+
     return results
 
 def get_expected_atoms(resname):
@@ -340,19 +363,20 @@ def get_expected_atoms(resname):
 ```
 
 ### 9. Occupancy Analysis
+
 **Description**: Assessment of atom occupancy values and alternate conformations.
 
 ```python
 def analyze_occupancy(structure_file):
     parser = PDBParser()
     structure = parser.get_structure("protein", structure_file)
-    
+
     occupancy_stats = {
         'low_occupancy': [],  # < 0.5
         'zero_occupancy': [],  # = 0.0
         'alternate_conformations': []
     }
-    
+
     for model in structure:
         for chain in model:
             for residue in chain:
@@ -363,7 +387,7 @@ def analyze_occupancy(structure_file):
                         occupancy_stats['zero_occupancy'].append(atom)
                     if atom.altloc not in ['', 'A']:
                         occupancy_stats['alternate_conformations'].append(atom)
-    
+
     return occupancy_stats
 ```
 
@@ -372,6 +396,7 @@ def analyze_occupancy(structure_file):
 ## B-factor Analysis
 
 ### 10. Temperature Factor Distribution
+
 **Description**: Analysis of atomic displacement parameters indicating flexibility and disorder.
 
 ```python
@@ -381,10 +406,10 @@ import numpy as np
 def analyze_b_factors(structure_file):
     parser = PDBParser()
     structure = parser.get_structure("protein", structure_file)
-    
+
     b_factors = []
     ca_b_factors = []  # C-alpha atoms only
-    
+
     for model in structure:
         for chain in model:
             for residue in chain:
@@ -392,7 +417,7 @@ def analyze_b_factors(structure_file):
                     b_factors.append(atom.bfactor)
                     if atom.name == 'CA':
                         ca_b_factors.append((residue.id[1], atom.bfactor))
-    
+
     stats = {
         'mean_b': np.mean(b_factors),
         'median_b': np.median(b_factors),
@@ -401,17 +426,17 @@ def analyze_b_factors(structure_file):
         'max_b': np.max(b_factors),
         'ca_profile': ca_b_factors
     }
-    
+
     # Plot B-factor profile
     plt.figure(figsize=(12, 6))
-    
+
     # Histogram
     plt.subplot(1, 2, 1)
     plt.hist(b_factors, bins=50, alpha=0.7)
     plt.xlabel('B-factor (Ų)')
     plt.ylabel('Frequency')
     plt.title('B-factor Distribution')
-    
+
     # C-alpha profile
     plt.subplot(1, 2, 2)
     if ca_b_factors:
@@ -420,10 +445,10 @@ def analyze_b_factors(structure_file):
         plt.xlabel('Residue Number')
         plt.ylabel('C-alpha B-factor (Ų)')
         plt.title('B-factor Profile Along Chain')
-    
+
     plt.tight_layout()
     plt.savefig('b_factor_analysis.png', dpi=300)
-    
+
     return stats
 ```
 
@@ -432,6 +457,7 @@ def analyze_b_factors(structure_file):
 ## Comparative Assessment
 
 ### 11. Structure Similarity Metrics
+
 **Description**: Comparison with homologous structures for validation.
 
 ```python
@@ -443,20 +469,20 @@ def compare_structures(ref_structure, test_structure):
     pymol_script = f"""
     load {ref_structure}, ref
     load {test_structure}, test
-    
+
     # Align structures
     align test, ref
-    
+
     # Calculate RMSD
     rms_cur test, ref
-    
+
     # Save alignment statistics
     save alignment_results.pse
     """
-    
+
     with open('compare_structures.pml', 'w') as f:
         f.write(pymol_script)
-    
+
     # Run PyMOL script
     import subprocess
     subprocess.run(['pymol', '-c', 'compare_structures.pml'])
@@ -466,17 +492,17 @@ from Bio.PDB import Superimposer
 
 def calculate_rmsd(structure1_file, structure2_file):
     parser = PDBParser()
-    
+
     struct1 = parser.get_structure("ref", structure1_file)
     struct2 = parser.get_structure("test", structure2_file)
-    
+
     # Extract C-alpha atoms
     atoms1 = []
     atoms2 = []
-    
+
     residues1 = list(struct1[0]['A'].get_residues())
     residues2 = list(struct2[0]['A'].get_residues())
-    
+
     # Match residues by number
     for res1 in residues1:
         for res2 in residues2:
@@ -485,15 +511,15 @@ def calculate_rmsd(structure1_file, structure2_file):
                     atoms1.append(res1['CA'])
                     atoms2.append(res2['CA'])
                 break
-    
+
     if len(atoms1) != len(atoms2):
         print("Warning: Different number of matching atoms")
-    
+
     # Superimpose and calculate RMSD
     sup = Superimposer()
     sup.set_atoms(atoms1, atoms2)
     sup.apply(atoms2)
-    
+
     return {
         'rmsd': sup.rms,
         'n_atoms': len(atoms1),
@@ -526,35 +552,35 @@ class StructureQualityAssessment:
         self.parser = PDBParser(QUIET=True)
         self.structure = self.parser.get_structure("protein", structure_file)
         self.results = {}
-    
+
     def run_full_assessment(self):
         """Run complete quality assessment pipeline"""
         print("Running comprehensive structure quality assessment...")
-        
+
         # Basic metadata
         self.results['metadata'] = self.extract_metadata()
-        
+
         # Geometric validation
         self.results['ramachandran'] = self.ramachandran_analysis()
         self.results['clashes'] = self.detect_clashes()
         self.results['geometry'] = self.validate_geometry()
-        
+
         # Completeness analysis
         self.results['completeness'] = self.assess_completeness()
         self.results['occupancy'] = self.analyze_occupancy()
-        
+
         # B-factor analysis
         self.results['b_factors'] = self.analyze_b_factors()
-        
+
         # Overall quality score
         self.results['quality_score'] = self.calculate_overall_score()
-        
+
         return self.results
-    
+
     def extract_metadata(self):
         """Extract basic structure metadata"""
         header = self.structure.header
-        
+
         metadata = {
             'resolution': header.get('resolution'),
             'method': header.get('structure_method'),
@@ -563,7 +589,7 @@ class StructureQualityAssessment:
             'deposition_date': header.get('deposition_date'),
             'release_date': header.get('release_date')
         }
-        
+
         # Extract R-factors from PDB file
         try:
             with open(self.structure_file, 'r') as f:
@@ -574,13 +600,13 @@ class StructureQualityAssessment:
                         metadata['r_free'] = float(line.split()[-1])
         except:
             pass
-        
+
         return metadata
-    
+
     def calculate_overall_score(self):
         """Calculate overall quality score (0-100)"""
         score = 100
-        
+
         # Resolution penalty
         if self.results['metadata']['resolution']:
             res = self.results['metadata']['resolution']
@@ -588,7 +614,7 @@ class StructureQualityAssessment:
                 score -= 20
             elif res > 2.5:
                 score -= 10
-        
+
         # R-factor penalty
         if self.results['metadata']['r_free']:
             r_free = self.results['metadata']['r_free']
@@ -596,14 +622,14 @@ class StructureQualityAssessment:
                 score -= 25
             elif r_free > 0.25:
                 score -= 15
-        
+
         # Ramachandran penalty
         rama = self.results['ramachandran']
         if rama['outlier_percent'] > 2:
             score -= 15
         elif rama['outlier_percent'] > 1:
             score -= 5
-        
+
         # Completeness penalty
         comp = self.results['completeness']
         avg_completeness = np.mean([chain['completeness'] for chain in comp.values()])
@@ -611,21 +637,21 @@ class StructureQualityAssessment:
             score -= 20
         elif avg_completeness < 95:
             score -= 10
-        
+
         return max(0, score)
-    
+
     def generate_report(self, output_file=None):
         """Generate comprehensive quality report"""
         if not self.results:
             self.run_full_assessment()
-        
+
         report = []
         report.append("=" * 60)
         report.append("PROTEIN STRUCTURE QUALITY ASSESSMENT REPORT")
         report.append("=" * 60)
         report.append(f"Structure file: {self.structure_file}")
         report.append("")
-        
+
         # Overall score
         score = self.results['quality_score']
         if score >= 80:
@@ -636,10 +662,10 @@ class StructureQualityAssessment:
             quality = "FAIR"
         else:
             quality = "POOR"
-        
+
         report.append(f"OVERALL QUALITY SCORE: {score:.1f}/100 ({quality})")
         report.append("")
-        
+
         # Metadata section
         report.append("EXPERIMENTAL DATA:")
         report.append("-" * 20)
@@ -652,7 +678,7 @@ class StructureQualityAssessment:
             report.append(f"R-free: {meta['r_free']:.3f}")
             report.append(f"R-gap: {meta['r_free'] - meta['r_work']:.3f}")
         report.append("")
-        
+
         # Ramachandran analysis
         report.append("RAMACHANDRAN ANALYSIS:")
         report.append("-" * 22)
@@ -661,7 +687,7 @@ class StructureQualityAssessment:
         report.append(f"Allowed: {rama['allowed_percent']:.1f}%")
         report.append(f"Outliers: {rama['outlier_percent']:.1f}%")
         report.append("")
-        
+
         # Completeness
         report.append("MODEL COMPLETENESS:")
         report.append("-" * 19)
@@ -670,7 +696,7 @@ class StructureQualityAssessment:
             if comp['missing_residues']:
                 report.append(f"  Missing residues: {comp['missing_residues'][:5]}{'...' if len(comp['missing_residues']) > 5 else ''}")
         report.append("")
-        
+
         # B-factor analysis
         report.append("B-FACTOR ANALYSIS:")
         report.append("-" * 18)
@@ -678,7 +704,7 @@ class StructureQualityAssessment:
         report.append(f"Mean B-factor: {bf['mean_b']:.1f} Ų")
         report.append(f"B-factor range: {bf['min_b']:.1f} - {bf['max_b']:.1f} Ų")
         report.append("")
-        
+
         # Recommendations
         report.append("RECOMMENDATIONS:")
         report.append("-" * 15)
@@ -691,15 +717,15 @@ class StructureQualityAssessment:
             report.append("⚠ Structure has quality issues")
             report.append("⚠ Use with caution for detailed structural analysis")
             report.append("⚠ Consider alternative structures if available")
-        
+
         report_text = "\n".join(report)
-        
+
         if output_file:
             with open(output_file, 'w') as f:
                 f.write(report_text)
         else:
             print(report_text)
-        
+
         return report_text
 
 # Command-line usage
@@ -707,25 +733,25 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python structure_qa.py <structure_file>")
         sys.exit(1)
-    
+
     structure_file = sys.argv[1]
     if not os.path.exists(structure_file):
         print(f"Error: File {structure_file} not found")
         sys.exit(1)
-    
+
     # Run assessment
     qa = StructureQualityAssessment(structure_file)
     results = qa.run_full_assessment()
-    
+
     # Generate report
     report_file = Path(structure_file).stem + "_quality_report.txt"
     qa.generate_report(report_file)
-    
+
     # Save detailed results as JSON
     json_file = Path(structure_file).stem + "_quality_results.json"
     with open(json_file, 'w') as f:
         json.dump(results, f, indent=2, default=str)
-    
+
     print(f"\nDetailed report saved to: {report_file}")
     print(f"JSON results saved to: {json_file}")
 ```
@@ -776,7 +802,7 @@ while read res_name res_num atom_name; do
         # Check if N and C atoms exist for this residue
         n_count=$(grep "^ATOM" "$STRUCTURE_FILE" | awk -v rn="$res_num" -v an="N" '$6==rn && $3==an' | wc -l)
         c_count=$(grep "^ATOM" "$STRUCTURE_FILE" | awk -v rn="$res_num" -v an="C" '$6==rn && $3==an' | wc -l)
-        
+
         if [ $n_count -eq 0 ] || [ $c_count -eq 0 ]; then
             echo "  Residue $res_name $res_num: missing backbone atoms"
         fi
@@ -790,7 +816,7 @@ b_factors=$(grep "^ATOM" "$STRUCTURE_FILE" | awk '{print $11}')
 echo "B-factor statistics:"
 echo "$b_factors" | awk '
     BEGIN { min=999; max=0; sum=0; count=0 }
-    { 
+    {
         if ($1 < min) min = $1;
         if ($1 > max) max = $1;
         sum += $1;
@@ -892,7 +918,7 @@ $(ls -la *.txt *.ps 2>/dev/null | grep -v "^total")
 
 Recommendations:
 1. Check molprobity_results.txt for geometric validation
-2. Review Ramachandran plot for backbone conformations  
+2. Review Ramachandran plot for backbone conformations
 3. Examine B-factor distribution for structural flexibility
 4. Validate experimental data agreement (if available)
 
@@ -920,12 +946,12 @@ import os
 def submit_to_molprobity(pdb_file):
     """Submit structure to MolProbity web service"""
     url = "http://molprobity.biochem.duke.edu/index.php"
-    
+
     # This is a simplified example - actual implementation would need
     # to handle the web form submission properly
     print(f"Manual submission required to: {url}")
     print("Upload your PDB file and download the results")
-    
+
     return {
         'service': 'MolProbity',
         'url': url,
@@ -935,7 +961,7 @@ def submit_to_molprobity(pdb_file):
 def submit_to_pdb_redo(pdb_id):
     """Check PDB-REDO for re-refined structure"""
     url = f"https://pdb-redo.eu/db/{pdb_id}"
-    
+
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -959,14 +985,14 @@ def submit_to_pdb_redo(pdb_id):
 def check_validation_services(structure_file, pdb_id=None):
     """Check multiple validation services"""
     results = []
-    
+
     # MolProbity
     results.append(submit_to_molprobity(structure_file))
-    
+
     # PDB-REDO (if PDB ID available)
     if pdb_id:
         results.append(submit_to_pdb_redo(pdb_id))
-    
+
     return results
 ```
 
@@ -976,7 +1002,7 @@ def check_validation_services(structure_file, pdb_id=None):
 # PyMOL script for structure quality visualization
 def generate_pymol_quality_script(structure_file, output_script="quality_check.pml"):
     """Generate PyMOL script for quality visualization"""
-    
+
     script_content = f"""
 # PyMOL Structure Quality Visualization Script
 # Generated for: {structure_file}
@@ -1032,7 +1058,7 @@ png high_quality_view.png, dpi=300
 # Print summary
 print "Quality visualization complete!"
 print "Red spheres: Low occupancy atoms"
-print "Yellow spheres: Potential clashes"  
+print "Yellow spheres: Potential clashes"
 print "Magenta: Ramachandran outliers"
 print "Color spectrum: B-factor (blue=low, red=high)"
 
@@ -1045,13 +1071,13 @@ pseudoatom legend4, pos=[10,16,10], color=magenta, label="Rama outliers"
 show spheres, legend*
 set sphere_scale, 0.5, legend*
 """
-    
+
     with open(output_script, 'w') as f:
         f.write(script_content)
-    
+
     print(f"PyMOL script saved to: {output_script}")
     print("Run with: pymol quality_check.pml")
-    
+
     return output_script
 ```
 
@@ -1064,30 +1090,30 @@ set sphere_scale, 0.5, legend*
 ```python
 class QualityThresholds:
     """Standard quality thresholds for structure assessment"""
-    
+
     RESOLUTION = {
         'excellent': {'xray': 2.0, 'cryo_em': 3.0},
         'good': {'xray': 2.5, 'cryo_em': 4.0},
         'acceptable': {'xray': 3.5, 'cryo_em': 6.0}
     }
-    
+
     R_FACTORS = {
         'excellent': {'r_free': 0.20, 'gap': 0.03},
         'good': {'r_free': 0.25, 'gap': 0.05},
         'questionable': {'r_free': 0.30, 'gap': 0.07}
     }
-    
+
     RAMACHANDRAN = {
         'excellent': {'favored': 98, 'outliers': 0.5},
         'good': {'favored': 95, 'outliers': 1.0},
         'acceptable': {'favored': 90, 'outliers': 2.0}
     }
-    
+
     GEOMETRY = {
         'bond_rmsd': {'excellent': 0.02, 'good': 0.03, 'poor': 0.05},
         'angle_rmsd': {'excellent': 2.0, 'good': 3.0, 'poor': 5.0}
     }
-    
+
     B_FACTORS = {
         'wilson_b': {'good': 30, 'acceptable': 50, 'poor': 80},
         'mean_b': {'good': 25, 'acceptable': 40, 'poor': 60}
@@ -1095,18 +1121,18 @@ class QualityThresholds:
 
 def interpret_quality_metrics(results):
     """Interpret quality assessment results"""
-    
+
     interpretation = {
         'overall_grade': 'A',  # Will be determined
         'issues': [],
         'strengths': [],
         'recommendations': []
     }
-    
+
     # Resolution assessment
     resolution = results.get('metadata', {}).get('resolution')
     method = results.get('metadata', {}).get('method', '').upper()
-    
+
     if resolution:
         if 'X-RAY' in method:
             if resolution <= QualityThresholds.RESOLUTION['excellent']['xray']:
@@ -1115,7 +1141,7 @@ def interpret_quality_metrics(results):
                 interpretation['strengths'].append("Good resolution")
             else:
                 interpretation['issues'].append("Low resolution may limit detailed analysis")
-        
+
         elif 'ELECTRON MICROSCOPY' in method:
             if resolution <= QualityThresholds.RESOLUTION['excellent']['cryo_em']:
                 interpretation['strengths'].append("Excellent resolution for cryo-EM structure")
@@ -1123,30 +1149,30 @@ def interpret_quality_metrics(results):
                 interpretation['strengths'].append("Good resolution for cryo-EM")
             else:
                 interpretation['issues'].append("Resolution limits atomic detail")
-    
+
     # R-factor assessment
     r_free = results.get('metadata', {}).get('r_free')
     r_work = results.get('metadata', {}).get('r_work')
-    
+
     if r_free and r_work:
         gap = r_free - r_work
-        
+
         if r_free <= QualityThresholds.R_FACTORS['excellent']['r_free']:
             interpretation['strengths'].append("Excellent R-factors")
         elif r_free <= QualityThresholds.R_FACTORS['good']['r_free']:
             interpretation['strengths'].append("Good R-factors")
         else:
             interpretation['issues'].append("High R-factors suggest poor model-data agreement")
-        
+
         if gap > QualityThresholds.R_FACTORS['questionable']['gap']:
             interpretation['issues'].append("Large R-free gap suggests overfitting")
-    
+
     # Ramachandran assessment
     rama = results.get('ramachandran', {})
     if rama:
         outlier_percent = rama.get('outlier_percent', 0)
         favored_percent = rama.get('favored_percent', 0)
-        
+
         if (outlier_percent <= QualityThresholds.RAMACHANDRAN['excellent']['outliers'] and
             favored_percent >= QualityThresholds.RAMACHANDRAN['excellent']['favored']):
             interpretation['strengths'].append("Excellent backbone geometry")
@@ -1155,12 +1181,12 @@ def interpret_quality_metrics(results):
         else:
             interpretation['issues'].append("Backbone geometry issues detected")
             interpretation['recommendations'].append("Review Ramachandran outliers manually")
-    
+
     # Completeness assessment
     completeness = results.get('completeness', {})
     if completeness:
         avg_completeness = sum(chain['completeness'] for chain in completeness.values()) / len(completeness)
-        
+
         if avg_completeness >= 95:
             interpretation['strengths'].append("Model is highly complete")
         elif avg_completeness >= 90:
@@ -1168,11 +1194,11 @@ def interpret_quality_metrics(results):
         else:
             interpretation['issues'].append("Significant missing atoms/residues")
             interpretation['recommendations'].append("Check for missing density in problematic regions")
-    
+
     # Overall grade determination
     num_issues = len(interpretation['issues'])
     num_strengths = len(interpretation['strengths'])
-    
+
     if num_issues == 0 and num_strengths >= 3:
         interpretation['overall_grade'] = 'A'
     elif num_issues <= 1 and num_strengths >= 2:
@@ -1181,7 +1207,7 @@ def interpret_quality_metrics(results):
         interpretation['overall_grade'] = 'C'
     else:
         interpretation['overall_grade'] = 'D'
-    
+
     # General recommendations
     if interpretation['overall_grade'] in ['A', 'B']:
         interpretation['recommendations'].append("Structure suitable for most applications")
@@ -1191,7 +1217,7 @@ def interpret_quality_metrics(results):
     else:
         interpretation['recommendations'].append("Structure has significant quality issues")
         interpretation['recommendations'].append("Not recommended for detailed structural analysis")
-    
+
     return interpretation
 ```
 
@@ -1200,7 +1226,7 @@ def interpret_quality_metrics(results):
 ```python
 def assess_fitness_for_purpose(results, application):
     """Assess structure quality for specific applications"""
-    
+
     applications = {
         'drug_design': {
             'min_resolution': 2.5,
@@ -1227,25 +1253,25 @@ def assess_fitness_for_purpose(results, application):
             'critical_regions': ['functional_sites']
         }
     }
-    
+
     if application not in applications:
         return {"error": f"Unknown application: {application}"}
-    
+
     criteria = applications[application]
     assessment = {"suitable": True, "issues": [], "recommendations": []}
-    
+
     # Check resolution
     resolution = results.get('metadata', {}).get('resolution')
     if resolution and resolution > criteria['min_resolution']:
         assessment['suitable'] = False
         assessment['issues'].append(f"Resolution ({resolution:.2f} Å) exceeds requirement ({criteria['min_resolution']} Å)")
-    
+
     # Check R-factors
     r_free = results.get('metadata', {}).get('r_free')
     if r_free and r_free > criteria['max_r_free']:
         assessment['suitable'] = False
         assessment['issues'].append(f"R-free ({r_free:.3f}) exceeds requirement ({criteria['max_r_free']})")
-    
+
     # Check completeness
     completeness = results.get('completeness', {})
     if completeness:
@@ -1253,7 +1279,7 @@ def assess_fitness_for_purpose(results, application):
         if avg_completeness < criteria['min_completeness']:
             assessment['suitable'] = False
             assessment['issues'].append(f"Completeness ({avg_completeness:.1f}%) below requirement ({criteria['min_completeness']}%)")
-    
+
     # Application-specific recommendations
     if application == 'drug_design':
         assessment['recommendations'].extend([
@@ -1267,7 +1293,7 @@ def assess_fitness_for_purpose(results, application):
             "Check for unrealistic conformations that may cause instability",
             "Validate disulfide bonds and metal coordination"
         ])
-    
+
     return assessment
 ```
 
@@ -1276,7 +1302,7 @@ def assess_fitness_for_purpose(results, application):
 ```python
 def generate_comprehensive_report(structure_file, results, interpretation, fitness_assessments=None):
     """Generate a comprehensive validation report"""
-    
+
     report = f"""
 COMPREHENSIVE PROTEIN STRUCTURE QUALITY ASSESSMENT
 ================================================
@@ -1309,13 +1335,13 @@ Geometric Validation:
 
 Model Completeness:
 """
-    
+
     # Add completeness details
     for chain_id, comp in results.get('completeness', {}).items():
         report += f"  • Chain {chain_id}: {comp['completeness']:.1f}% complete\n"
         if comp['missing_residues']:
             report += f"    Missing residues: {', '.join(map(str, comp['missing_residues'][:10]))}\n"
-    
+
     report += f"""
 B-factor Analysis:
   • Mean B-factor: {results.get('b_factors', {}).get('mean_b', 'N/A'):.1f} Ų
@@ -1326,19 +1352,19 @@ Quality Assessment Summary
 ------------------------
 Strengths:
 """
-    
+
     for strength in interpretation['strengths']:
         report += f"  ✓ {strength}\n"
-    
+
     if interpretation['issues']:
         report += "\nIssues Identified:\n"
         for issue in interpretation['issues']:
             report += f"  ⚠ {issue}\n"
-    
+
     report += "\nRecommendations:\n"
     for rec in interpretation['recommendations']:
         report += f"  • {rec}\n"
-    
+
     # Add fitness-for-purpose assessments if provided
     if fitness_assessments:
         report += "\nFitness for Purpose Assessment\n"
@@ -1349,7 +1375,7 @@ Strengths:
             if assessment['issues']:
                 for issue in assessment['issues']:
                     report += f"  - {issue}\n"
-    
+
     report += f"""
 Quality Score: {results.get('quality_score', 'N/A')}/100
 
@@ -1363,7 +1389,7 @@ For additional validation, consider:
 
 Report Generated by Protein Structure Quality Assessment Pipeline
 """
-    
+
     return report
 ```
 
@@ -1373,12 +1399,14 @@ Report Generated by Protein Structure Quality Assessment Pipeline
 ## Structure Quality Control Checklist
 
 ### Pre-Analysis Setup
+
 - [ ] Verify file format (PDB/mmCIF) and integrity
 - [ ] Check for presence of experimental data files (MTZ, MAP)
 - [ ] Confirm structure method (X-ray, NMR, Cryo-EM)
 - [ ] Identify any special features (ligands, metals, modifications)
 
 ### Experimental Data Quality
+
 - [ ] Resolution appropriate for intended use
 - [ ] R-factors within acceptable ranges
 - [ ] R-free gap < 7%
@@ -1386,6 +1414,7 @@ Report Generated by Protein Structure Quality Assessment Pipeline
 - [ ] Data completeness > 95% (for X-ray)
 
 ### Geometric Validation
+
 - [ ] Ramachandran plot: >95% favored, <2% outliers
 - [ ] Bond lengths within 3σ of ideal values
 - [ ] Bond angles within 3σ of ideal values
@@ -1393,6 +1422,7 @@ Report Generated by Protein Structure Quality Assessment Pipeline
 - [ ] Proper stereochemistry for chiral centers
 
 ### Model Completeness
+
 - [ ] All expected residues present or justified absences
 - [ ] Side chains built where electron density supports
 - [ ] Waters placed in reasonable density
@@ -1400,41 +1430,53 @@ Report Generated by Protein Structure Quality Assessment Pipeline
 - [ ] Ligands properly modeled and validated
 
 ### B-factor Analysis
+
 - [ ] Reasonable B-factor distribution
 - [ ] No atoms with zero occupancy (unless justified)
 - [ ] Alternate conformations properly modeled
 - [ ] B-factors correlate with structural features
 
 ### Final Validation
+
 - [ ] Cross-validation with independent methods
 - [ ] Comparison with homologous structures
 - [ ] Biological relevance assessment
 - [ ] Documentation of limitations and uncertainties
 
 ### Application-Specific Checks
+
 #### For Drug Design:
+
 - [ ] Active site well-defined and complete
 - [ ] Binding pocket accessible and properly shaped
 - [ ] Cofactor/metal sites correctly coordinated
 
 #### For Molecular Dynamics:
+
 - [ ] All atoms present (including hydrogens)
 - [ ] No steric clashes that would cause instability
 - [ ] Proper protonation states assigned
 
 #### For Functional Studies:
+
 - [ ] Functionally important regions well-resolved
 - [ ] Conformational states biologically relevant
 - [ ] Quaternary structure validated if applicable
 ```
 
-This comprehensive guide provides you with all the essential tools and knowledge needed to thoroughly assess protein structure quality. The combination of automated scripts, manual validation techniques, and interpretation guidelines will help ensure you're working with reliable structural data for your research applications.
+This comprehensive guide provides you with all the essential tools and knowledge needed to
+thoroughly assess protein structure quality. The combination of automated scripts, manual validation
+techniques, and interpretation guidelines will help ensure you're working with reliable structural
+data for your research applications.
 
 Key takeaways:
+
 1. **Always consider the intended application** - different uses have different quality requirements
 2. **Use multiple validation methods** - no single metric tells the complete story
-3. **Pay attention to experimental details** - resolution, R-factors, and data collection methods matter
+3. **Pay attention to experimental details** - resolution, R-factors, and data collection methods
+   matter
 4. **Validate geometry rigorously** - poor geometry indicates modeling problems
 5. **Document limitations clearly** - be transparent about quality issues and their implications
 
-The tools and scripts provided can be adapted for your specific needs and integrated into automated pipelines for high-throughput analysis.
+The tools and scripts provided can be adapted for your specific needs and integrated into automated
+pipelines for high-throughput analysis.
