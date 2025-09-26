@@ -8,6 +8,7 @@ dependencies = [
     "pandas",
     "scipy",
     "seaborn",
+    "statsmodels",
     "torch==2.5.1",
     "torchaudio==2.5.1",
     "torchdata==0.8.0",
