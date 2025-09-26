@@ -6,6 +6,7 @@ dependencies = [
     "biopython>=1.85",
     "matplotlib",
     "pandas",
+    "scipy",
     "seaborn",
     "torch==2.5.1",
     "torchaudio==2.5.1",
