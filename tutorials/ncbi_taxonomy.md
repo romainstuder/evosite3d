@@ -6,7 +6,7 @@ The Taxonomy browser is a fantastic tool to browser the Tree of Life:
 
 Here is a simple Python script to browse it.
 
-First, download the taxonomy archive  (70MB) in your folder and unpack it:
+First, download the taxonomy archive (70MB) in your folder and unpack it:
 
 ```shell
 mkdir -p ncbi_data && cd ncbi_data
@@ -34,7 +34,6 @@ readme.txt
 
 Only `names.dmp` and `nodes.dmp` are important for the script.
 
-
 Then execute it in the same folder as "names.dmp and "nodes.dmp":
 
 ```shell
@@ -45,8 +44,9 @@ And enjoy!
 
 It will do different things:
 
-1) Load the association between Tax_id and Names ("names.dmp")
-2) Load the Tree of Life ("nodes.dmp")
-3) Display the genealogy from root to Human
-4) Find the common ancestor between Trichoplax and Human.
-5) Find descendants (internal or terminal leaves) of a specific taxa, based on division (i.e. "genus", "species").
+1. Load the association between Tax_id and Names ("names.dmp")
+2. Load the Tree of Life ("nodes.dmp")
+3. Display the genealogy from root to Human
+4. Find the common ancestor between Trichoplax and Human.
+5. Find descendants (internal or terminal leaves) of a specific taxa, based on division (i.e.
+   "genus", "species").
