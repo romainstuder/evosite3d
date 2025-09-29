@@ -1,12 +1,21 @@
-import sys
+import argparse
+import logging
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def main():
-    pdb_id = sys.argv[1]
+    parser = argparse.ArgumentParser(description="Plot PSSM heatmap from FoldX output")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+
+    args = parser.parse_args()
+
+    pdb_id = args.pdb_id
 
     # Load compiled data
     df = pd.read_csv(f"{pdb_id}_pssm_output.csv", sep="\t")
@@ -29,6 +38,7 @@ def main():
         figsize=(31, 6),
     )
     plt.savefig(f"{pdb_id}_Repair_interface_clustermap.png", bbox_inches="tight", pad_inches=0.0)
+    logger.info(f"Heatmap of {pdb_id}  interface saved to {pdb_id}_Repair_interface_clustermap.png")
 
 
 if __name__ == "__main__":

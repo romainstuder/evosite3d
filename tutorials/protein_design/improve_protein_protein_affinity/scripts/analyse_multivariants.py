@@ -1,10 +1,19 @@
-import sys
+import argparse
+import logging
 
 import pandas as pd
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def main():
-    pdb_id = sys.argv[1]
+    parser = argparse.ArgumentParser(description="Analyse multivariants from FoldX output")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+
+    args = parser.parse_args()
+
+    pdb_id = args.pdb_id
 
     df_list = []
     for variants_type in ["pairs", "triplets"]:
@@ -18,7 +27,7 @@ def main():
                 output_folder = line.split("--output-dir=")[-1]
                 folder_list.append(output_folder)
         file.close()
-        print(f"Number of {variants_type} variants: {len(folder_list)}")
+        logger.info(f"Number of {variants_type} variants: {len(folder_list)}")
 
         for output_folder in folder_list:
             average_file = f"{output_folder}/Average_{pdb_id}_Repair.fxout"

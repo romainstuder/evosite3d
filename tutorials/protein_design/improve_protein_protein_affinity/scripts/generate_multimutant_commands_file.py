@@ -1,116 +1,144 @@
-import os
-import sys
+import argparse
+import logging
 from itertools import combinations
+from pathlib import Path
+from typing import List, Tuple
 
 import pandas as pd
 
-
-def unique_pairs_only(lst):
-    """Get unique pairs without self-pairing"""
-    return list(combinations(lst, 2))
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-def unique_triplets_only(lst):
-    """Get unique pairs without self-pairing"""
-    return list(combinations(lst, 3))
+# Constants
+FOLDX_EXECUTABLE = "./foldx"
+NUM_PARALLEL_PROCESSES = 7
 
 
-def remove_same_positions(lst):
-    new_list = []
-    for pair in lst:
-        pos_list = [pos[2:-1] for pos in pair]
-        if len(set(pos_list)) == len(pos_list):
-            new_list.append(pair)
-    return new_list
+def generate_combinations(lst: List[str], n: int) -> List[Tuple[str, ...]]:
+    """Generate unique combinations of n items from a list.
+
+    Args:
+        lst: List of items to combine
+        n: Number of items per combination
+
+    Returns:
+        List of unique combinations
+    """
+    return list(combinations(lst, n))
 
 
-def write_mutant_pairs(df_best, pdb_id):
-    # Build commands for pairwise
-    output_pairs_results_folder = "pairs_results"
-    os.makedirs(output_pairs_results_folder, exist_ok=True)
+def filter_same_positions(variants: List[Tuple[str, ...]]) -> List[Tuple[str, ...]]:
+    """Filter out variants that mutate the same position multiple times.
 
-    command_file = open("command_list_pairs.txt", "w")
+    Args:
+        variants: List of variant tuples (e.g., ('MA10Y', 'LA20V'))
 
-    unique_pairs_list = unique_pairs_only(df_best["mutant_code"])
-    unique_pairs_list = remove_same_positions(unique_pairs_list)
-    print(f"Number of variants (pairs): {len(unique_pairs_list)}")
-
-    for pair in unique_pairs_list:
-        # print(pair)
-        res_to_mutate = ",".join(list(pair))
-        # print(res_to_mutate)
-        # position = res[2].zfill(3)
-        output_dir = (
-            f"{output_pairs_results_folder}/{pdb_id}_Repair_{res_to_mutate.replace(',', '_')}"
-        )
-        os.makedirs(f"{output_dir}", exist_ok=True)
-        with open(f"{output_dir}/individual_list.txt", "w") as f:
-            f.write(f"{res_to_mutate};\n")
-
-        #  Write command
-        command = [
-            "./foldx",
-            "--command=BuildModel",
-            f"--pdb={pdb_id}_Repair.pdb",
-            f"--mutant-file={output_dir}/individual_list.txt",
-            f"--output-dir={output_dir}",
-        ]
-        #  print(" ".join(command))
-        command_file.write(" ".join(command) + "\n")
-    command_file.close()
-
-    print("cat command_list_pairs.txt | xargs -P 7 -I {} sh -c '{}'")
+    Returns:
+        Filtered list with only variants affecting different positions
+    """
+    filtered = []
+    for variant in variants:
+        # Extract position from each mutation code (e.g., 'MA10Y' -> '10')
+        positions = [mutation[2:-1] for mutation in variant]
+        # Keep only if all positions are unique
+        if len(set(positions)) == len(positions):
+            filtered.append(variant)
+    return filtered
 
 
-def write_mutant_triplets(df_best, pdb_id):
-    # Build commands for triplets
-    unique_triplets_list = unique_triplets_only(
-        df_best.sort_values(["position", "wt"])["mutant_code"]
+def write_mutant_commands(
+    df_best: pd.DataFrame,
+    pdb_id: str,
+    n_mutations: int,
+    sort_by: List[str] = None,
+) -> None:
+    """Generate FoldX BuildModel commands for n-mutant variants.
+
+    Args:
+        df_best: DataFrame containing filtered mutations
+        pdb_id: PDB identifier
+        n_mutations: Number of mutations per variant (2 for pairs, 3 for triplets)
+        sort_by: Optional list of columns to sort by before generating combinations
+    """
+    variant_type = "pairs" if n_mutations == 2 else "triplets"
+    output_folder = Path(f"{variant_type}_results")
+    command_file = Path(f"command_list_{variant_type}.txt")
+
+    # Create output directory
+    output_folder.mkdir(exist_ok=True)
+
+    # Generate combinations
+    if sort_by:
+        mutant_codes = df_best.sort_values(sort_by)["mutant_code"].tolist()
+    else:
+        mutant_codes = df_best["mutant_code"].tolist()
+    variant_list = generate_combinations(mutant_codes, n_mutations)
+    variant_list = filter_same_positions(variant_list)
+
+    logger.info(f"Number of variants ({variant_type}): {len(variant_list)}")
+
+    # Write commands to file
+    with command_file.open("w") as cmd_file:
+        for variant in variant_list:
+            # Format mutation string
+            mutations_str = ",".join(variant)
+            safe_name = mutations_str.replace(",", "_")
+
+            # Create variant-specific directory
+            variant_dir = output_folder / f"{pdb_id}_Repair_{safe_name}"
+            variant_dir.mkdir(exist_ok=True)
+
+            # Write mutation list file
+            mutation_list_file = variant_dir / "individual_list.txt"
+            mutation_list_file.write_text(f"{mutations_str};\n")
+
+            # Build FoldX command
+            command = [
+                FOLDX_EXECUTABLE,
+                "--command=BuildModel",
+                f"--pdb={pdb_id}_Repair.pdb",
+                f"--mutant-file={mutation_list_file}",
+                f"--output-dir={variant_dir}",
+            ]
+
+            cmd_file.write(" ".join(command) + "\n")
+
+    # Log execution instructions
+    logger.info(f"cat {command_file} | xargs -P {NUM_PARALLEL_PROCESSES} -I {{}} sh -c '{{}}'")
+
+
+def main() -> None:
+    """Generate multimutant command files for FoldX BuildModel."""
+    parser = argparse.ArgumentParser(
+        description="Generate multimutant commands for FoldX BuildModel",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    unique_triplets_list = remove_same_positions(unique_triplets_list)
-    print(f"Number of variants (triplets): {len(unique_triplets_list)}")
-    output_triplets_results_folder = "triplets_results"
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument(
+        "dgg_threshold",
+        type=float,
+        help="ddG threshold for filtering mutations (mutations with ddG <= threshold will be used)",
+    )
 
-    os.makedirs(output_triplets_results_folder, exist_ok=True)
-    command_file = open("command_list_triplets.txt", "w")
-    for pair in unique_triplets_list:
-        # print(pair)
-        res_to_mutate = ",".join(list(pair))
-        # print(res_to_mutate)
-        # position = res[2].zfill(3)
-        output_dir = (
-            f"{output_triplets_results_folder}/{pdb_id}_Repair_{res_to_mutate.replace(',', '_')}"
-        )
-        os.makedirs(output_dir, exist_ok=True)
-        with open(f"{output_dir}/individual_list.txt", "w") as f:
-            f.write(f"{res_to_mutate};\n")
+    args = parser.parse_args()
 
-        # Write command
-        command = [
-            "./foldx",
-            "--command=BuildModel",
-            f"--pdb={pdb_id}_Repair.pdb",
-            f"--mutant-file={output_dir}/individual_list.txt",
-            f"--output-dir={output_dir}",
-        ]
-        # print(" ".join(command))
-        command_file.write(" ".join(command) + "\n")
-    command_file.close()
+    pdb_id = args.pdb_id
+    dgg_threshold = args.dgg_threshold
 
-    print("cat command_list_triplets.txt | xargs -P 7 -I {} sh -c '{}'")
+    # Load and filter data
+    input_file = f"{pdb_id}_pssm_output.csv"
+    logger.info(f"Loading PSSM data from {input_file}")
 
-
-def main():
-    pdb_id = sys.argv[1]
-    dgg_threshold = float(sys.argv[2])
-
-    df = pd.read_csv(f"{pdb_id}_pssm_output.csv", sep="\t")
+    df = pd.read_csv(input_file, sep="\t")
     df_best = df[df["ddG"] <= dgg_threshold].copy()
 
-    print(df_best.head())
+    logger.info(f"Found {len(df_best)} mutations with ddG <= {dgg_threshold}")
+    logger.info(f"Top mutations:\n{df_best.head()}")
 
-    write_mutant_pairs(df_best, pdb_id)
-    write_mutant_triplets(df_best, pdb_id)
+    # Generate pair and triplet commands
+    write_mutant_commands(df_best, pdb_id, n_mutations=2)
+    write_mutant_commands(df_best, pdb_id, n_mutations=3, sort_by=["position", "wt"])
 
 
 if __name__ == "__main__":

@@ -12,7 +12,6 @@ The pipeline implements a complete workflow for:
 2. **Interface Analysis**: Identify and extract protein-protein interface residues
 3. **Single Mutation Screening**: Perform comprehensive PSSM analysis
 4. **Multi-mutation Design**: Generate and evaluate combinatorial mutations
-5. **Variant Ranking**: Score variants based on multiple biophysical properties
 
 ## Scripts
 
@@ -38,7 +37,7 @@ python scripts/run_foldx_repair.py <pdb_id>
 
 #### `run_foldx_analysecomplex.py`
 
-Analyzes protein-protein complexes using FoldX AnalyseComplex to identify interface residues.
+Analyses protein-protein complexes using FoldX AnalyseComplex to identify interface residues.
 
 ```bash
 python scripts/run_foldx_analysecomplex.py <pdb_id> <chain1> <chain2>
@@ -112,26 +111,6 @@ python scripts/analyse_multivariants.py <pdb_id>
 
 **Output**: `<pdb_id>_multivariants_output.csv` - Ranked multi-mutant results
 
-### Variant Scoring and Selection
-
-#### `compute_scoring.py`
-
-Performs comprehensive scoring of variants using multiple biophysical properties including:
-
-- Binding affinity (total energy)
-- Protein stability (instability index)
-- Electrostatic properties (isoelectric point)
-- Hydrophobicity (GRAVY score)
-
-```bash
-python scripts/compute_scoring.py <pdb_id> <target_chain>
-```
-
-**Output**:
-
-- `<pdb_id>_variants_ranked.csv` - Top 100 ranked variants
-- `all_variant_file.fasta` - FASTA sequences of all variants
-
 ### Utilities
 
 #### `utils.py`
@@ -168,7 +147,6 @@ cat command_list_triplets.txt | xargs -P 7 -I {} sh -c '{}'
 
 # 5. Analyze and rank variants
 python scripts/analyse_multivariants.py 9FWW
-python scripts/compute_scoring.py 9FWW B
 ```
 
 ## Dependencies
@@ -184,19 +162,8 @@ python scripts/compute_scoring.py 9FWW B
 
 ## Output Files
 
-- `<pdb_id>_pssm_output.csv`: Single mutation ��G analysis
+- `<pdb_id>_pssm_output.csv`: Single mutation ddG analysis
 - `<pdb_id>_multivariants_output.csv`: Multi-mutant binding energies
 - `<pdb_id>_variants_ranked.csv`: Final ranked variants with scores
 - `<pdb_id>_Repair_interface_clustermap.png`: Mutation effect visualization
 - `all_variant_file.fasta`: Sequences for all analyzed variants
-
-## Scoring Methodology
-
-Final variant scoring combines multiple factors:
-
-- **Binding affinity** (70%): FoldX total energy
-- **Stability** (10%): Protein instability index
-- **Electrostatics** (10%): Isoelectric point optimization
-- **Hydrophobicity** (10%): GRAVY score balance
-
-Higher scores indicate more favorable variants for experimental validation.

@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from Bio.PDB.PDBParser import PDBParser
 
 
-class AntibodyConstants:
+class AminoAcidConstants:
     """Constants related to antibody structure and amino acids."""
 
     # Three-letter to one-letter amino acid code mapping
@@ -54,6 +54,8 @@ class AntibodyConstants:
         "Tyr",
     ]
 
+
+class AntibodyConstants:
     # Complementarity-determining regions (CDRs) position ranges (Kabat numbering)
     CDR1: range = range(26, 34)
     CDR2: range = range(51, 59)
@@ -61,8 +63,8 @@ class AntibodyConstants:
 
 
 # Legacy constants for backwards compatibility
-D3TO1 = AntibodyConstants.D3TO1
-AA_LIST = AntibodyConstants.AA_LIST
+D3TO1 = AminoAcidConstants.D3TO1
+AA_LIST = AminoAcidConstants.AA_LIST
 CDR1 = AntibodyConstants.CDR1
 CDR2 = AntibodyConstants.CDR2
 CDR3 = AntibodyConstants.CDR3
@@ -99,8 +101,8 @@ def extract_sequence_from_pdb(pdb_file: str, chain_id: str) -> List[Tuple[str, s
             if chain.id == chain_id:
                 chain_found = True
                 for pos, residue in enumerate(chain, 1):
-                    if residue.resname in AntibodyConstants.D3TO1:
-                        amino_acid = AntibodyConstants.D3TO1[residue.resname]
+                    if residue.resname in AminoAcidConstants.D3TO1:
+                        amino_acid = AminoAcidConstants.D3TO1[residue.resname]
                         sequence.append((amino_acid, chain.id, str(pos)))
 
     if not chain_found:

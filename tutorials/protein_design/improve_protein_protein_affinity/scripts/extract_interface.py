@@ -1,6 +1,10 @@
-import sys
+import argparse
+import logging
 
 import pandas as pd
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def extract_interface(pdb_id, chain_id):
@@ -20,11 +24,17 @@ def extract_interface(pdb_id, chain_id):
 
 
 def main():
-    pdb_id = sys.argv[1]
-    chain_id = sys.argv[2]
+    parser = argparse.ArgumentParser(description="Extract interface residues from FoldX output")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument("chain_id", help="Chain identifier")
+
+    args = parser.parse_args()
+
+    pdb_id = args.pdb_id
+    chain_id = args.chain_id
 
     residue_list = extract_interface(pdb_id, chain_id)
-    print(f"select foldx_interface, chain B and resi {' + '.join(residue_list)}")
+    logger.info(f"select foldx_interface, chain B and resi {' + '.join(residue_list)}")
 
 
 if __name__ == "__main__":

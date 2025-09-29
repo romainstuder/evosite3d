@@ -1,58 +1,133 @@
 
-PDB_ID = 9FWW
-CHAIN_ID = B
-OTHER_MOL = A
-DDG_THRESHOLD = -1.5
+# =============================================================================
+# Protein-Protein Affinity Optimisation Pipeline
+# =============================================================================
 
+# Configuration variables
+PDB_ID := 9FWW
+CHAIN_ID := B
+OTHER_MOL := A
+DDG_THRESHOLD := -1.5
+PARALLEL_JOBS := 7
 
-default: all
+# Script directory
+SCRIPTS_DIR := ./scripts
+PYTHON := python
 
-all: download_pdb \
-     repair_pdb \
-	 identify_interface \
-	 extract_interface \
-     prepare_pssm_commands \
-     run_foldx_pssm \
-     analyse_pssm_output \
-     prepare_multimutant_commands \
-     run_foldx_pairs \
-     run_foldx_triplets \
-     analyse_multimutant_output \
-     get_final_score
+# Output files
+COMMAND_LIST_FILE := command_list.txt
+COMMAND_LIST_PAIRS_FILE := command_list_pairs.txt
+COMMAND_LIST_TRIPLETS_FILE := command_list_triplets.txt
 
-download_pdb:
-	python ./scripts/download_pdb.py $(PDB_ID)
+# =============================================================================
+# Phony targets
+# =============================================================================
+.PHONY: all help clean download_pdb repair_pdb identify_interface extract_interface \
+        prepare_pssm_commands run_foldx_pssm analyse_pssm_output \
+        prepare_multimutant_commands run_foldx_pairs run_foldx_triplets \
+        analyse_multimutant_output pssm_analysis multimutant_analysis
 
-repair_pdb:
-	python ./scripts/run_foldx_repair.py $(PDB_ID)
+# =============================================================================
+# Default target
+# =============================================================================
+.DEFAULT_GOAL := help
 
-identify_interface:
-	python ./scripts/run_foldx_analysecomplex.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
+# =============================================================================
+# Help target
+# =============================================================================
+help: ## Show this help message
+	@echo "Protein-Protein Affinity Optimization Pipeline"
+	@echo "=============================================="
+	@echo ""
+	@echo "Configuration:"
+	@echo "  PDB_ID=$(PDB_ID)"
+	@echo "  CHAIN_ID=$(CHAIN_ID)"
+	@echo "  OTHER_MOL=$(OTHER_MOL)"
+	@echo "  DDG_THRESHOLD=$(DDG_THRESHOLD)"
+	@echo "  PARALLEL_JOBS=$(PARALLEL_JOBS)"
+	@echo ""
+	@echo "Available targets:"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-25s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-extract_interface:
-	python ./scripts/extract_interface.py $(PDB_ID) $(CHAIN_ID)
+# =============================================================================
+# Main pipeline targets
+# =============================================================================
+all: ## Run complete pipeline
+all: download_pdb repair_pdb identify_interface extract_interface pssm_analysis multimutant_analysis
 
-prepare_pssm_commands:
-	python ./scripts/generate_pssm_commands_file.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
+pssm_analysis: ## Run PSSM analysis workflow
+pssm_analysis: prepare_pssm_commands run_foldx_pssm analyse_pssm_output
 
-run_foldx_pssm:
-	cat command_list.txt | xargs -P 7 -I {} sh -c '{}'
+multimutant_analysis: ## Run multimutant analysis workflow
+multimutant_analysis: prepare_multimutant_commands run_foldx_pairs run_foldx_triplets analyse_multimutant_output
 
-analyse_pssm_output:
-	python ./scripts/parse_pssm_output.py $(PDB_ID) $(CHAIN_ID)
-	python ./scripts/plot_pssm_heatmap.py $(PDB_ID)
+# =============================================================================
+# Individual pipeline steps
+# =============================================================================
+download_pdb: ## Download PDB structure
+	$(PYTHON) $(SCRIPTS_DIR)/download_pdb.py $(PDB_ID)
 
-prepare_multimutant_commands:
-	python ./scripts/generate_multimutant_commands_file.py $(PDB_ID) $(DDG_THRESHOLD)
+repair_pdb:  ## Repair PDB structure using FoldX
+	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_repair.py $(PDB_ID)
 
-run_foldx_pairs:
-	cat command_list_pairs.txt | xargs -P 7 -I {} sh -c '{}'
+identify_interface:  ## Identify protein-protein interface
+	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_analysecomplex.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
 
-run_foldx_triplets:
-	cat command_list_triplets.txt | xargs -P 7 -I {} sh -c '{}'
+extract_interface: ## Extract interface residues
+	$(PYTHON) $(SCRIPTS_DIR)/extract_interface.py $(PDB_ID) $(CHAIN_ID)
 
-analyse_multimutant_output:
-	python ./scripts/analyse_multivariants.py $(PDB_ID)
+prepare_pssm_commands: ## Generate PSSM scanning commands
+	$(PYTHON) $(SCRIPTS_DIR)/generate_pssm_commands_file.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
 
-get_final_score:
-	python ./scripts/compute_scoring.py $(PDB_ID) $(CHAIN_ID)
+run_foldx_pssm: ## Run FoldX PSSM scanning in parallel
+	@if [ -f $(COMMAND_LIST_FILE) ]; then \
+		cat $(COMMAND_LIST_FILE) | xargs -P $(PARALLEL_JOBS) -I {} sh -c '{}'; \
+	else \
+		echo "Error: $(COMMAND_LIST_FILE) not found. Run 'make prepare_pssm_commands' first."; \
+		exit 1; \
+	fi
+
+analyse_pssm_output: ## Parse and plot PSSM results
+	$(PYTHON) $(SCRIPTS_DIR)/parse_pssm_output.py $(PDB_ID) $(CHAIN_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/plot_pssm_heatmap.py $(PDB_ID)
+
+prepare_multimutant_commands: ## Generate multimutant commands
+	$(PYTHON) $(SCRIPTS_DIR)/generate_multimutant_commands_file.py $(PDB_ID) $(DDG_THRESHOLD)
+
+run_foldx_pairs: ## Run FoldX for pairs in parallel
+	@if [ -f $(COMMAND_LIST_PAIRS_FILE) ]; then \
+		cat $(COMMAND_LIST_PAIRS_FILE) | xargs -P $(PARALLEL_JOBS) -I {} sh -c '{}'; \
+	else \
+		echo "Error: $(COMMAND_LIST_PAIRS_FILE) not found. Run 'make prepare_multimutant_commands' first."; \
+		exit 1; \
+	fi
+
+run_foldx_triplets: ## Run FoldX for triplets in parallel
+	@if [ -f $(COMMAND_LIST_TRIPLETS_FILE) ]; then \
+		cat $(COMMAND_LIST_TRIPLETS_FILE) | xargs -P $(PARALLEL_JOBS) -I {} sh -c '{}'; \
+	else \
+		echo "Error: $(COMMAND_LIST_TRIPLETS_FILE) not found. Run 'make prepare_multimutant_commands' first."; \
+		exit 1; \
+	fi
+
+analyse_multimutant_output:  ## Analyse multimutant results
+	$(PYTHON) $(SCRIPTS_DIR)/analyse_multivariants.py $(PDB_ID)
+
+# =============================================================================
+# Utility targets
+# =============================================================================
+clean: ## Clean generated files
+	@echo "Cleaning generated files..."
+	@rm -f $(COMMAND_LIST_FILE) $(COMMAND_LIST_PAIRS_FILE) $(COMMAND_LIST_TRIPLETS_FILE)
+	@rm -rf output_* *.log *.tmp
+	@echo "Clean completed."
+
+variables: ## Show current variable values
+	@echo "Current configuration:"
+	@echo "  PDB_ID=$(PDB_ID)"
+	@echo "  CHAIN_ID=$(CHAIN_ID)"
+	@echo "  OTHER_MOL=$(OTHER_MOL)"
+	@echo "  DDG_THRESHOLD=$(DDG_THRESHOLD)"
+	@echo "  PARALLEL_JOBS=$(PARALLEL_JOBS)"
+	@echo "  SCRIPTS_DIR=$(SCRIPTS_DIR)"
+	@echo "  PYTHON=$(PYTHON)"

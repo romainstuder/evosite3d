@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Generate PSSM command files for FoldX batch processing.
+"""Generate PSSM command files for FoldX batch processing.
 
 This script generates a list of FoldX PSSM commands for each position in a protein chain,
 allowing for parallel execution of mutagenesis scans.
@@ -17,12 +16,17 @@ Output:
     command_list.txt: File containing all PSSM commands
 """
 
+import argparse
+import logging
 import os
 import sys
 from pathlib import Path
 from typing import List, Tuple
 
 from utils import extract_sequence_from_pdb
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def create_output_directories(pdb_id: str, sequence: List[Tuple[str, str, str]]) -> None:
@@ -93,20 +97,23 @@ def write_command_file(commands: List[str], filename: str = "command_list.txt") 
 
 def main() -> None:
     """Main function to generate PSSM command file."""
-    if len(sys.argv) != 4:
-        print("Usage: python generate_pssm_commands_file.py <pdb_id> <other_chain> <target_chain>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Generate PSSM command files for FoldX batch processing"
+    )
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument("other_chain", help="Chain identifier for the binding partner")
+    parser.add_argument("target_chain", help="Chain identifier for the target to mutate")
 
-    pdb_id, other_chain, target_chain = sys.argv[1:4]
+    args = parser.parse_args()
 
-    if not all([pdb_id, other_chain, target_chain]):
-        print("Error: All arguments must be provided")
-        sys.exit(1)
+    pdb_id = args.pdb_id
+    other_chain = args.other_chain
+    target_chain = args.target_chain
 
     pdb_file = f"{pdb_id}_Repair.pdb"
 
     if not os.path.exists(pdb_file):
-        print(f"Error: PDB file not found: {pdb_file}")
+        logger.error(f"Error: PDB file not found: {pdb_file}")
         sys.exit(1)
 
     try:
@@ -114,7 +121,7 @@ def main() -> None:
         sequence = extract_sequence_from_pdb(pdb_file, target_chain)
 
         if not sequence:
-            print(f"Error: No residues found for chain {target_chain}")
+            logger.error(f"Error: No residues found for chain {target_chain}")
             sys.exit(1)
 
         # Create output directories
@@ -126,12 +133,12 @@ def main() -> None:
         # Write command file
         write_command_file(commands)
 
-        print(f"Generated {len(commands)} PSSM commands")
-        print("To run in parallel (7 processes):")
-        print("cat command_list.txt | xargs -P 7 -I {} sh -c '{}'")
+        logger.info(f"Generated {len(commands)} PSSM commands")
+        logger.info("To run in parallel (7 processes):")
+        logger.info("cat command_list.txt | xargs -P 7 -I {} sh -c '{}'")
 
     except Exception as e:
-        print(f"Error generating PSSM commands: {e}")
+        logger.error(f"Error generating PSSM commands: {e}")
         sys.exit(1)
 
 

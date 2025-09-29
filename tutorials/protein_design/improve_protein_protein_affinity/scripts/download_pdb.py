@@ -1,10 +1,15 @@
+import argparse
 import os
-import sys
-
-pdb_id = sys.argv[1]
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Download PDB file from RCSB")
+    parser.add_argument("pdb_id", help="PDB identifier")
+
+    args = parser.parse_args()
+
+    pdb_id = args.pdb_id
+
     os.system(f"wget --no-clobber https://files.rcsb.org/download/{pdb_id}.pdb")
 
 

@@ -14,31 +14,37 @@ Reference:
     https://foldxsuite.crg.eu/command/AnalyseComplex
 """
 
+import argparse
+import logging
 import sys
 
 from foldx_wrapper import FoldXRunner
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def main() -> None:
     """Main function to run FoldX AnalyseComplex command."""
-    if len(sys.argv) != 4:
-        print("Usage: python run_foldx_analysecomplex.py <pdb_id> <chain1> <chain2>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Analyze protein complexes using FoldX")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument("chain1", help="First chain identifier")
+    parser.add_argument("chain2", help="Second chain identifier")
 
-    pdb_id, chain1, chain2 = sys.argv[1:4]
+    args = parser.parse_args()
 
-    if not all([pdb_id, chain1, chain2]):
-        print("Error: All arguments (pdb_id, chain1, chain2) must be provided")
-        sys.exit(1)
+    pdb_id = args.pdb_id
+    chain1 = args.chain1
+    chain2 = args.chain2
 
     try:
         runner = FoldXRunner()
         result = runner.analyse_complex(pdb_id, chain1, chain2)
-        print(f"Successfully analyzed complex: {pdb_id} (chains {chain1}, {chain2})")
+        logger.info(f"Successfully analyzed complex: {pdb_id} (chains {chain1}, {chain2})")
         if result.stdout:
-            print("FoldX output:", result.stdout)
+            logger.debug("FoldX output: %s", result.stdout)
     except Exception as e:
-        print(f"Error analyzing complex {pdb_id}: {e}")
+        logger.error(f"Error analyzing complex {pdb_id}: {e}")
         sys.exit(1)
 
 

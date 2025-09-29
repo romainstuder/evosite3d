@@ -1,14 +1,24 @@
-import sys
+import argparse
+import logging
 from itertools import repeat
 
 import numpy as np
 import pandas as pd
 from utils import AA_LIST, CDR1, CDR2, CDR3, D3TO1, extract_sequence_from_pdb
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def main():
-    pdb_id = sys.argv[1]
-    target_chain = sys.argv[2]
+    parser = argparse.ArgumentParser(description="Parse PSSM output from FoldX")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument("target_chain", help="Target chain identifier")
+
+    args = parser.parse_args()
+
+    pdb_id = args.pdb_id
+    target_chain = args.target_chain
 
     pdb_file = f"{pdb_id}_Repair.pdb"
     seq = extract_sequence_from_pdb(pdb_file, target_chain)
@@ -53,7 +63,7 @@ def main():
     df_reduce = df_reduce.sort_values(["ddG"])
 
     df_reduce.to_csv(f"./{pdb_id}_pssm_output.csv", sep="\t", index=False)
-    print(f"output written to ./{pdb_id}_pssm_output.csv")
+    logger.info(f"output written to ./{pdb_id}_pssm_output.csv")
 
 
 if __name__ == "__main__":

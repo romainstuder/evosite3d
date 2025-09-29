@@ -9,31 +9,33 @@ Args:
     pdb_id: PDB identifier (without .pdb extension)
 """
 
+import argparse
+import logging
 import sys
 
 from foldx_wrapper import FoldXRunner
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def main() -> None:
     """Main function to run FoldX RepairPDB command."""
-    if len(sys.argv) != 2:
-        print("Usage: python run_foldx_repair.py <pdb_id>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Repair PDB structures using FoldX")
+    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
 
-    pdb_id = sys.argv[1]
+    args = parser.parse_args()
 
-    if not pdb_id:
-        print("Error: PDB ID cannot be empty")
-        sys.exit(1)
+    pdb_id = args.pdb_id
 
     try:
         runner = FoldXRunner()
         result = runner.repair_pdb(pdb_id)
-        print(f"Successfully repaired PDB: {pdb_id}")
+        logger.info(f"Successfully repaired PDB: {pdb_id}")
         if result.stdout:
-            print("FoldX output:", result.stdout)
+            logger.debug("FoldX output: %s", result.stdout)
     except Exception as e:
-        print(f"Error repairing PDB {pdb_id}: {e}")
+        logger.error(f"Error repairing PDB {pdb_id}: {e}")
         sys.exit(1)
 
 
