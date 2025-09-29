@@ -408,15 +408,20 @@ cat command_list_triplets.txt | xargs -P 7 -I {} sh -c '{}'
 
 #### `analyse_multivariants.py`
 
-Compiles and ranks results from multi-mutant FoldX calculations.
+Compiles and ranks results from multi-mutant FoldX calculations. Automatically generates PyMOL visualization scripts for each variant.
 
 ```bash
-python scripts/analyse_multivariants.py <pdb_id>
+python scripts/analyse_multivariants.py <pdb_id> [options]
 ```
 
 **Arguments:**
 
 - `pdb_id`: PDB identifier (without .pdb extension)
+- `--chain-a`: Chain identifier for binding partner (default: A)
+- `--chain-b`: Chain identifier for target chain with mutations (default: B)
+- `--chain-a-name`: Display name for chain A in PyMOL (default: partner)
+- `--chain-b-name`: Display name for chain B in PyMOL (default: target)
+- `--no-pymol`: Skip PyMOL visualization script generation
 
 **Input:**
 
@@ -429,12 +434,60 @@ python scripts/analyse_multivariants.py <pdb_id>
   - `variant`: Mutation combination (e.g., "MA10Y_SB52T")
   - `total energy`: Total binding energy
   - Plus all FoldX energy components
+- `<variant_folder>/visualize.pml`: PyMOL visualization script for each variant
+
+**Features:**
+
+- Automatically extracts mutation positions from variant names
+- Generates ready-to-use PyMOL scripts in each variant folder
+- Shows top 10 variants by total energy
+- Provides PyMOL usage instructions
+
+**PyMOL Script Features:**
+
+Each generated `visualize.pml` script includes:
+
+- Cartoon representation with color-coded chains
+- Highlighted mutated residues (yellow spheres)
+- Contact residues on partner chain (salmon spheres)
+- CDR regions colored (cyan/magenta/olive)
+- Disulfide bridges shown as sticks
+- Auto-zoom on mutation sites
 
 **Example:**
 
 ```bash
+# Basic usage
 python scripts/analyse_multivariants.py 9FWW
+
+# Custom chain names for visualization
+python scripts/analyse_multivariants.py 9FWW \
+  --chain-a A --chain-b B \
+  --chain-a-name "antigen" --chain-b-name "antibody"
+
+# Skip PyMOL script generation
+python scripts/analyse_multivariants.py 9FWW --no-pymol
 ```
+
+**Visualizing Results:**
+
+After running the analysis, visualize any variant:
+
+```bash
+# Navigate to variant folder
+cd triplets_results/9FWW_Repair_TB28Y_TB58R_SB104F
+
+# Launch PyMOL
+pymol visualize.pml
+```
+
+**Example Visualizations:**
+
+![Variant TB28Y_TB58R_SB104F](9FWW_variants_TB28Y_TB58R_SB104F.png)
+_Triple mutant TB28Y_TB58R_SB104F showing mutation sites (yellow) and contact residues_
+
+![Variant TB28Y_SB104F_LB106R](9FWW_variants_TB28Y_SB104F_LB106R.png)
+_Triple mutant TB28Y_SB104F_LB106R highlighting interface interactions_
 
 ### Utilities
 
