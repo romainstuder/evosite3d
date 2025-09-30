@@ -1,4 +1,4 @@
-# Protein-Protein Affinity Optimization Pipeline
+# Protein-Protein Affinity Optimisation Pipeline
 
 A comprehensive computational pipeline for improving protein-protein binding affinity through systematic mutagenesis analysis using FoldX.
 
@@ -23,7 +23,7 @@ Protein-protein affinity refers to the strength of non-covalent interactions bet
 - **Biosensor design**: Improving detection sensitivity
 - **Drug discovery**: Optimizing protein inhibitors
 
-### Computational Affinity Optimization Strategy
+### Computational Affinity Optimisation Strategy
 
 This pipeline uses FoldX, an empirical force field-based method, to computationally predict the effect of mutations on binding affinity:
 
@@ -35,7 +35,7 @@ This pipeline uses FoldX, an empirical force field-based method, to computationa
    - Calculate ΔΔG (change in binding free energy)
    - Negative ΔΔG indicates improved binding affinity
 
-3. **Combinatorial Optimization**:
+3. **Combinatorial Optimisation**:
 
    - Combine beneficial single mutations (ΔΔG < threshold)
    - Test double and triple mutants
@@ -59,23 +59,23 @@ The pipeline consists of four main stages:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    1. STRUCTURE PREPARATION                  │
-│  Download PDB → Repair structure → Optimize side chains     │
+│                    1. STRUCTURE PREPARATION                 │
+│  Download PDB → Repair structure → Optimise side chains     │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│                    2. INTERFACE ANALYSIS                     │
+│                    2. INTERFACE ANALYSIS                    |
 │  Identify interface → Extract interface residues            │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│                  3. SINGLE MUTATION SCREENING                │
-│  Generate mutations → Run PSSM → Parse results → Visualize  │
+│                  3. SINGLE MUTATION SCREENING               │
+│  Generate mutations → Run PSSM → Parse results → Visualise  │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│                  4. MULTI-MUTATION DESIGN                    │
-│  Filter beneficial → Combine mutations → Rank variants       │
+│                  4. MULTI-MUTATION DESIGN                   │
+│  Filter beneficial → Combine mutations → Rank variants      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -175,7 +175,7 @@ python scripts/download_pdb.py <pdb_id>
 
 **Arguments:**
 
-- `pdb_id`: PDB identifier (e.g., "9FWW")
+- `pdb_id`: PDB identifier (e.g., "8GZ5")
 
 **Output:**
 
@@ -184,7 +184,7 @@ python scripts/download_pdb.py <pdb_id>
 **Example:**
 
 ```bash
-python scripts/download_pdb.py 9FWW
+python scripts/download_pdb.py 8GZ5
 ```
 
 ---
@@ -209,7 +209,7 @@ python scripts/run_foldx_repair.py <pdb_id>
 **Example:**
 
 ```bash
-python scripts/run_foldx_repair.py 9FWW
+python scripts/run_foldx_repair.py 8GZ5
 ```
 
 ### Interface Analysis
@@ -236,7 +236,7 @@ python scripts/run_foldx_analysecomplex.py <pdb_id> <chain1> <chain2>
 **Example:**
 
 ```bash
-python scripts/run_foldx_analysecomplex.py 9FWW A B
+python scripts/run_foldx_analysecomplex.py 8GZ5 A B
 ```
 
 ---
@@ -261,7 +261,7 @@ python scripts/extract_interface.py <pdb_id> <chain_id>
 **Example:**
 
 ```bash
-python scripts/extract_interface.py 9FWW B
+python scripts/extract_interface.py 8GZ5 B
 # Output: select foldx_interface, chain B and resi 45 + 47 + 52 + 98 + 100
 ```
 
@@ -301,10 +301,10 @@ python scripts/generate_pssm_commands_file.py <pdb_id> <other_chain> <target_cha
 
 ```bash
 # Scan interface residues only (default, recommended)
-python scripts/generate_pssm_commands_file.py 9FWW A B
+python scripts/generate_pssm_commands_file.py 8GZ5 A B
 
 # Scan all residues in chain B
-python scripts/generate_pssm_commands_file.py 9FWW A B --full-sequence
+python scripts/generate_pssm_commands_file.py 8GZ5 A B --full-sequence
 
 # Execute commands in parallel (7 jobs):
 cat command_list.txt | xargs -P 7 -I {} sh -c '{}'
@@ -350,7 +350,7 @@ python scripts/parse_pssm_output.py <pdb_id> <target_chain>
 **Example:**
 
 ```bash
-python scripts/parse_pssm_output.py 9FWW B
+python scripts/parse_pssm_output.py 8GZ5 B
 ```
 
 ---
@@ -382,7 +382,7 @@ python scripts/plot_pssm_heatmap.py <pdb_id>
 **Example:**
 
 ```bash
-python scripts/plot_pssm_heatmap.py 9FWW
+python scripts/plot_pssm_heatmap.py 8GZ5
 ```
 
 ### Multi-Mutation Design
@@ -421,7 +421,7 @@ python scripts/generate_multimutant_commands_file.py <pdb_id> <ddg_threshold>
 **Example:**
 
 ```bash
-python scripts/generate_multimutant_commands_file.py 9FWW -1.0
+python scripts/generate_multimutant_commands_file.py 8GZ5 -1.0
 
 # Execute in parallel:
 cat command_list_pairs.txt | xargs -P 7 -I {} sh -c '{}'
@@ -458,7 +458,7 @@ python scripts/analyse_multivariants.py <pdb_id> [options]
   - `variant`: Mutation combination (e.g., "MA10Y_SB52T")
   - `total energy`: Total binding energy
   - Plus all FoldX energy components
-- `<variant_folder>/visualize.pml`: PyMOL visualization script for each variant
+- `<variant_folder>/visualise.pml`: PyMOL visualization script for each variant
 
 **Features:**
 
@@ -469,7 +469,7 @@ python scripts/analyse_multivariants.py <pdb_id> [options]
 
 **PyMOL Script Features:**
 
-Each generated `visualize.pml` script includes:
+Each generated `visualise.pml` script includes:
 
 - Cartoon representation with color-coded chains
 - Highlighted mutated residues (yellow spheres)
@@ -482,15 +482,15 @@ Each generated `visualize.pml` script includes:
 
 ```bash
 # Basic usage
-python scripts/analyse_multivariants.py 9FWW
+python scripts/analyse_multivariants.py 8GZ5
 
 # Custom chain names for visualization
-python scripts/analyse_multivariants.py 9FWW \
+python scripts/analyse_multivariants.py 8GZ5 \
   --chain-a A --chain-b B \
   --chain-a-name "antigen" --chain-b-name "antibody"
 
 # Skip PyMOL script generation
-python scripts/analyse_multivariants.py 9FWW --no-pymol
+python scripts/analyse_multivariants.py 8GZ5 --no-pymol
 ```
 
 **Visualizing Results:**
@@ -502,16 +502,14 @@ After running the analysis, visualize any variant:
 cd triplets_results/9FWW_Repair_TB28Y_TB58R_SB104F
 
 # Launch PyMOL
-pymol visualize.pml
+pymol visualise.pml
 ```
 
-**Example Visualizations:**
+**Example Visualisations:**
 
-![Variant TB28Y_TB58R_SB104F](9FWW_variants_TB28Y_TB58R_SB104F.png)
-_Triple mutant TB28Y_TB58R_SB104F showing mutation sites (yellow) and contact residues_
-
-![Variant TB28Y_SB104F_LB106R](9FWW_variants_TB28Y_SB104F_LB106R.png)
-_Triple mutant TB28Y_SB104F_LB106R highlighting interface interactions_
+![Variant SB30L_NB54R_YB109W](8GZ5_Repair_SB30L_NB54R_YB109W_mutations.png)
+_Triple mutant SB30L_NB54R_YB109W showing CDR1, CDR2 and CDR3 in colours (magenta, cyan, yellow),
+and mutation sites and contact residues highlighted in spheres_
 
 ### Utilities
 
@@ -570,7 +568,7 @@ This example optimizes the binding of an antibody (chain B) to an antigen (chain
 
 ```bash
 # Configure
-export PDB_ID=9FWW
+export PDB_ID=8GZ5
 export CHAIN_ID=B      # Antibody chain to optimize
 export OTHER_MOL=A     # Antigen chain
 export DDG_THRESHOLD=-1.5
@@ -633,7 +631,7 @@ make prepare_multimutant_commands DDG_THRESHOLD=-1.0
 
 ```bash
 # Variables
-PDB_ID="9FWW"
+PDB_ID="8GZ5"
 CHAIN_ID="B"
 OTHER_MOL="A"
 DDG_THRESHOLD=-1.5
