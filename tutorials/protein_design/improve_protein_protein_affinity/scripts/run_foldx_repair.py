@@ -22,20 +22,22 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     """Main function to run FoldX RepairPDB command."""
     parser = argparse.ArgumentParser(description="Repair PDB structures using FoldX")
-    parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
+    parser.add_argument("pdb_file", help="PDB file")
+    parser.add_argument("workdir", help="Working directory")
 
     args = parser.parse_args()
 
-    pdb_id = args.pdb_id
+    pdb_file = args.pdb_file
+    workdir = args.workdir
 
     try:
         runner = FoldXRunner()
-        result = runner.repair_pdb(pdb_id)
-        logger.info(f"Successfully repaired PDB: {pdb_id}")
+        result = runner.repair_pdb(pdb_file, workdir)
+        logger.info(f"Successfully repaired PDB: {pdb_file}")
         if result.stdout:
             logger.debug("FoldX output: %s", result.stdout)
     except Exception as e:
-        logger.error(f"Error repairing PDB {pdb_id}: {e}")
+        logger.error(f"Error repairing PDB {pdb_file}: {e}")
         sys.exit(1)
 
 

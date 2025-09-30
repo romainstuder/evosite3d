@@ -48,10 +48,7 @@ def filter_same_positions(variants: List[Tuple[str, ...]]) -> List[Tuple[str, ..
 
 
 def write_mutant_commands(
-    df_best: pd.DataFrame,
-    pdb_id: str,
-    n_mutations: int,
-    sort_by: List[str] = None,
+    df_best: pd.DataFrame, pdb_id: str, n_mutations: int, sort_by: List[str] = None, workdir=str
 ) -> None:
     """Generate FoldX BuildModel commands for n-mutant variants.
 
@@ -62,8 +59,8 @@ def write_mutant_commands(
         sort_by: Optional list of columns to sort by before generating combinations
     """
     variant_type = "pairs" if n_mutations == 2 else "triplets"
-    output_folder = Path(f"{variant_type}_results")
-    command_file = Path(f"command_list_{variant_type}.txt")
+    output_folder = Path(workdir) / f"{variant_type}_results"
+    command_file = Path(workdir) / f"command_list_{variant_type}.txt"
 
     # Create output directory
     output_folder.mkdir(exist_ok=True)
@@ -98,6 +95,7 @@ def write_mutant_commands(
                 FOLDX_EXECUTABLE,
                 "--command=BuildModel",
                 f"--pdb={pdb_id}_Repair.pdb",
+                f"--pdb-dir={workdir}",
                 f"--mutant-file={mutation_list_file}",
                 f"--output-dir={variant_dir}",
             ]
@@ -120,14 +118,16 @@ def main() -> None:
         type=float,
         help="ddG threshold for filtering mutations (mutations with ddG <= threshold will be used)",
     )
+    parser.add_argument("workdir", help="Working directory")
 
     args = parser.parse_args()
 
     pdb_id = args.pdb_id
     dgg_threshold = args.dgg_threshold
+    workdir = args.workdir
 
     # Load and filter data
-    input_file = f"{pdb_id}_pssm_output.csv"
+    input_file = Path(workdir) / f"{pdb_id}_pssm_output.csv"
     logger.info(f"Loading PSSM data from {input_file}")
 
     df = pd.read_csv(input_file, sep="\t")
@@ -137,8 +137,10 @@ def main() -> None:
     logger.info(f"Top mutations:\n{df_best.head()}")
 
     # Generate pair and triplet commands
-    write_mutant_commands(df_best, pdb_id, n_mutations=2)
-    write_mutant_commands(df_best, pdb_id, n_mutations=3, sort_by=["position", "wt"])
+    write_mutant_commands(df_best, pdb_id, n_mutations=2, workdir=workdir)
+    write_mutant_commands(
+        df_best, pdb_id, n_mutations=3, sort_by=["position", "wt"], workdir=workdir
+    )
 
 
 if __name__ == "__main__":

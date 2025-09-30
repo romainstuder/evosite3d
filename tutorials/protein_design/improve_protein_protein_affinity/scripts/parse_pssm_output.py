@@ -1,6 +1,8 @@
 import argparse
 import logging
+import os
 from itertools import repeat
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -14,14 +16,16 @@ def main():
     parser = argparse.ArgumentParser(description="Parse PSSM output from FoldX")
     parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
     parser.add_argument("target_chain", help="Target chain identifier")
+    parser.add_argument("workdir", help="Working directory")
 
     args = parser.parse_args()
 
     pdb_id = args.pdb_id
     target_chain = args.target_chain
+    workdir = args.workdir
 
-    pdb_file = f"{pdb_id}_Repair.pdb"
-    seq = extract_sequence_from_pdb(pdb_file, target_chain)
+    pdb_file = Path(workdir) / f"{pdb_id}_Repair.pdb"
+    seq = extract_sequence_from_pdb(str(pdb_file), target_chain)
 
     df_list = []
     for res in seq:
@@ -29,15 +33,19 @@ def main():
         # res_to_mutate = "".join(list(res))
         # position = res[2].zfill(3)
         average_file = (
-            f"./pssm_results/{pdb_id}_Repair_{res[2].zfill(3)}/Interaction_{pdb_id}_Repair_AC.fxout"
+            f"{workdir}/pssm_results/{pdb_id}_Repair_"
+            f"{res[2].zfill(3)}/Interaction_{pdb_id}_Repair_AC.fxout"
         )
-        df = pd.read_csv(average_file, sep="\t")
-        df["position"] = int(res[2])
-        df["wt"] = res[0]
-        df["chain"] = res[1]
-        df["mut"] = [x for item in [D3TO1[aa.upper()] for aa in AA_LIST] for x in repeat(item, 2)]
-        df["mutant"] = [x for item in AA_LIST for x in repeat(item, 2)]
-        df_list.append(df)
+        if os.path.isfile(average_file):
+            df = pd.read_csv(average_file, sep="\t")
+            df["position"] = int(res[2])
+            df["wt"] = res[0]
+            df["chain"] = res[1]
+            df["mut"] = [
+                x for item in [D3TO1[aa.upper()] for aa in AA_LIST] for x in repeat(item, 2)
+            ]
+            df["mutant"] = [x for item in AA_LIST for x in repeat(item, 2)]
+            df_list.append(df)
 
     df = pd.concat(df_list)
 
@@ -62,8 +70,8 @@ def main():
     )
     df_reduce = df_reduce.sort_values(["ddG"])
 
-    df_reduce.to_csv(f"./{pdb_id}_pssm_output.csv", sep="\t", index=False)
-    logger.info(f"output written to ./{pdb_id}_pssm_output.csv")
+    df_reduce.to_csv(f"{workdir}/{pdb_id}_pssm_output.csv", sep="\t", index=False)
+    logger.info(f"output written to {workdir}/{pdb_id}_pssm_output.csv")
 
 
 if __name__ == "__main__":

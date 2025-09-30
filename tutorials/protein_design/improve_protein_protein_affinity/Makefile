@@ -4,10 +4,10 @@
 # =============================================================================
 
 # Configuration variables
-PDB_ID := 9FWW
+PDB_ID := 8GZ5
 CHAIN_ID := B
 OTHER_MOL := A
-DDG_THRESHOLD := -1.5
+DDG_THRESHOLD := -1.3
 PARALLEL_JOBS := 7
 
 # Script directory
@@ -15,9 +15,10 @@ SCRIPTS_DIR := ./scripts
 PYTHON := python
 
 # Output files
-COMMAND_LIST_FILE := command_list.txt
-COMMAND_LIST_PAIRS_FILE := command_list_pairs.txt
-COMMAND_LIST_TRIPLETS_FILE := command_list_triplets.txt
+WORKDIR := ${PDB_ID}_workdir
+COMMAND_LIST_FILE := ${WORKDIR}/command_list.txt
+COMMAND_LIST_PAIRS_FILE := ${WORKDIR}/command_list_pairs.txt
+COMMAND_LIST_TRIPLETS_FILE := ${WORKDIR}/command_list_triplets.txt
 
 # =============================================================================
 # Phony targets
@@ -65,19 +66,19 @@ multimutant_analysis: prepare_multimutant_commands run_foldx_pairs run_foldx_tri
 # Individual pipeline steps
 # =============================================================================
 download_pdb: ## Download PDB structure
-	$(PYTHON) $(SCRIPTS_DIR)/download_pdb.py $(PDB_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/download_pdb.py $(PDB_ID) $(WORKDIR)
 
 repair_pdb:  ## Repair PDB structure using FoldX
-	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_repair.py $(PDB_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_repair.py $(PDB_ID).pdb $(WORKDIR)
 
 identify_interface:  ## Identify protein-protein interface
-	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_analysecomplex.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/run_foldx_analysecomplex.py $(PDB_ID)_Repair.pdb $(OTHER_MOL) $(CHAIN_ID) $(WORKDIR)
 
 extract_interface: ## Extract interface residues
-	$(PYTHON) $(SCRIPTS_DIR)/extract_interface.py $(PDB_ID) $(CHAIN_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/extract_interface.py $(PDB_ID) $(CHAIN_ID) $(WORKDIR)
 
 prepare_pssm_commands: ## Generate PSSM scanning commands
-	$(PYTHON) $(SCRIPTS_DIR)/generate_pssm_commands_file.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/generate_pssm_commands_file.py $(PDB_ID) $(OTHER_MOL) $(CHAIN_ID) $(WORKDIR)
 
 run_foldx_pssm: ## Run FoldX PSSM scanning in parallel
 	@if [ -f $(COMMAND_LIST_FILE) ]; then \
@@ -88,11 +89,11 @@ run_foldx_pssm: ## Run FoldX PSSM scanning in parallel
 	fi
 
 analyse_pssm_output: ## Parse and plot PSSM results
-	$(PYTHON) $(SCRIPTS_DIR)/parse_pssm_output.py $(PDB_ID) $(CHAIN_ID)
-	$(PYTHON) $(SCRIPTS_DIR)/plot_pssm_heatmap.py $(PDB_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/parse_pssm_output.py $(PDB_ID) $(CHAIN_ID) $(WORKDIR)
+	$(PYTHON) $(SCRIPTS_DIR)/plot_pssm_heatmap.py $(PDB_ID) $(WORKDIR)
 
 prepare_multimutant_commands: ## Generate multimutant commands
-	$(PYTHON) $(SCRIPTS_DIR)/generate_multimutant_commands_file.py $(PDB_ID) $(DDG_THRESHOLD)
+	$(PYTHON) $(SCRIPTS_DIR)/generate_multimutant_commands_file.py $(PDB_ID) $(DDG_THRESHOLD) $(WORKDIR)
 
 run_foldx_pairs: ## Run FoldX for pairs in parallel
 	@if [ -f $(COMMAND_LIST_PAIRS_FILE) ]; then \
@@ -111,7 +112,7 @@ run_foldx_triplets: ## Run FoldX for triplets in parallel
 	fi
 
 analyse_multimutant_output:  ## Analyse multimutant results
-	$(PYTHON) $(SCRIPTS_DIR)/analyse_multivariants.py $(PDB_ID)
+	$(PYTHON) $(SCRIPTS_DIR)/analyse_multivariants.py $(PDB_ID) $(WORKDIR)
 
 # =============================================================================
 # Utility targets

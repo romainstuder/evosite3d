@@ -80,7 +80,7 @@ color olive, CDR3
 # Highlight mutated positions
 select mutated, chain {chain_b} and resi {positions_str}
 show spheres, mutated
-color yellow, mutated
+# color yellow, mutated
 
 # Show disulfide bridges
 select disulfides, resn CYS
@@ -90,7 +90,7 @@ color orange, disulfides
 # Show contact residues on partner chain
 select contact_residues, chain {chain_a} within 5.0 of mutated
 show spheres, contact_residues
-color salmon, contact_residues
+# color salmon, contact_residues
 
 # Apply element colors to spheres
 util.cnc mutated
@@ -135,17 +135,19 @@ def main():
     parser.add_argument(
         "--no-pymol", action="store_true", help="Skip PyMOL visualization script generation"
     )
+    parser.add_argument("workdir", help="Working directory")
 
     args = parser.parse_args()
 
     pdb_id = args.pdb_id
+    workdir = args.workdir
 
     df_list = []
     pymol_scripts_created = 0
 
     for variants_type in ["pairs", "triplets"]:
         # Load variants_type
-        file = open(f"./command_list_{variants_type}.txt", "r")
+        file = open(f"{workdir}/command_list_{variants_type}.txt", "r")
         line = file.readline()
         folder_list = []
         while line:
@@ -161,7 +163,9 @@ def main():
             df = pd.read_csv(average_file, sep="\t", skiprows=8)
 
             # Extract variant name
-            variant_name = output_folder.replace(f"{variants_type}_results/{pdb_id}_Repair_", "")
+            variant_name = output_folder.replace(
+                f"{workdir}/{variants_type}_results/{pdb_id}_Repair_", ""
+            )
             df["variant"] = variant_name
             df_list.append(df)
 
@@ -215,7 +219,7 @@ def main():
     cols = ["variant"] + [col for col in df_output.columns if col != "variant"]
     df_output = df_output.reindex(columns=cols)
 
-    output_file = f"./{pdb_id}_multivariants_output.csv"
+    output_file = f"{workdir}/{pdb_id}_multivariants_output.csv"
     df_output.to_csv(output_file, index=False, sep="\t")
     logger.info(f"Results written to {output_file}")
 
@@ -238,7 +242,7 @@ def main():
             top_variant = df_output.iloc[0]["variant"]
             # Determine folder type based on number of underscores in variant name
             folder_type = "pairs_results" if top_variant.count("_") == 1 else "triplets_results"
-            logger.info(f"  cd {folder_type}/{pdb_id}_Repair_{top_variant}")
+            logger.info(f"  cd {workdir}/{folder_type}/{pdb_id}_Repair_{top_variant}")
             logger.info("  pymol visualize.pml")
 
 

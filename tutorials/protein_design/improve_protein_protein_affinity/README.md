@@ -86,10 +86,10 @@ The pipeline consists of four main stages:
 Edit variables at the top of the Makefile:
 
 ```makefile
-PDB_ID := 9FWW              # Your PDB structure ID
+PDB_ID := 8GZ5              # Your PDB structure ID
 CHAIN_ID := B               # Target chain to mutate
 OTHER_MOL := A              # Binding partner chain
-DDG_THRESHOLD := -1.5       # ΔΔG cutoff for beneficial mutations
+DDG_THRESHOLD := -1.2       # ΔΔG cutoff for beneficial mutations
 PARALLEL_JOBS := 7          # Number of parallel FoldX jobs
 ```
 
@@ -269,10 +269,10 @@ python scripts/extract_interface.py 9FWW B
 
 #### `generate_pssm_commands_file.py`
 
-Generates FoldX PSSM (Position-Specific Scoring Matrix) commands for systematic single-point mutagenesis of all interface residues.
+Generates FoldX PSSM (Position-Specific Scoring Matrix) commands for systematic single-point mutagenesis of protein residues.
 
 ```bash
-python scripts/generate_pssm_commands_file.py <pdb_id> <other_chain> <target_chain>
+python scripts/generate_pssm_commands_file.py <pdb_id> <other_chain> <target_chain> [options]
 ```
 
 **Arguments:**
@@ -280,19 +280,43 @@ python scripts/generate_pssm_commands_file.py <pdb_id> <other_chain> <target_cha
 - `pdb_id`: PDB identifier (without .pdb extension)
 - `other_chain`: Binding partner chain identifier
 - `target_chain`: Chain to mutate
+- `--full-sequence`: Scan all residues in the chain (default: interface residues only)
 
 **Output:**
 
 - `command_list.txt`: FoldX commands for parallel execution
 - `pssm_results/`: Directory structure for outputs
 
+**Features:**
+
+- **Interface-only scan (default)**: Uses `Interface_Residues_{pdb_id}_Repair_AC.fxout` to limit scanning to interface residues only
+  - Requires running `run_foldx_analysecomplex.py` first
+  - Significantly reduces computation time (~80% for typical complexes)
+  - Recommended for most analyses
+- **Full sequence scan**: Tests mutations at every position in the target chain when `--full-sequence` is specified
+  - Useful for comprehensive exploration
+  - More computationally expensive
+
 **Example:**
 
 ```bash
+# Scan interface residues only (default, recommended)
 python scripts/generate_pssm_commands_file.py 9FWW A B
+
+# Scan all residues in chain B
+python scripts/generate_pssm_commands_file.py 9FWW A B --full-sequence
+
 # Execute commands in parallel (7 jobs):
 cat command_list.txt | xargs -P 7 -I {} sh -c '{}'
 ```
+
+**Performance Comparison:**
+
+For a typical antibody-antigen complex:
+
+- Interface only (~20 residues): ~380 FoldX runs (19 amino acids × 20 positions) - **DEFAULT**
+- Full sequence (~120 residues): ~2,280 FoldX runs (19 amino acids × 120 positions)
+- **Default mode saves ~80% computation time**
 
 ---
 
