@@ -499,7 +499,7 @@ After running the analysis, visualize any variant:
 
 ```bash
 # Navigate to variant folder
-cd triplets_results/9FWW_Repair_TB28Y_TB58R_SB104F
+cd triplets_results/8GZ5_Repair_SB30L_NB54R_YB109W
 
 # Launch PyMOL
 pymol visualise.pml
@@ -533,7 +533,7 @@ Core utility functions used throughout the pipeline.
 ```python
 from utils import extract_sequence_from_pdb, D3TO1
 
-sequence = extract_sequence_from_pdb("9FWW_Repair.pdb", "B")
+sequence = extract_sequence_from_pdb("8GZ5_Repair.pdb", "B")
 # Returns: [('MET', 'B', '1'), ('ALA', 'B', '2'), ...]
 
 one_letter = D3TO1['ALA']  # Returns 'A'
@@ -556,15 +556,15 @@ Methods:
 from foldx_wrapper import FoldXRunner
 
 runner = FoldXRunner()
-result = runner.repair_pdb("9FWW")
-result = runner.analyse_complex("9FWW", "A", "B")
+result = runner.repair_pdb("8GZ5")
+result = runner.analyse_complex("8GZ5", "A", "B")
 ```
 
 ## Workflow Examples
 
-### Complete Analysis for Antibody-Antigen Complex (9FWW)
+### Complete Analysis for Antibody-Antigen Complex
 
-This example optimizes the binding of an antibody (chain B) to an antigen (chain A).
+This example optimizes the binding of an antibody (chain B) to an antigen (chain A) using PDB structure 8GZ5.
 
 ```bash
 # Configure
