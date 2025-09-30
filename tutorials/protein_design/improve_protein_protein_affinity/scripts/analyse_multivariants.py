@@ -34,7 +34,7 @@ def build_pymol_commands(
     chain_b_name: str = "target",
 ) -> str:
     """
-    Generate PyMOL visualization commands for a variant.
+    Generate PyMOL visualisation commands for a variant.
 
     Args:
         pdb_file: Path to PDB file
@@ -52,7 +52,7 @@ def build_pymol_commands(
 
     # TODO: Use generic elements instead of CDR.
     # TODO: Use better colours.
-    command_block = f"""# PyMOL visualization script for variant
+    command_block = f"""# PyMOL visualisation script for variant
 # Generated automatically by analyse_multivariants.py
 
 # Load structure
@@ -62,7 +62,7 @@ load {pdb_file}
 select {chain_a_name}, chain {chain_a}
 select {chain_b_name}, chain {chain_b}
 
-# Basic visualization
+# Basic visualisation
 hide everything
 show cartoon, {chain_a_name}
 show cartoon, {chain_b_name}
@@ -111,7 +111,7 @@ print "Variant loaded with mutations at positions: {positions_str}"
 def main():
     parser = argparse.ArgumentParser(
         description="Analyse multivariants from FoldX output and "
-        "generate PyMOL visualization scripts"
+        "generate PyMOL visualisation scripts"
     )
     parser.add_argument("pdb_id", help="PDB identifier (without .pdb extension)")
     parser.add_argument(
@@ -133,7 +133,7 @@ def main():
         help="Display name for chain B in PyMOL (default: target)",
     )
     parser.add_argument(
-        "--no-pymol", action="store_true", help="Skip PyMOL visualization script generation"
+        "--no-pymol", action="store_true", help="Skip PyMOL visualisation script generation"
     )
     parser.add_argument("workdir", help="Working directory")
 
@@ -169,7 +169,7 @@ def main():
             df["variant"] = variant_name
             df_list.append(df)
 
-            # Generate PyMOL visualization script (unless --no-pymol is specified)
+            # Generate PyMOL visualisation script (unless --no-pymol is specified)
             if not args.no_pymol:
                 try:
                     # Extract mutation positions from variant name
@@ -195,7 +195,7 @@ def main():
                             )
 
                             # Write PyMOL script to variant folder
-                            pymol_file = folder_path / "visualize.pml"
+                            pymol_file = folder_path / "visualise.pml"
                             pymol_file.write_text(pymol_script)
                             pymol_scripts_created += 1
 
@@ -211,7 +211,7 @@ def main():
                     logger.error(f"Error generating PyMOL script for {variant_name}: {e}")
 
     if not args.no_pymol and pymol_scripts_created > 0:
-        logger.info(f"Created {pymol_scripts_created} PyMOL visualization scripts")
+        logger.info(f"Created {pymol_scripts_created} PyMOL visualisation scripts")
 
     # Combine and rank all variants
     df_output = pd.concat(df_list)
@@ -236,14 +236,14 @@ def main():
         logger.info("\n=== PyMOL Visualization ===")
         logger.info("To visualize a variant, navigate to its folder and run:")
         logger.info("  cd <variant_folder>")
-        logger.info("  pymol visualize.pml")
+        logger.info("  pymol visualise.pml")
         logger.info("\nExample:")
         if len(df_output) > 0:
             top_variant = df_output.iloc[0]["variant"]
             # Determine folder type based on number of underscores in variant name
             folder_type = "pairs_results" if top_variant.count("_") == 1 else "triplets_results"
             logger.info(f"  cd {workdir}/{folder_type}/{pdb_id}_Repair_{top_variant}")
-            logger.info("  pymol visualize.pml")
+            logger.info("  pymol visualise.pml")
 
 
 if __name__ == "__main__":
