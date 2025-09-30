@@ -507,7 +507,7 @@ pymol visualise.pml
 
 **Example Visualisations:**
 
-![Variant SB30L_NB54R_YB109W](8GZ5_Repair_SB30L_NB54R_YB109W_mutations.png)
+![Variant SB30L_NB54R_YB109W](8GZ5_Repair_SB30L_NB54R_YB109W_mutations.jpg)
 _Triple mutant SB30L_NB54R_YB109W showing CDR1, CDR2 and CDR3 in colours (magenta, cyan, yellow),
 and mutation sites and contact residues highlighted in spheres_
 
@@ -809,30 +809,6 @@ pip install -r requirements.txt
 
 - Schymkowitz et al. (2005). "The FoldX web server: an online force field." _Nucleic Acids Research_
 - Guerois et al. (2002). "Predicting changes in the stability of proteins and protein complexes." _Journal of Molecular Biology_
-
-### Protein Design Resources
-
-- Rosetta: https://www.rosettacommons.org/
-- AlphaFold2: https://github.com/deepmind/alphafold
-- PyMOL: https://pymol.org/
-
-## Citation
-
-If you use this pipeline in your research, please cite:
-
-- FoldX software
-- This repository (add appropriate citation)
-
-## License
-
-[Specify your license here]
-
-## Support
-
-For issues and questions:
-
-- Open an issue on GitHub
-- Contact: [your contact information]
 
 ---
 
