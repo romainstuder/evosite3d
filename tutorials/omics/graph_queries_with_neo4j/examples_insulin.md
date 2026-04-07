@@ -24,22 +24,31 @@ The insulin signaling pathway is a textbook example well suited for graph explor
 Who does the insulin receptor directly interact with?
 
 ```cypher
-MATCH (p:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
+MATCH (p:Protein {entryNameID: 'INSR_HUMAN'})-[r:INTERACTS_WITH]-(partner:Protein)
 RETURN partner.entryNameID, partner.proteinName
 ```
 
 ### 1.2 What does IRS1 interact with?
 
 ```cypher
-MATCH (p:Protein {entryNameID: 'IRS1_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
+MATCH (p:Protein {entryNameID: 'IRS1_HUMAN'})-[r:INTERACTS_WITH]-(partner:Protein)
 RETURN partner.entryNameID, partner.proteinName
 ```
 
 ### 1.3 Shared partners between INSR and IRS1
 
 ```cypher
-MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(common:Protein)-[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'IRS1_HUMAN'})
+MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[r:INTERACTS_WITH]-(common:Protein)-
+[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'IRS1_HUMAN'})
 RETURN common.entryNameID AS sharedPartner
+```
+
+or to view a graph, you can use `RETURN *` instead:
+
+```cypher
+MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[r:INTERACTS_WITH]-(common:Protein)-
+[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'IRS1_HUMAN'})
+RETURN *
 ```
 
 ### 1.4 Shortest path from INSR to AKT1
@@ -49,6 +58,15 @@ MATCH path = shortestPath(
   (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
 )
 RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
+```
+
+Or:
+
+```cypher
+MATCH path = shortestPath(
+  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
+)
+RETURN *
 ```
 
 ### 1.5 All shortest paths from INSR to AKT1
@@ -138,10 +156,25 @@ MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INVOLVED_IN]->(bp:BiologicalPro
 RETURN bp.name, collect(p2.entryNameID) AS proteins
 ```
 
+Or view the first 10:
+
+```cypher
+MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[r1:INVOLVED_IN]->(bp:BiologicalProcess)<-[r2:INVOLVED_IN]-(p2:Protein)
+RETURN * LIMIT 10;
+```
+
 ### 3.3 Cellular components of insulin pathway proteins
 
 ```cypher
 MATCH (p:Protein)-[:IS_LOCATED_IN]->(cc:CellularComponent)
 WHERE p.entryNameID IN ['INSR_HUMAN', 'IRS1_HUMAN', 'AKT1_HUMAN', 'MTOR_HUMAN']
 RETURN p.entryNameID, collect(cc.name) AS locations
+```
+
+or
+
+```
+MATCH (p:Protein)-[r:IS_LOCATED_IN]->(cc:CellularComponent)
+WHERE p.entryNameID IN ['INSR_HUMAN', 'IRS1_HUMAN', 'AKT1_HUMAN', 'MTOR_HUMAN']
+RETURN *
 ```
