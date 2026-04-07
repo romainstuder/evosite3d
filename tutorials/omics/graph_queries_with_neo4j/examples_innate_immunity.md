@@ -40,7 +40,7 @@ MATCH (p:Protein {entryNameID: 'NFKB1_HUMAN'})-[:INTERACTS_WITH]-(partner:Protei
 RETURN partner.entryNameID, partner.proteinName
 ```
 
-### 1.4 Shortest path from TLR4 to NF-kB1
+### 1.3 Shortest path from TLR4 to NF-kB1
 
 ```cypher
 MATCH path = shortestPath(
@@ -58,7 +58,7 @@ MATCH path = shortestPath(
 RETURN *
 ```
 
-### 1.5 All shortest paths from TLR4 to NF-kB1
+### 1.4 All shortest paths from TLR4 to NF-kB1
 
 ```cypher
 MATCH path = allShortestPaths(
@@ -78,7 +78,7 @@ MATCH path = allShortestPaths(
 RETURN *
 ```
 
-### 1.6 Shortest path from TLR4 to IRF3
+### 1.5 Shortest path from TLR4 to IRF3
 
 ```cypher
 MATCH path = shortestPath(
@@ -87,7 +87,7 @@ MATCH path = shortestPath(
 RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
 ```
 
-### 1.7 Shortest path from TLR4 to JUN
+### 1.6 Shortest path from TLR4 to JUN
 
 ```cypher
 MATCH path = shortestPath(
@@ -96,7 +96,7 @@ MATCH path = shortestPath(
 RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
 ```
 
-### 1.8 Most connected proteins in the TLR4 subgraph
+### 1.7 Most connected proteins in the TLR4 subgraph
 
 ```cypher
 MATCH (p:Protein {entryNameID: 'TLR4_HUMAN'})-[:INTERACTS_WITH*..3]-(partner:Protein)
@@ -106,7 +106,7 @@ ORDER BY connections DESC
 LIMIT 10
 ```
 
-### 1.9 Explore the TLR4 local subgraph
+### 1.8 Explore the TLR4 local subgraph
 
 Best run in Neo4j Browser for graph visualization.
 
@@ -128,7 +128,7 @@ MATCH (p:Protein {entryNameID: 'TLR4_HUMAN'})-[:ASSOCIATED_WITH]->(d:Disease)
 RETURN d.name, d.id
 ```
 
-=> No disease associatiom
+=> No disease association
 
 ### 2.2 Diseases associated with NF-kB pathway proteins
 
