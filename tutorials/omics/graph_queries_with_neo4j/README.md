@@ -168,7 +168,7 @@ The ingestion script handles:
 (:Protein)-[:INTERACTS_WITH]->(:Protein)
 (:Protein)-[:ASSOCIATED_WITH]->(:Disease)
 (:Protein)-[:INVOLVED_IN]->(:BiologicalProcess)
-(:Protein)-[:IS_DOING]->(:MolecularFunction)
+(:Protein)-[:HAS_FUNCTION]->(:MolecularFunction)
 (:Protein)-[:IS_LOCATED_IN]->(:CellularComponent)
 ```
 

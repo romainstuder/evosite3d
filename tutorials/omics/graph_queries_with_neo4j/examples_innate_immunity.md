@@ -26,18 +26,18 @@ MATCH (p:Protein {entryNameID: 'TLR4_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein
 RETURN partner.entryNameID, partner.proteinName
 ```
 
+or to view a graph, you can use `RETURN *` instead:
+
+```cypher
+MATCH (p:Protein {entryNameID: 'TLR4_HUMAN'})-[r:INTERACTS_WITH]-(partner:Protein)
+RETURN *
+```
+
 ### 1.2 What does NF-kB1 interact with?
 
 ```cypher
 MATCH (p:Protein {entryNameID: 'NFKB1_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
 RETURN partner.entryNameID, partner.proteinName
-```
-
-### 1.3 Shared partners between TLR4 and NF-kB1
-
-```cypher
-MATCH (p1:Protein {entryNameID: 'TLR4_HUMAN'})-[:INTERACTS_WITH]-(common:Protein)-[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'NFKB1_HUMAN'})
-RETURN common.entryNameID AS sharedPartner, common.proteinName
 ```
 
 ### 1.4 Shortest path from TLR4 to NF-kB1
@@ -49,6 +49,15 @@ MATCH path = shortestPath(
 RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
 ```
 
+or:
+
+```cypher
+MATCH path = shortestPath(
+  (p1:Protein {entryNameID: 'TLR4_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'NFKB1_HUMAN'})
+)
+RETURN *
+```
+
 ### 1.5 All shortest paths from TLR4 to NF-kB1
 
 ```cypher
@@ -57,6 +66,16 @@ MATCH path = allShortestPaths(
 )
 RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
 ORDER BY hops
+```
+
+or
+
+```cypher
+MATCH path = allShortestPaths(
+  (p1:Protein {entryNameID: 'TLR4_HUMAN'})-[r:INTERACTS_WITH*..5]-(p2:Protein {entryNameID:
+  'NFKB1_HUMAN'})
+)
+RETURN *
 ```
 
 ### 1.6 Shortest path from TLR4 to IRF3
@@ -96,6 +115,8 @@ MATCH path = (p:Protein {entryNameID: 'TLR4_HUMAN'})-[:INTERACTS_WITH*..3]-(part
 RETURN path
 ```
 
+This will display a lot of nodes.
+
 ---
 
 ## Disease Queries
@@ -107,6 +128,8 @@ MATCH (p:Protein {entryNameID: 'TLR4_HUMAN'})-[:ASSOCIATED_WITH]->(d:Disease)
 RETURN d.name, d.id
 ```
 
+=> No disease associatiom
+
 ### 2.2 Diseases associated with NF-kB pathway proteins
 
 ```cypher
@@ -114,6 +137,8 @@ MATCH (p:Protein)-[:ASSOCIATED_WITH]->(d:Disease)
 WHERE p.entryNameID IN ['TLR4_HUMAN', 'NFKB1_HUMAN', 'RELA_HUMAN', 'MYD88_HUMAN', 'IRAK4_HUMAN', 'TRAF6_HUMAN']
 RETURN p.entryNameID, collect(d.name) AS diseases
 ```
+
+=> Some diseases.
 
 ### 2.3 Cancer-associated proteins interacting with NF-kB1
 
@@ -157,7 +182,7 @@ RETURN bp.name, bp.id
 ### 3.3 Molecular functions of the NF-kB pathway proteins
 
 ```cypher
-MATCH (p:Protein)-[:IS_DOING]->(mf:MolecularFunction)
+MATCH (p:Protein)-[:HAS_FUNCTION]->(mf:MolecularFunction)
 WHERE p.entryNameID IN ['NFKB1_HUMAN', 'RELA_HUMAN', 'JUN_HUMAN', 'IRF3_HUMAN']
 RETURN p.entryNameID, collect(mf.name) AS functions
 ```
@@ -168,4 +193,12 @@ RETURN p.entryNameID, collect(mf.name) AS functions
 MATCH (p:Protein)-[:IS_LOCATED_IN]->(cc:CellularComponent)
 WHERE p.entryNameID IN ['TLR4_HUMAN', 'NFKB1_HUMAN', 'RELA_HUMAN', 'MYD88_HUMAN', 'IRF3_HUMAN', 'JUN_HUMAN']
 RETURN p.entryNameID, collect(cc.name) AS locations
+```
+
+or
+
+```cypher
+MATCH (p:Protein)-[r:IS_LOCATED_IN]->(cc:CellularComponent)
+WHERE p.entryNameID IN ['TLR4_HUMAN', 'NFKB1_HUMAN', 'RELA_HUMAN', 'MYD88_HUMAN', 'IRF3_HUMAN', 'JUN_HUMAN']
+RETURN *
 ```
