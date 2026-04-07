@@ -83,7 +83,7 @@ WHERE term <> ''
 WITH p, trim(split(term, '[')[0]) AS goName, replace(split(term, '[')[1], ']', '') AS goId
 MERGE (mf:MolecularFunction {id: goId})
 ON CREATE SET mf.name = goName
-MERGE (p)-[:IS_DOING]->(mf);
+MERGE (p)-[:HAS_FUNCTION]->(mf);
 
 // Create CellularComponent nodes from GO cellular component annotations
 WITH "file:///Users/romainstuder/Github/evosite3d/tutorials/omics/graph_queries_with_neo4j/uniprotkb_human.tsv" AS file_path
