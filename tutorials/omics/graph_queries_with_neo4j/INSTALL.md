@@ -22,8 +22,6 @@ sudo apt update && sudo apt install neo4j
 sudo systemctl start neo4j
 ```
 
-Access Neo4j Browser at `http://localhost:7474` — default credentials are `neo4j / neo4j`.
-
 ## Option C — Docker
 
 ```bash
@@ -50,3 +48,7 @@ subl /opt/homebrew/Cellar/neo4j/2026.03.1/libexec/conf/neo4j.conf
 => Add/uncomment: dbms.security.auth_enabled=false
 => Remove/Comment out: server.directories.import=import
 ```
+
+## Testing
+
+Access Neo4j Browser at `http://localhost:7474` — default credentials are `neo4j / neo4j`.
