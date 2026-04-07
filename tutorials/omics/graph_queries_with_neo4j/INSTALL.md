@@ -34,6 +34,11 @@ docker run \
   neo4j:latest
 ```
 
+## Further steps:
+
+We need to adjust a few lines to be able to load files directly from any folder.
+I used Sublime Text (`subl`) for editing, but any text editor would work.
+
 ```bash
 more /opt/homebrew/Cellar/neo4j/2026.03.1/libexec/conf/neo4j.conf
 subl /opt/homebrew/Cellar/neo4j/2026.03.1/libexec/conf/neo4j.conf
