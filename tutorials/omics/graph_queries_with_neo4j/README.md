@@ -75,13 +75,58 @@ We use the **UniProt reviewed (Swiss-Prot)** database filtered for _Homo sapiens
 
 ## 4. Data Ingestion
 
+Start neo4j:
+
+```bash
 neo4j start
+```
+
+or
+
+```bash
+neo4j restart
+```
+
+and access Neo4j Browser at `http://localhost:7474` — default credentials are `neo4j / neo4j`.
+
+First, we need to create indices, which will produce speed:
 
 ```cypher
-// [PLACEHOLDER: run ingestion script here]
-// The script loads uniprotkb_human.tsv, creates (:Protein) nodes
-// and (:INTERACTS_WITH) relationships between them.
+CREATE INDEX protein_index_name FOR (p:Protein) ON (p.entryID);
 ```
+
+Then the following query will parse the uniprot file and create Protein nodes, with two
+properties: `entryID` (based on `Entry` column) and `entryName` (based on `Entry Name` column).
+
+```cypher
+WITH "file:///Users/romainstuder/Github/evosite3d/tutorials/omics/graph_queries_with_neo4j/uniprotkb_human.tsv" AS file_path
+LOAD CSV WITH HEADERS FROM file_path AS row
+FIELDTERMINATOR '\t'
+CREATE (p:Protein {entryID:row.Entry, entryNameID:row.`Entry Name`});
+```
+
+Note: if you need to delete the current data, you can run:
+
+```cypher
+DROP INDEX protein_index_name IF EXISTS;
+MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n, r;
+```
+
+You can load some proteins at random:
+
+```cypher
+MATCH (n:Protein) RETURN n LIMIT 25;
+```
+
+You can search for a specific node using
+
+```cypher
+MATCH (n:Protein {entryNameID:"TLR4_HUMAN"}) RETURN *;
+```
+
+Now you can load more columns from the uniprot files using the following script:
 
 ```bash
 cat script.cql | cypher-shell -a bolt://localhost:7687 -u neo4j
