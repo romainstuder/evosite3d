@@ -98,6 +98,8 @@ CREATE INDEX protein_index_name FOR (p:Protein) ON (p.entryID);
 Then the following query will parse the uniprot file and create Protein nodes, with two
 properties: `entryID` (based on `Entry` column) and `entryName` (based on `Entry Name` column).
 
+**Important: you need to change the path to your file in the query**
+
 ```cypher
 WITH "file:///Users/romainstuder/Github/evosite3d/tutorials/omics/graph_queries_with_neo4j/uniprotkb_human.tsv" AS file_path
 LOAD CSV WITH HEADERS FROM file_path AS row
@@ -127,6 +129,8 @@ MATCH (n:Protein {entryNameID:"TLR4_HUMAN"}) RETURN *;
 ```
 
 Now you can load more columns from the uniprot files using the following script:
+
+**Important: you need to change the path in the script to your file**
 
 ```bash
 cat script.cql | cypher-shell -a bolt://localhost:7687 -u neo4j
