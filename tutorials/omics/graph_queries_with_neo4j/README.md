@@ -15,9 +15,8 @@ The same graph thinking applies to biology — proteins interact in networks, di
 3. [Downloading UniProt Data](#3-downloading-uniprot-data)
 4. [Data Ingestion](#4-data-ingestion)
 5. [Graph Model](#5-graph-model)
-6. [Basic Queries](#6-basic-queries)
-7. [Insulin Signaling Pathway](#7-insulin-signaling-pathway)
-8. [Disease Queries](#8-disease-queries)
+6. [Key Concepts Covered](#6-key-concepts-covered)
+7. [Example Queries](#7-example-queries)
 
 ---
 
@@ -91,8 +90,10 @@ cat script.cql | cypher-shell -a bolt://localhost:7687 -u neo4j
 The ingestion script handles:
 
 - Creating one `(:Protein)` node per row using `Entry` as the unique ID
-- Splitting the `Interacts with` column on `"; "` and creating `[:INTERACTS_WITH]` relationships
-- Skipping null or empty interaction fields
+- Splitting the `Interacts with` column on `";"` and creating `[:INTERACTS_WITH]` relationships
+- Parsing `Involvement in disease` entries (format: `DISEASE: <name> [MIM:<id>]: ...`) to create `(:Disease)` nodes with MIM ID and name
+- Parsing Gene Ontology columns to create `(:BiologicalProcess)`, `(:MolecularFunction)`, and `(:CellularComponent)` nodes with GO ID and name
+- Skipping null or empty fields
 
 ---
 
@@ -103,229 +104,34 @@ The ingestion script handles:
     entryID:      "P04637",        // UniProt accession
     entryNameID:  "P53_HUMAN",     // Entry name
     proteinName:  "Cellular tumor antigen p53",
-    geneName:     "TP53",
-    disease:      "Li-Fraumeni syndrome; ..."
-})-[:INTERACTS_WITH]->(:Protein)
+    geneName:     "TP53"
+})
+
+(:Disease {
+    id:    "151623",               // MIM ID
+    name:  "Li-Fraumeni syndrome"  // Disease name
+})
+
+(:BiologicalProcess { id: "GO:0006915", name: "apoptotic process" })
+(:MolecularFunction { id: "GO:0003677", name: "DNA binding" })
+(:CellularComponent { id: "GO:0005634", name: "nucleus" })
+```
+
+### Relationships
+
+```
+(:Protein)-[:INTERACTS_WITH]->(:Protein)
+(:Protein)-[:ASSOCIATED_WITH]->(:Disease)
+(:Protein)-[:INVOLVED_IN]->(:BiologicalProcess)
+(:Protein)-[:IS_DOING]->(:MolecularFunction)
+(:Protein)-[:IS_LOCATED_IN]->(:CellularComponent)
 ```
 
 Relationships are directional as loaded from UniProt, but are queried without direction (undirected) unless otherwise specified.
 
 ---
 
-## 6. Basic Queries
-
-### 5.1 Direct interaction partners
-
-Who does a given protein directly interact with?
-
-```cypher
-MATCH (p:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
-RETURN partner.entryNameID, partner.proteinName
-```
-
-### 5.2 Most connected proteins (hubs)
-
-Which proteins have the most interactions in the dataset?
-
-```cypher
-MATCH (p:Protein)-[:INTERACTS_WITH]-(partner:Protein)
-RETURN p.entryNameID, count(partner) AS degree
-ORDER BY degree DESC
-LIMIT 10
-```
-
-> Hub proteins are often chaperones, ubiquitin ligases, or scaffolding proteins — biologically important but can create noise in pathway queries.
-
-### 5.3 Shared interaction partners
-
-Do two proteins share common interactors?
-
-```cypher
-MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(common:Protein)-[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'IRS1_HUMAN'})
-RETURN common.entryNameID AS sharedPartner
-```
-
-### 5.4 Shortest path between two proteins
-
-```cypher
-MATCH path = shortestPath(
-  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
-)
-RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
-```
-
-### 5.5 All shortest paths between two proteins
-
-```cypher
-MATCH path = allShortestPaths(
-  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
-)
-RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
-ORDER BY hops
-```
-
-### 5.6 Explore a local subgraph
-
-Visualize the interaction neighborhood up to 3 hops from a protein — best run in Neo4j Browser for graph visualization.
-
-```cypher
-MATCH path = (p:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..3]-(partner:Protein)
-RETURN path
-```
-
----
-
-## 7. Insulin Signaling Pathway
-
-The insulin signaling pathway is a textbook example well suited for graph exploration.
-
-### Key proteins
-
-| Protein          | entryNameID    | Role                           |
-| ---------------- | -------------- | ------------------------------ |
-| Insulin receptor | `INSR_HUMAN`   | Receptor tyrosine kinase       |
-| IRS1             | `IRS1_HUMAN`   | Docking/adaptor protein        |
-| PI3K regulatory  | `PIK3R1_HUMAN` | Lipid kinase complex           |
-| PI3K catalytic   | `PIK3CA_HUMAN` | Lipid kinase complex           |
-| AKT1             | `AKT1_HUMAN`   | Serine/threonine kinase        |
-| mTOR             | `MTOR_HUMAN`   | Growth & metabolism regulator  |
-| GLUT4            | `SLC2A4_HUMAN` | Glucose transporter            |
-| GRB2             | `GRB2_HUMAN`   | Adaptor, links to MAPK cascade |
-
-### 6.1 What does the insulin receptor interact with?
-
-```cypher
-MATCH (p:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
-RETURN partner.entryNameID, partner.proteinName
-```
-
-### 6.2 What does IRS1 interact with?
-
-```cypher
-MATCH (p:Protein {entryNameID: 'IRS1_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
-RETURN partner.entryNameID, partner.proteinName
-```
-
-### 6.3 Shared partners between INSR and IRS1
-
-```cypher
-MATCH (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH]-(common:Protein)-[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'IRS1_HUMAN'})
-RETURN common.entryNameID AS sharedPartner
-```
-
-### 6.4 Shortest path from INSR to AKT1
-
-```cypher
-MATCH path = shortestPath(
-  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
-)
-RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
-```
-
-### 6.5 All shortest paths from INSR to AKT1
-
-```cypher
-MATCH path = allShortestPaths(
-  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..5]-(p2:Protein {entryNameID: 'AKT1_HUMAN'})
-)
-RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
-ORDER BY hops
-```
-
-### 6.6 Most connected proteins in the insulin subgraph
-
-Which proteins are the most central within 3 hops of INSR?
-
-```cypher
-MATCH (p:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..3]-(partner:Protein)
-WITH partner, count(*) AS connections
-RETURN partner.entryNameID, connections
-ORDER BY connections DESC
-LIMIT 10
-```
-
-> Hub proteins like PIK3R1, AKT1, and GRB2 naturally emerge here — they are genuine pathway members but also interact with many other proteins.
-
----
-
-## 8. Disease Queries
-
-UniProt includes disease association annotations for many proteins. These enable clinically relevant graph queries.
-
-### 7.1 Proteins associated with a disease
-
-Find all proteins linked to Type 2 diabetes:
-
-```cypher
-MATCH (p:Protein)
-WHERE p.disease CONTAINS 'diabetes'
-RETURN p.entryNameID, p.proteinName, p.disease
-```
-
-### 7.2 Cancer-associated proteins that interact with p53
-
-```cypher
-MATCH (p53:Protein {entryNameID: 'P53_HUMAN'})-[:INTERACTS_WITH]-(partner:Protein)
-WHERE partner.disease CONTAINS 'cancer'
-   OR partner.disease CONTAINS 'carcinoma'
-   OR partner.disease CONTAINS 'tumor'
-RETURN partner.entryNameID, partner.proteinName, partner.disease
-```
-
-### 7.3 Shortest path between two disease-associated proteins
-
-Path between the insulin receptor (Type 2 diabetes) and BRCA1 (breast cancer):
-
-```cypher
-MATCH path = shortestPath(
-  (p1:Protein {entryNameID: 'INSR_HUMAN'})-[:INTERACTS_WITH*..6]-(p2:Protein {entryNameID: 'BRCA1_HUMAN'})
-)
-RETURN [n IN nodes(path) | n.entryNameID] AS pathway, length(path) AS hops
-```
-
-### 7.4 Proteins involved in multiple diseases
-
-```cypher
-MATCH (p:Protein)
-WHERE p.disease IS NOT NULL AND p.disease <> ''
-RETURN p.entryNameID, p.proteinName, size(split(p.disease, ';')) AS diseaseCount, p.disease
-ORDER BY diseaseCount DESC
-LIMIT 10
-```
-
-### 7.5 Interaction network around a disease gene
-
-Explore the neighborhood of BRCA1 — useful for identifying candidate drug targets:
-
-```cypher
-MATCH path = (p:Protein {entryNameID: 'BRCA1_HUMAN'})-[:INTERACTS_WITH*..2]-(partner:Protein)
-RETURN path
-```
-
-### 7.6 Disease proteins that are hubs
-
-Which disease-associated proteins have the most interactions? Potential drug targets.
-
-```cypher
-MATCH (p:Protein)-[:INTERACTS_WITH]-(partner:Protein)
-WHERE p.disease IS NOT NULL AND p.disease <> ''
-RETURN p.entryNameID, p.proteinName, count(partner) AS degree, p.disease
-ORDER BY degree DESC
-LIMIT 10
-```
-
-### 7.7 Do two disease proteins share interaction partners?
-
-Common partners between TP53 (cancer) and INSR (diabetes) may represent crosstalk proteins:
-
-```cypher
-MATCH (p1:Protein {entryNameID: 'P53_HUMAN'})-[:INTERACTS_WITH]-(common:Protein)-[:INTERACTS_WITH]-(p2:Protein {entryNameID: 'INSR_HUMAN'})
-RETURN common.entryNameID AS sharedPartner, common.proteinName
-```
-
----
-
-## Key Concepts Covered
+## 6. Key Concepts Covered
 
 | Concept                | Cypher Feature                                   |
 | ---------------------- | ------------------------------------------------ |
@@ -338,6 +144,13 @@ RETURN common.entryNameID AS sharedPartner, common.proteinName
 | Subgraph visualization | `RETURN path` in Neo4j Browser                   |
 | Text filtering         | `CONTAINS`, `IS NOT NULL`                        |
 | List operations        | `split()`, `size()`                              |
+
+---
+
+## 7. Example Queries
+
+- [Insulin Signaling Pathway](examples_insulin.md) — INSR, IRS1, AKT1, mTOR, disease & GO queries
+- [Innate Immunity Signaling](examples_innate_immunity.md) — TLR4, NF-kB, JUN, IRF3, disease & GO queries
 
 ---
 

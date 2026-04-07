@@ -11,7 +11,7 @@ DELETE n, r;
 
 // Create index for fast lookups
 CREATE INDEX protein_index_name FOR (p:Protein) ON (p.entryID);
-CREATE INDEX disease_index_name FOR (d:Disease) ON (d.name);
+CREATE INDEX disease_index_name FOR (d:Disease) ON (d.id);
 CREATE INDEX go_bp_index_name FOR (bp:BiologicalProcess) ON (bp.id);
 CREATE INDEX go_mf_index_name FOR (mf:MolecularFunction) ON (mf.id);
 CREATE INDEX go_cc_index_name FOR (cc:CellularComponent) ON (cc.id);
@@ -34,17 +34,23 @@ MATCH (p2:Protein {entryID: trim(partnerId)})
 MERGE (p1)-[:INTERACTS_WITH]->(p2);
 
 // Create Disease nodes from protein disease annotations
+// Format: "DISEASE: <name> [MIM:<id>]: <description>..."
 WITH "file:///Users/romainstuder/Github/evosite3d/tutorials/omics/graph_queries_with_neo4j/uniprotkb_human.tsv" AS file_path
 LOAD CSV WITH HEADERS FROM file_path AS row
 FIELDTERMINATOR '\t'
 WITH row
 WHERE row.`Involvement in disease` IS NOT NULL AND row.`Involvement in disease` <> ''
 MATCH (p:Protein {entryID: row.Entry})
-WITH p, split(row.`Involvement in disease`, ';') AS diseases
-UNWIND diseases AS diseaseName
-WITH p, trim(diseaseName) AS diseaseName
-WHERE diseaseName <> ''
-MERGE (d:Disease {name: diseaseName})
+WITH p, split(row.`Involvement in disease`, 'DISEASE: ') AS diseases
+UNWIND diseases AS entry
+WITH p, trim(entry) AS entry
+WHERE entry <> '' AND entry CONTAINS '[MIM:'
+WITH p,
+     trim(split(entry, '[MIM:')[0]) AS diseaseName,
+     split(split(entry, '[MIM:')[1], ']')[0] AS mimId
+WHERE diseaseName <> '' AND mimId <> ''
+MERGE (d:Disease {id: mimId})
+ON CREATE SET d.name = diseaseName
 MERGE (p)-[:ASSOCIATED_WITH]->(d);
 
 // Create BiologicalProcess nodes from GO biological process annotations
