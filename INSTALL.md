@@ -71,7 +71,7 @@ brew install clustal-omega \
 
 ## Installation of python modules
 
-Python module dependencies (only `biopython` at the moment) are listed in the `pyproject.toml` file.
+Python module dependencies are listed in the `pyproject.toml` file.
 Just run to install:
 
 ```shell
@@ -94,6 +94,9 @@ uv pip install -r pyproject.toml
 
 # (Optional) Install development dependencies
 uv pip install -r pyproject.toml --extra dev
+
+# (Optional) Install pre-commit hooks
+pre-commit install
 ```
 
 ### Links:
