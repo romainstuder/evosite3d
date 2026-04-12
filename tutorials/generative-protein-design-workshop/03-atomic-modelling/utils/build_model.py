@@ -1,3 +1,4 @@
+# ruff: noqa
 from modeller import *
 from modeller.automodel import *
 
@@ -52,7 +53,7 @@ a = MyModel(
 # Model settings
 a.starting_model = 1
 a.ending_model = 5  # Generate 5 models
-a.md_level = refine.slow  # Thorough optimization
+a.md_level = refine.slow  # noqa: F403 Thorough optimization
 
 # Build models
 a.make()
