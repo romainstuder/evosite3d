@@ -11,6 +11,7 @@
 
 ## Conventions
 
+- Keep imports at the top of the file.
 - Use Google Docstrings.
 - Use British English for documentation and variable naming.
 - Line length: 100 characters.
