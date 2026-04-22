@@ -1,0 +1,60 @@
+# Pre-commit configuration file
+# See https://pre-commit.com for more information
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Markdown specific
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        types: [markdown]
+
+  # Python linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Markdown linting
+#  - repo: https://github.com/igorshubovych/markdownlint-cli
+#    rev: v0.35.0
+#    hooks:
+#      - id: markdownlint
+#        args: ['--fix']
+
+
+# Global configuration
+default_language_version:
+  python: python3.11
+
+
+# Exclude files/directories
+exclude: |
+  (?x)^(
+    \.git/|
+    \.venv/|
+    venv/|
+    node_modules/|
+    build/|
+    dist/|
+    \.pytest_cache/|
+    __pycache__/
+  )$

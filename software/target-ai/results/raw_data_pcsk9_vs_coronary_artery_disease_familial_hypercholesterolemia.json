@@ -1,0 +1,582 @@
+{
+  "PCSK9|coronary artery disease": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "coronary artery disease",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000169174",
+                  "approvedSymbol": "PCSK9"
+                },
+                "score": 0.7311108649693407,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.9466987048063227
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.9465425848983504
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9401660938592522
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.9465425848983504
+                  },
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9401660938592522
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.9466987048063227
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000169174",
+          "approvedSymbol": "PCSK9",
+          "approvedName": "proprotein convertase subtilisin/kexin type 9",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low-density lipid receptor family members: low density lipoprotein receptor (LDLR), very low density lipoprotein receptor (VLDLR), apolipoprotein E receptor (LRP1/APOER) and apolipoprotein receptor 2 (LRP8/APOER2), and promotes their degradation in intracellular acidic compartments (PubMed:18039658). Acts via a non- proteolytic mechanism to enhance the degradation of the hepatic LDLR through a clathrin LDLRAP1/ARH-mediated pathway. May prevent the recycling of LDLR from endosomes to the cell surface or direct it to lysosomes for degradation. Can induce ubiquitination of LDLR leading to its subsequent degradation (PubMed:17461796, PubMed:18197702, PubMed:18799458, PubMed:22074827). Inhibits intracellular degradation of APOB via the autophagosome/lysosome pathway in a LDLR-independent manner. Involved in the disposal of non-acetylated intermediates of BACE1 in the early secretory pathway (PubMed:18660751). Inhibits epithelial Na(+) channel (ENaC)-mediated Na(+) absorption by reducing ENaC surface expression primarily by increasing its proteasomal degradation. Regulates neuronal apoptosis via modulation of LRP8/APOER2 levels and related anti-apoptotic signaling pathways. {ECO:0000269|PubMed:17461796, ECO:0000269|PubMed:18039658, ECO:0000269|PubMed:18197702, ECO:0000269|PubMed:18660751, ECO:0000269|PubMed:18799458, ECO:0000269|PubMed:22074827, ECO:0000269|PubMed:22493497, ECO:0000269|PubMed:22580899}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Secreted"
+            },
+            {
+              "location": "Endosome"
+            },
+            {
+              "location": "Lysosome"
+            },
+            {
+              "location": "Cell surface"
+            },
+            {
+              "location": "Endoplasmic reticulum"
+            },
+            {
+              "location": "Golgi apparatus"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": true
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.12791000306606293,
+              "oe": 0.9881399869918823,
+              "oeLower": 0.9079999923706055,
+              "oeUpper": 1.0750000476837158
+            },
+            {
+              "constraintType": "mis",
+              "score": 0.5869899988174438,
+              "oe": 0.9469699859619141,
+              "oeLower": 0.8949999809265137,
+              "oeUpper": 1.0019999742507935
+            },
+            {
+              "constraintType": "lof",
+              "score": 1.1171999903956359e-20,
+              "oe": 1.006700038909912,
+              "oeLower": 0.8159999847412109,
+              "oeUpper": 1.25
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "VLDLR internalisation and degradation"
+            },
+            {
+              "pathway": "LDL clearance"
+            },
+            {
+              "pathway": "Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)"
+            },
+            {
+              "pathway": "Post-translational protein phosphorylation"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "PCSK9|familial hypercholesterolemia": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "familial hypercholesterolemia",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000169174",
+                  "approvedSymbol": "PCSK9"
+                },
+                "score": 0.8951649215030246,
+                "datatypeScores": [
+                  {
+                    "id": "genetic_literature",
+                    "score": 0.9021181479026837
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9763180402308089
+                  },
+                  {
+                    "id": "literature",
+                    "score": 0.2575694168164171
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.9195364334218861
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.037995674850726316
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.5305970462532441
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9763180402308089
+                  },
+                  {
+                    "id": "genomics_england",
+                    "score": 0.9703567939903968
+                  },
+                  {
+                    "id": "eva",
+                    "score": 0.9425503046843479
+                  },
+                  {
+                    "id": "uniprot_variants",
+                    "score": 0.9421515329208274
+                  },
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.8761019587547738
+                  },
+                  {
+                    "id": "clingen",
+                    "score": 0.7599134970145264
+                  },
+                  {
+                    "id": "gene_burden",
+                    "score": 0.737498545997946
+                  },
+                  {
+                    "id": "orphanet",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "uniprot_literature",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.5305970462532441
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.2575694168164171
+                  },
+                  {
+                    "id": "eva_somatic",
+                    "score": 0.037995674850726316
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000169174",
+          "approvedSymbol": "PCSK9",
+          "approvedName": "proprotein convertase subtilisin/kexin type 9",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low-density lipid receptor family members: low density lipoprotein receptor (LDLR), very low density lipoprotein receptor (VLDLR), apolipoprotein E receptor (LRP1/APOER) and apolipoprotein receptor 2 (LRP8/APOER2), and promotes their degradation in intracellular acidic compartments (PubMed:18039658). Acts via a non- proteolytic mechanism to enhance the degradation of the hepatic LDLR through a clathrin LDLRAP1/ARH-mediated pathway. May prevent the recycling of LDLR from endosomes to the cell surface or direct it to lysosomes for degradation. Can induce ubiquitination of LDLR leading to its subsequent degradation (PubMed:17461796, PubMed:18197702, PubMed:18799458, PubMed:22074827). Inhibits intracellular degradation of APOB via the autophagosome/lysosome pathway in a LDLR-independent manner. Involved in the disposal of non-acetylated intermediates of BACE1 in the early secretory pathway (PubMed:18660751). Inhibits epithelial Na(+) channel (ENaC)-mediated Na(+) absorption by reducing ENaC surface expression primarily by increasing its proteasomal degradation. Regulates neuronal apoptosis via modulation of LRP8/APOER2 levels and related anti-apoptotic signaling pathways. {ECO:0000269|PubMed:17461796, ECO:0000269|PubMed:18039658, ECO:0000269|PubMed:18197702, ECO:0000269|PubMed:18660751, ECO:0000269|PubMed:18799458, ECO:0000269|PubMed:22074827, ECO:0000269|PubMed:22493497, ECO:0000269|PubMed:22580899}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Secreted"
+            },
+            {
+              "location": "Endosome"
+            },
+            {
+              "location": "Lysosome"
+            },
+            {
+              "location": "Cell surface"
+            },
+            {
+              "location": "Endoplasmic reticulum"
+            },
+            {
+              "location": "Golgi apparatus"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": true
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.12791000306606293,
+              "oe": 0.9881399869918823,
+              "oeLower": 0.9079999923706055,
+              "oeUpper": 1.0750000476837158
+            },
+            {
+              "constraintType": "mis",
+              "score": 0.5869899988174438,
+              "oe": 0.9469699859619141,
+              "oeLower": 0.8949999809265137,
+              "oeUpper": 1.0019999742507935
+            },
+            {
+              "constraintType": "lof",
+              "score": 1.1171999903956359e-20,
+              "oe": 1.006700038909912,
+              "oeLower": 0.8159999847412109,
+              "oeUpper": 1.25
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "VLDLR internalisation and degradation"
+            },
+            {
+              "pathway": "LDL clearance"
+            },
+            {
+              "pathway": "Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)"
+            },
+            {
+              "pathway": "Post-translational protein phosphorylation"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  }
+}

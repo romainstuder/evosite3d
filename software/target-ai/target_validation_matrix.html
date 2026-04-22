@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Target Validation Scoring Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: #0c1220;
+    color: #c8d6e5;
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    background: linear-gradient(165deg, #111b2e 0%, #0d1526 40%, #101c30 100%);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .header { margin-bottom: 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .header-left { flex: 1; min-width: 300px; }
+
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h1 .accent { color: #3b82f6; }
+  h1 .icon { font-size: 18px; opacity: 0.7; }
+
+  .subtitle {
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.6;
+    max-width: 620px;
+  }
+
+  /* ── Input Bar ──────────────────────────────────────── */
+  .input-bar {
+    margin: 20px 0 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .input-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 200px; }
+  .input-group label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+  }
+  .input-group input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #e2e8f0;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-group input::placeholder { color: #475569; }
+  .input-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+  }
+
+  .btn-run {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    height: 40px;
+  }
+  .btn-run:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,99,235,0.3); }
+  .btn-run:active { transform: translateY(0); }
+  .btn-run:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── Loading ────────────────────────────────────────── */
+  .loading-bar {
+    height: 3px;
+    background: rgba(59,130,246,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .loading-bar.active { display: block; }
+  .loading-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 3px;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .status-msg {
+    font-size: 12px;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 16px;
+    min-height: 18px;
+  }
+  .status-msg .ok { color: #34d399; }
+  .status-msg .err { color: #f87171; }
+
+  /* ── Matrix Table ───────────────────────────────────── */
+  .matrix-wrap { overflow-x: auto; margin-bottom: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  thead th {
+    text-align: center;
+    padding: 12px 10px;
+    border-bottom: 2px solid rgba(59,130,246,0.3);
+    font-weight: 700;
+    color: #94a3b8;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  thead th:first-child { text-align: left; min-width: 180px; }
+  thead th.wt-col { color: #475569; font-size: 10px; width: 44px; }
+
+  thead .target-head {
+    cursor: pointer;
+    min-width: 120px;
+    transition: all 0.2s;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+  }
+  thead .target-head:hover { background: rgba(59,130,246,0.06); }
+  thead .target-head.selected { background: rgba(59,130,246,0.08); }
+  thead .target-head.vetoed .target-name { color: #f87171; }
+
+  .target-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.02em;
+  }
+  .target-context { font-size: 10px; font-weight: 400; color: #64748b; margin-top: 3px; line-height: 1.3; }
+
+  tbody td {
+    padding: 9px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    text-align: center;
+    transition: background 0.15s;
+  }
+  tbody td:first-child { text-align: left; font-weight: 600; color: #94a3b8; padding-left: 14px; }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.01); }
+  tbody td.selected-col { background: rgba(59,130,246,0.05) !important; }
+
+  .dim-label { display: flex; align-items: center; gap: 7px; }
+  .veto-label { border-left: 3px solid #ef4444; padding-left: 10px; }
+  .veto-badge { font-size: 9px; color: #ef4444; font-weight: 700; letter-spacing: 0.05em; }
+  .subdim { font-size: 11px; color: #64748b; font-weight: 400; padding-left: 28px !important; }
+
+  /* ── Score Chips ─────────────────────────────────────── */
+  .score-cell { position: relative; display: inline-block; }
+
+  .score-chip {
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 30px;
+    text-align: center;
+    border: 1.5px solid;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .score-cell:hover .score-chip { transform: scale(1.08); }
+
+  .score-0 { background: rgba(239,68,68,0.1); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+  .score-1 { background: rgba(245,158,11,0.1); color: #fcd34d; border-color: rgba(245,158,11,0.25); }
+  .score-2 { background: rgba(251,191,36,0.1); color: #fde68a; border-color: rgba(251,191,36,0.25); }
+  .score-3 { background: rgba(52,211,153,0.1); color: #6ee7b7; border-color: rgba(52,211,153,0.25); }
+  .score-4 { background: rgba(34,197,94,0.1); color: #86efac; border-color: rgba(34,197,94,0.3); }
+  .score-5 { background: rgba(59,130,246,0.15); color: #93c5fd; border-color: rgba(59,130,246,0.35); }
+  .score-veto { background: rgba(239,68,68,0.15); color: #fca5a5; border-color: rgba(239,68,68,0.4); }
+  .score-na { background: transparent; color: #475569; border-color: rgba(255,255,255,0.06); font-size: 11px; }
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    white-space: nowrap;
+    max-width: 280px;
+    white-space: normal;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    pointer-events: none;
+    line-height: 1.4;
+  }
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1e293b;
+  }
+  .score-cell:hover .tooltip { display: block; }
+
+  /* ── Total / Rec / Rank Rows ────────────────────────── */
+  .total-row td {
+    border-top: 2px solid rgba(59,130,246,0.3);
+    padding: 12px 10px;
+    font-weight: 700;
+    font-size: 15px;
+    color: #e2e8f0;
+  }
+  .total-pct { font-size: 11px; font-weight: 400; color: #64748b; margin-left: 4px; }
+  .total-vetoed { text-decoration: line-through; color: #475569; }
+
+  .confidence-row td { padding: 10px 10px; }
+  .conf-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .conf-high { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.2); }
+  .conf-med { background: rgba(251,191,36,0.12); color: #fde68a; border: 1px solid rgba(251,191,36,0.2); }
+  .conf-low { background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+
+  .rec-row td { padding: 10px 10px; }
+  .rec-pill {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .rec-advance { background: rgba(52,211,153,0.15); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.25); }
+  .rec-investigate { background: rgba(251,191,36,0.12); color: #fde68a; border: 1px solid rgba(251,191,36,0.2); }
+  .rec-park { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.2); }
+  .rec-kill { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+
+  .rank-row td { padding: 12px 10px; }
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .rank-1 { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; box-shadow: 0 2px 12px rgba(59,130,246,0.3); }
+  .rank-other { background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); }
+  .rank-vetoed { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+
+  /* ── Notes Panel ────────────────────────────────────── */
+  .notes-panel {
+    margin-top: 16px;
+    padding: 18px 20px;
+    background: rgba(59,130,246,0.05);
+    border-radius: 10px;
+    border-left: 4px solid #3b82f6;
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .notes-panel.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .notes-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #93c5fd;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .notes-text { font-size: 12.5px; color: #94a3b8; line-height: 1.65; }
+  .notes-text strong { color: #c8d6e5; }
+  .notes-section { margin-top: 8px; }
+  .notes-section-title { font-weight: 700; color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+
+  /* ── Legend ──────────────────────────────────────────── */
+  .legend {
+    margin-top: 20px;
+    padding: 18px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .legend-title {
+    font-weight: 700;
+    font-size: 10px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .legend-items { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11.5px; color: #94a3b8; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-chip {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1.5px solid;
+  }
+  .legend-note { margin-top: 10px; font-size: 11.5px; color: #475569; line-height: 1.6; }
+
+  /* ── Empty State ────────────────────────────────────── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #475569;
+  }
+  .empty-state .icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+  .empty-state p { font-size: 13px; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+  .empty-state code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.04);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #64748b;
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    .container { padding: 16px; }
+    .input-bar { flex-direction: column; }
+    .input-group { min-width: 100%; }
+    h1 { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <h1><span class="icon">◆</span> Target Validation <span class="accent">Scoring Matrix</span></h1>
+      <p class="subtitle">Enter gene targets and diseases to score across clinical evidence, druggability, and pathway biology using Open Targets Platform data. Scores 0–5 per dimension, weighted composite determines ranking. Safety flags act as veto. Hover scores for details. Click target names for full evidence notes.</p>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-group">
+      <label>Targets (comma-separated)</label>
+      <input type="text" id="input-targets" placeholder="BRAF, KRAS, EGFR" />
+    </div>
+    <div class="input-group">
+      <label>Disease</label>
+      <input type="text" id="input-disease" placeholder="melanoma" />
+    </div>
+    <button class="btn-run" id="btn-run" onclick="runValidation()">▶ Validate</button>
+  </div>
+
+  <div class="loading-bar" id="loading-bar"><div class="fill" style="width:100%"></div></div>
+  <div class="status-msg" id="status-msg"></div>
+
+  <div id="matrix-container">
+    <div class="empty-state" id="empty-state">
+      <div class="icon">⬡</div>
+      <p>Enter targets and a disease above, then click <strong>Validate</strong>.<br><br>
+      Try: <code>BRAF, KRAS, EGFR</code> vs <code>melanoma</code><br>
+      or: <code>PCSK9, HMGCR, ANGPTL3</code> vs <code>cardiovascular disease</code></p>
+    </div>
+  </div>
+
+  <div class="notes-panel" id="notes-panel">
+    <div class="notes-title" id="notes-title"></div>
+    <div class="notes-text" id="notes-text"></div>
+  </div>
+
+  <div class="legend" id="legend" style="display:none">
+    <div class="legend-title">How to Read This</div>
+    <div class="legend-items">
+      <div class="legend-item"><span class="legend-chip score-0">0</span> None</div>
+      <div class="legend-item"><span class="legend-chip score-1">1</span> Minimal</div>
+      <div class="legend-item"><span class="legend-chip score-2">2</span> Weak</div>
+      <div class="legend-item"><span class="legend-chip score-3">3</span> Moderate</div>
+      <div class="legend-item"><span class="legend-chip score-4">4</span> Strong</div>
+      <div class="legend-item"><span class="legend-chip score-5">5</span> Excellent</div>
+      <div class="legend-item"><span class="legend-chip score-veto">✗</span> Safety veto</div>
+    </div>
+    <div class="legend-note">
+      <strong>Weights:</strong> Clinical ×0.40 · Druggability ×0.35 · Pathway ×0.25. Safety liabilities trigger a veto flag regardless of total score. Data sourced live from the Open Targets Platform GraphQL API.
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ───────────────────────────────────────────────
+const API = "https://api.platform.opentargets.org/api/v4/graphql";
+
+const DIMENSIONS = [
+  { key: "genetic", label: "Genetic Association", group: "clinical", weight: 0, isVeto: false,
+    descriptions: ["No GWAS or rare-variant signal","Suggestive association (sub-threshold)","Significant GWAS hit (p<5e-8)","GWAS + rare-variant convergence","Strong colocalisation confirmed","Protective LoF variant + Mendelian evidence"] },
+  { key: "trials", label: "Clinical Trials", group: "clinical", weight: 0, isVeto: false,
+    descriptions: ["No trials found","Preclinical compounds only","Phase 1 trial(s)","Phase 2 trial(s)","Phase 3 trial(s)","Approved drug for this indication"] },
+  { key: "clinical_total", label: "Clinical Evidence", group: "section", weight: 0.40, isVeto: false,
+    descriptions: ["No clinical/genetic evidence","Minimal evidence","Suggestive evidence","Moderate evidence","Strong evidence","Excellent — approved drug or strong genetics"] },
+  { key: "sm_tractability", label: "Small Molecule", group: "druggability", weight: 0, isVeto: false,
+    descriptions: ["Not tractable","Predicted druggable family","Druggable family confirmed","High-confidence binding pocket","Clinical candidate exists","Approved small-molecule drug"] },
+  { key: "ab_tractability", label: "Antibody Access", group: "druggability", weight: 0, isVeto: false,
+    descriptions: ["Intracellular / inaccessible","Unknown accessibility","Predicted accessible","Accessible, moderate conservation","Clinical-stage biologic","Approved biologic drug"] },
+  { key: "druggability_total", label: "Druggability", group: "section", weight: 0.35, isVeto: false,
+    descriptions: ["Undruggable","Low tractability","Some tractability signals","Moderate — druggable family","High — clinical compounds exist","Fully validated — approved drug"] },
+  { key: "pathways", label: "Pathway Membership", group: "pathway", weight: 0, isVeto: false,
+    descriptions: ["No pathway annotation","Isolated / peripheral","One relevant pathway","Multiple relevant pathways","Central hub in disease network","Hub + validated in disease models"] },
+  { key: "expression", label: "Disease Expression", group: "pathway", weight: 0, isVeto: false,
+    descriptions: ["Not expressed in tissue","Expressed, not differential","Weak differential expression","Differentially expressed","DE + tissue-specific","DE + cell-type specific (scRNA)"] },
+  { key: "literature", label: "Literature Support", group: "pathway", weight: 0, isVeto: false,
+    descriptions: ["No publications","Few mentions, no direct link","Mentioned in disease context","Multiple supporting papers","Strongly supported in reviews","Established in field consensus"] },
+  { key: "pathway_total", label: "Pathway / Biology", group: "section", weight: 0.25, isVeto: false,
+    descriptions: ["No biological rationale","Minimal biology","Weak biology","Moderate biological support","Strong pathway + expression","Excellent — hub with expression + models"] },
+  { key: "safety", label: "Safety Profile", group: "safety", weight: 0, isVeto: true,
+    descriptions: ["Major liabilities (veto)","Significant concerns","Moderate concerns","Minor / manageable","Minimal concerns","Clean profile"] },
+];
+
+const SECTION_DIMS = DIMENSIONS.filter(d => d.group === "section");
+const SUB_DIMS = DIMENSIONS.filter(d => d.group !== "section");
+
+// ── API Helpers ──────────────────────────────────────────
+async function gql(query, variables) {
+  const r = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, variables })
+  });
+  if (!r.ok) throw new Error(`API ${r.status}`);
+  return r.json();
+}
+
+async function searchEntity(name, type) {
+  const q = `query s($q:String!){search(queryString:$q,entityNames:["${type}"],page:{size:3,index:0}){hits{id name entity description}}}`;
+  const r = await gql(q, { q: name });
+  return r.data?.search?.hits || [];
+}
+
+async function getAssociation(ensemblId, efoId) {
+  const q = `query a($eid:String!,$did:String!){disease(efoId:$did){name associatedTargets(page:{size:200,index:0}){rows{target{id approvedSymbol}score datatypeScores{componentId score}datasourceScores{componentId score}}}}}`;
+  const r = await gql(q, { eid: ensemblId, did: efoId });
+  const rows = r.data?.disease?.associatedTargets?.rows || [];
+  const match = rows.find(row => row.target.id === ensemblId);
+  return { diseaseName: r.data?.disease?.name, association: match || null };
+}
+
+async function getTargetInfo(ensemblId) {
+  const q = `query t($id:String!){target(ensemblId:$id){id approvedSymbol approvedName biotype functionDescriptions subcellularLocations{location}tractability{label modality value}safetyLiabilities{event biosamplesFromSource effects{direction}}geneticConstraint{constraintType score oe oeLower oeUpper}pathways{pathway term}}}`;
+  const r = await gql(q, { id: ensemblId });
+  return r.data?.target || null;
+}
+
+async function getKnownDrugs(ensemblId, efoId) {
+  const q = `query d($id:String!,$efo:String!){target(ensemblId:$id){knownDrugs(diseaseId:$efo,size:100){uniqueDrugs count rows{drug{name id maximumClinicalTrialPhase}phase status urls{url name}}}}}`;
+  const r = await gql(q, { id: ensemblId, efo: efoId });
+  return r.data?.target?.knownDrugs || null;
+}
+
+// ── Scoring Engine ───────────────────────────────────────
+function scoreTarget(assoc, info, drugs) {
+  const scores = {};
+  const reasons = {};
+
+  // ── Genetic Association ──
+  let geneticScore = 0;
+  let geneticReason = "No genetic evidence found";
+  if (assoc) {
+    const dtScores = assoc.datatypeScores || [];
+    const genAssoc = dtScores.find(d => d.componentId === "genetic_association");
+    const somaticAssoc = dtScores.find(d => d.componentId === "somatic_mutation");
+    const gs = genAssoc?.score || 0;
+    const ss = somaticAssoc?.score || 0;
+    const combined = Math.max(gs, ss);
+    if (combined > 0.7) { geneticScore = 5; geneticReason = `Very strong genetic signal (score: ${combined.toFixed(2)})`; }
+    else if (combined > 0.5) { geneticScore = 4; geneticReason = `Strong genetic association (score: ${combined.toFixed(2)})`; }
+    else if (combined > 0.3) { geneticScore = 3; geneticReason = `Significant association (score: ${combined.toFixed(2)})`; }
+    else if (combined > 0.1) { geneticScore = 2; geneticReason = `Suggestive association (score: ${combined.toFixed(2)})`; }
+    else if (combined > 0) { geneticScore = 1; geneticReason = `Weak signal (score: ${combined.toFixed(2)})`; }
+  }
+  scores.genetic = geneticScore;
+  reasons.genetic = geneticReason;
+
+  // ── Clinical Trials ──
+  let maxPhase = 0;
+  let trialReason = "No clinical trials found";
+  let drugNames = [];
+  if (drugs && drugs.rows) {
+    drugs.rows.forEach(row => {
+      const ph = row.phase || row.drug?.maximumClinicalTrialPhase || 0;
+      if (ph > maxPhase) maxPhase = ph;
+      if (row.drug?.name && !drugNames.includes(row.drug.name)) drugNames.push(row.drug.name);
+    });
+  }
+  if (maxPhase >= 4) { scores.trials = 5; trialReason = `Approved drug(s): ${drugNames.slice(0,3).join(", ")}`; }
+  else if (maxPhase === 3) { scores.trials = 4; trialReason = `Phase 3: ${drugNames.slice(0,3).join(", ")}`; }
+  else if (maxPhase === 2) { scores.trials = 3; trialReason = `Phase 2: ${drugNames.slice(0,3).join(", ")}`; }
+  else if (maxPhase === 1) { scores.trials = 2; trialReason = `Phase 1: ${drugNames.slice(0,3).join(", ")}`; }
+  else if (drugs && drugs.uniqueDrugs > 0) { scores.trials = 1; trialReason = `${drugs.uniqueDrugs} preclinical compound(s)`; }
+  else { scores.trials = 0; }
+  reasons.trials = trialReason;
+
+  // ── Clinical Total ──
+  scores.clinical_total = Math.min(5, Math.round((scores.genetic + scores.trials) / 2 + Math.max(scores.genetic, scores.trials) * 0.2));
+  reasons.clinical_total = `Genetic: ${scores.genetic}/5, Trials: ${scores.trials}/5`;
+
+  // ── SM Tractability ──
+  let smScore = 0;
+  let smReason = "No small-molecule tractability data";
+  if (info?.tractability) {
+    const smItems = info.tractability.filter(t => t.modality === "SM" && t.value);
+    if (smItems.length > 0) {
+      const labels = smItems.map(t => t.label);
+      if (maxPhase >= 4 && smItems.length > 0) { smScore = 5; smReason = `Approved SM drug. Tractability: ${labels.slice(0,2).join(", ")}`; }
+      else if (maxPhase >= 1) { smScore = 4; smReason = `Clinical SM. Tractability: ${labels.slice(0,2).join(", ")}`; }
+      else if (smItems.length >= 3) { smScore = 3; smReason = `High SM tractability: ${labels.slice(0,2).join(", ")}`; }
+      else if (smItems.length >= 1) { smScore = 2; smReason = `Some SM tractability: ${labels.join(", ")}`; }
+    }
+  }
+  scores.sm_tractability = smScore;
+  reasons.sm_tractability = smReason;
+
+  // ── AB Tractability ──
+  let abScore = 0;
+  let abReason = "No antibody accessibility data";
+  if (info?.tractability) {
+    const abItems = info.tractability.filter(t => t.modality === "AB" && t.value);
+    if (abItems.length > 0) {
+      const labels = abItems.map(t => t.label);
+      if (abItems.length >= 3) { abScore = 4; abReason = `Strong AB accessibility: ${labels.slice(0,2).join(", ")}`; }
+      else if (abItems.length >= 2) { abScore = 3; abReason = `Good AB accessibility: ${labels.join(", ")}`; }
+      else { abScore = 2; abReason = `Some AB accessibility: ${labels.join(", ")}`; }
+    }
+    // Check subcellular location
+    const locs = info.subcellularLocations?.map(l => l.location) || [];
+    if (locs.some(l => /membrane|surface|extracellular|secreted/i.test(l))) {
+      abScore = Math.max(abScore, 2);
+      abReason += ` | Location: ${locs.slice(0,2).join(", ")}`;
+    }
+  }
+  scores.ab_tractability = abScore;
+  reasons.ab_tractability = abReason;
+
+  // ── Druggability Total ──
+  scores.druggability_total = Math.min(5, Math.max(scores.sm_tractability, scores.ab_tractability) + Math.round(Math.min(scores.sm_tractability, scores.ab_tractability) * 0.3));
+  reasons.druggability_total = `SM: ${scores.sm_tractability}/5, AB: ${scores.ab_tractability}/5`;
+
+  // ── Pathway ──
+  let pathwayScore = 0;
+  let pathwayReason = "No pathway annotations";
+  if (info?.pathways) {
+    const n = info.pathways.length;
+    const topPathways = info.pathways.slice(0, 3).map(p => p.term || p.pathway);
+    if (n >= 10) { pathwayScore = 5; pathwayReason = `${n} pathways: ${topPathways.join(", ")}…`; }
+    else if (n >= 5) { pathwayScore = 4; pathwayReason = `${n} pathways: ${topPathways.join(", ")}`; }
+    else if (n >= 3) { pathwayScore = 3; pathwayReason = `${n} pathways: ${topPathways.join(", ")}`; }
+    else if (n >= 1) { pathwayScore = 2; pathwayReason = `${n} pathway(s): ${topPathways.join(", ")}`; }
+  }
+  scores.pathways = pathwayScore;
+  reasons.pathways = pathwayReason;
+
+  // ── Expression ──
+  let exprScore = 0;
+  let exprReason = "No expression data in association";
+  if (assoc) {
+    const dtScores = assoc.datasourceScores || [];
+    const exprDS = dtScores.find(d => /expression_atlas/i.test(d.componentId));
+    const es = exprDS?.score || 0;
+    if (es > 0.5) { exprScore = 5; exprReason = `Strong differential expression (${es.toFixed(2)})`; }
+    else if (es > 0.3) { exprScore = 4; exprReason = `Significant expression signal (${es.toFixed(2)})`; }
+    else if (es > 0.1) { exprScore = 3; exprReason = `Moderate expression signal (${es.toFixed(2)})`; }
+    else if (es > 0) { exprScore = 2; exprReason = `Weak expression signal (${es.toFixed(2)})`; }
+    else {
+      // Check if overall score suggests expression
+      const rnaType = (assoc.datatypeScores || []).find(d => /rna_expression/i.test(d.componentId));
+      if (rnaType && rnaType.score > 0) { exprScore = 2; exprReason = `RNA expression score: ${rnaType.score.toFixed(2)}`; }
+    }
+  }
+  scores.expression = exprScore;
+  reasons.expression = exprReason;
+
+  // ── Literature ──
+  let litScore = 0;
+  let litReason = "No literature co-mentions";
+  if (assoc) {
+    const dtScores = assoc.datatypeScores || [];
+    const litType = dtScores.find(d => /literature/i.test(d.componentId));
+    const ls = litType?.score || 0;
+    if (ls > 0.5) { litScore = 5; litReason = `Extensive literature support (${ls.toFixed(2)})`; }
+    else if (ls > 0.3) { litScore = 4; litReason = `Strong literature support (${ls.toFixed(2)})`; }
+    else if (ls > 0.1) { litScore = 3; litReason = `Moderate literature (${ls.toFixed(2)})`; }
+    else if (ls > 0.05) { litScore = 2; litReason = `Some literature (${ls.toFixed(2)})`; }
+    else if (ls > 0) { litScore = 1; litReason = `Minimal literature (${ls.toFixed(2)})`; }
+  }
+  scores.literature = litScore;
+  reasons.literature = litReason;
+
+  // ── Pathway Total ──
+  scores.pathway_total = Math.min(5, Math.round((scores.pathways + scores.expression + scores.literature) / 3 + Math.max(scores.pathways, scores.expression, scores.literature) * 0.15));
+  reasons.pathway_total = `Pathways: ${scores.pathways}/5, Expression: ${scores.expression}/5, Literature: ${scores.literature}/5`;
+
+  // ── Safety ──
+  let safetyScore = 5;
+  let safetyReason = "No safety liabilities reported";
+  if (info?.safetyLiabilities && info.safetyLiabilities.length > 0) {
+    const n = info.safetyLiabilities.length;
+    const events = info.safetyLiabilities.slice(0, 3).map(s => s.event);
+    if (n >= 5) { safetyScore = 0; safetyReason = `Major safety concerns (${n} liabilities): ${events.join(", ")}`; }
+    else if (n >= 3) { safetyScore = 1; safetyReason = `Significant concerns (${n}): ${events.join(", ")}`; }
+    else if (n >= 2) { safetyScore = 2; safetyReason = `Moderate concerns: ${events.join(", ")}`; }
+    else { safetyScore = 3; safetyReason = `Minor concerns: ${events.join(", ")}`; }
+  }
+  // Check genetic constraint
+  if (info?.geneticConstraint) {
+    const pli = info.geneticConstraint.find(g => g.constraintType === "pLI");
+    if (pli && pli.score > 0.9) {
+      safetyScore = Math.min(safetyScore, 1);
+      safetyReason += ` | High pLI=${pli.score.toFixed(2)} (essential gene)`;
+    }
+  }
+  scores.safety = safetyScore;
+  reasons.safety = safetyReason;
+
+  return { scores, reasons };
+}
+
+function computeComposite(scores) {
+  return +(scores.clinical_total * 0.40 + scores.druggability_total * 0.35 + scores.pathway_total * 0.25).toFixed(2);
+}
+
+function hasVeto(scores) {
+  return scores.safety === 0;
+}
+
+function getConfidence(comp, scores) {
+  const nonZero = [scores.clinical_total, scores.druggability_total, scores.pathway_total].filter(s => s > 0).length;
+  if (comp >= 3.5 && nonZero >= 3) return "High";
+  if (comp >= 2.0) return "Medium";
+  return "Low";
+}
+
+function getRecommendation(comp, vetoed) {
+  if (vetoed) return { text: "KILL", cls: "rec-kill" };
+  if (comp >= 3.5) return { text: "ADVANCE", cls: "rec-advance" };
+  if (comp >= 2.0) return { text: "INVESTIGATE", cls: "rec-investigate" };
+  return { text: "PARK", cls: "rec-park" };
+}
+
+// ── UI State ─────────────────────────────────────────────
+let rankedTargets = [];
+let selectedTarget = null;
+
+// ── Main Pipeline ────────────────────────────────────────
+async function runValidation() {
+  const targetsRaw = document.getElementById("input-targets").value.trim();
+  const diseaseRaw = document.getElementById("input-disease").value.trim();
+  if (!targetsRaw || !diseaseRaw) return;
+
+  const btn = document.getElementById("btn-run");
+  btn.disabled = true;
+  document.getElementById("loading-bar").classList.add("active");
+  document.getElementById("empty-state")?.remove();
+
+  const targetNames = targetsRaw.split(",").map(s => s.trim()).filter(Boolean);
+  const status = msg => document.getElementById("status-msg").innerHTML = msg;
+
+  try {
+    // Resolve disease
+    status("Resolving disease…");
+    let efoId = diseaseRaw;
+    let diseaseName = diseaseRaw;
+    if (!diseaseRaw.match(/^(EFO_|MONDO_|HP_|Orphanet_)/)) {
+      const hits = await searchEntity(diseaseRaw, "disease");
+      if (!hits.length) throw new Error(`Could not find disease: "${diseaseRaw}"`);
+      efoId = hits[0].id;
+      diseaseName = hits[0].name;
+      status(`Disease: <span class="ok">${diseaseName}</span> (${efoId})`);
+    }
+
+    // Resolve and fetch each target
+    const results = [];
+    for (const tName of targetNames) {
+      status(`Resolving ${tName}…`);
+      let ensemblId = tName;
+      if (!tName.startsWith("ENSG")) {
+        const hits = await searchEntity(tName, "target");
+        if (!hits.length) { status(`<span class="err">Could not find target: ${tName}</span>`); continue; }
+        ensemblId = hits[0].id;
+      }
+
+      status(`Fetching data for ${tName}…`);
+      const [assocResult, info, drugs] = await Promise.all([
+        getAssociation(ensemblId, efoId),
+        getTargetInfo(ensemblId),
+        getKnownDrugs(ensemblId, efoId),
+      ]);
+
+      const { scores, reasons } = scoreTarget(assocResult.association, info, drugs);
+      const comp = computeComposite(scores);
+      const vetoed = hasVeto(scores);
+      const conf = getConfidence(comp, scores);
+
+      results.push({
+        name: info?.approvedSymbol || tName,
+        fullName: info?.approvedName || "",
+        ensemblId,
+        context: (info?.functionDescriptions?.[0] || "").slice(0, 80) + ((info?.functionDescriptions?.[0]?.length || 0) > 80 ? "…" : ""),
+        scores,
+        reasons,
+        composite: comp,
+        vetoed,
+        confidence: conf,
+        recommendation: getRecommendation(comp, vetoed),
+        drugs: drugs,
+        info: info,
+      });
+    }
+
+    // Sort
+    results.sort((a, b) => {
+      if (a.vetoed && !b.vetoed) return 1;
+      if (!a.vetoed && b.vetoed) return -1;
+      return b.composite - a.composite;
+    });
+
+    rankedTargets = results;
+    selectedTarget = null;
+    renderMatrix(diseaseName);
+    status(`<span class="ok">✓</span> Scored ${results.length} target(s) against ${diseaseName}`);
+    document.getElementById("legend").style.display = "block";
+
+  } catch (err) {
+    status(`<span class="err">Error: ${err.message}</span>`);
+  } finally {
+    btn.disabled = false;
+    document.getElementById("loading-bar").classList.remove("active");
+  }
+}
+
+// ── Render ───────────────────────────────────────────────
+function renderMatrix(diseaseName) {
+  const container = document.getElementById("matrix-container");
+  container.innerHTML = `
+    <div class="matrix-wrap">
+      <table>
+        <thead><tr id="thead-row">
+          <th style="text-align:left;min-width:180px">Dimension</th>
+          <th class="wt-col">Wt.</th>
+        </tr></thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>`;
+
+  const headerRow = document.getElementById("thead-row");
+  const tbody = document.getElementById("matrix-body");
+
+  // Column headers
+  rankedTargets.forEach((t, i) => {
+    const th = document.createElement("th");
+    th.className = "target-head" + (t.vetoed ? " vetoed" : "") + (selectedTarget === i ? " selected" : "");
+    th.innerHTML = `<div class="target-name">${t.name}</div><div class="target-context">${t.context.slice(0,50)}${t.context.length > 50 ? "…":""}</div>`;
+    th.onclick = () => { selectedTarget = selectedTarget === i ? null : i; renderMatrix(diseaseName); };
+    headerRow.appendChild(th);
+  });
+
+  // Dimension groups
+  const groups = [
+    { title: "Clinical Evidence", dims: ["genetic","trials","clinical_total"] },
+    { title: "Druggability", dims: ["sm_tractability","ab_tractability","druggability_total"] },
+    { title: "Pathway / Biology", dims: ["pathways","expression","literature","pathway_total"] },
+    { title: "Safety", dims: ["safety"] },
+  ];
+
+  groups.forEach(group => {
+    group.dims.forEach(key => {
+      const dim = DIMENSIONS.find(d => d.key === key);
+      if (!dim) return;
+      const isSection = dim.group === "section";
+      const isSub = !isSection && dim.group !== "safety";
+
+      const tr = document.createElement("tr");
+      if (isSection) tr.style.borderTop = "1px solid rgba(59,130,246,0.15)";
+
+      // Label
+      const tdLabel = document.createElement("td");
+      if (isSub) {
+        tdLabel.className = "subdim";
+        tdLabel.textContent = dim.label;
+      } else {
+        const vetoHtml = dim.isVeto ? ' <span class="veto-badge">VETO</span>' : '';
+        const cls = dim.isVeto ? 'dim-label veto-label' : 'dim-label';
+        tdLabel.innerHTML = `<div class="${cls}" style="${isSection ? 'font-weight:700;color:#e2e8f0' : ''}">${dim.label}${vetoHtml}</div>`;
+      }
+      tr.appendChild(tdLabel);
+
+      // Weight
+      const tdWt = document.createElement("td");
+      tdWt.style.cssText = "color:#475569;font-weight:600;font-size:11px;";
+      tdWt.textContent = dim.weight > 0 ? `×${dim.weight}` : dim.isVeto ? "—" : "";
+      tr.appendChild(tdWt);
+
+      // Score cells
+      rankedTargets.forEach((t, ti) => {
+        const td = document.createElement("td");
+        if (selectedTarget === ti) td.classList.add("selected-col");
+        const score = t.scores[key];
+        const reason = t.reasons[key];
+
+        if (score === undefined || score === null) {
+          td.innerHTML = `<div class="score-cell"><span class="score-chip score-na">—</span></div>`;
+        } else {
+          const isVetoScore = dim.isVeto && score === 0;
+          const chipClass = isVetoScore ? "score-veto" : `score-${Math.min(score, 5)}`;
+          const label = isVetoScore ? "✗" : score;
+          const descText = dim.descriptions[Math.min(score, dim.descriptions.length - 1)] || "";
+          const tooltipContent = reason ? `${descText}<br><em style="color:#94a3b8">${reason}</em>` : descText;
+          td.innerHTML = `<div class="score-cell"><span class="score-chip ${chipClass}" style="${isSection ? 'font-size:16px;padding:4px 16px' : ''}">${label}</span><div class="tooltip">${tooltipContent}</div></div>`;
+        }
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  });
+
+  // ── Composite Row ──
+  const totalRow = document.createElement("tr");
+  totalRow.className = "total-row";
+  totalRow.innerHTML = `<td style="font-weight:700;color:#93c5fd">Composite Score</td><td style="text-align:center;font-size:10px;color:#475569">/5.00</td>`;
+  rankedTargets.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    if (t.vetoed) {
+      td.innerHTML = `<span class="total-vetoed">${t.composite}</span><span class="total-pct">(vetoed)</span>`;
+    } else {
+      td.innerHTML = `${t.composite}<span class="total-pct">(${Math.round(t.composite / 5 * 100)}%)</span>`;
+    }
+    totalRow.appendChild(td);
+  });
+  tbody.appendChild(totalRow);
+
+  // ── Confidence Row ──
+  const confRow = document.createElement("tr");
+  confRow.className = "confidence-row";
+  confRow.innerHTML = `<td style="font-weight:700;color:#94a3b8">Confidence</td><td></td>`;
+  rankedTargets.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    const cls = t.confidence === "High" ? "conf-high" : t.confidence === "Medium" ? "conf-med" : "conf-low";
+    td.innerHTML = `<span class="conf-pill ${cls}">${t.confidence.toUpperCase()}</span>`;
+    confRow.appendChild(td);
+  });
+  tbody.appendChild(confRow);
+
+  // ── Recommendation Row ──
+  const recRow = document.createElement("tr");
+  recRow.className = "rec-row";
+  recRow.innerHTML = `<td style="font-weight:700;color:#94a3b8">Recommendation</td><td></td>`;
+  rankedTargets.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    td.innerHTML = `<span class="rec-pill ${t.recommendation.cls}">${t.recommendation.text}</span>`;
+    recRow.appendChild(td);
+  });
+  tbody.appendChild(recRow);
+
+  // ── Rank Row ──
+  const rankRow = document.createElement("tr");
+  rankRow.className = "rank-row";
+  rankRow.innerHTML = `<td style="font-weight:700;color:#94a3b8">Portfolio Rank</td><td></td>`;
+  rankedTargets.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    const cls = t.vetoed ? "rank-vetoed" : i === 0 ? "rank-1" : "rank-other";
+    td.innerHTML = `<span class="rank-badge ${cls}">${t.vetoed ? "—" : "#" + (i + 1)}</span>`;
+    rankRow.appendChild(td);
+  });
+  tbody.appendChild(rankRow);
+
+  // ── Notes Panel ──
+  const panel = document.getElementById("notes-panel");
+  if (selectedTarget !== null) {
+    const t = rankedTargets[selectedTarget];
+    document.getElementById("notes-title").textContent = `${t.name} — ${t.fullName}`;
+
+    let html = `<div class="notes-section"><div class="notes-section-title">Ensembl ID</div>${t.ensemblId}</div>`;
+    html += `<div class="notes-section"><div class="notes-section-title">Clinical Evidence</div><strong>Genetic:</strong> ${t.reasons.genetic}<br><strong>Trials:</strong> ${t.reasons.trials}</div>`;
+    html += `<div class="notes-section"><div class="notes-section-title">Druggability</div><strong>Small Molecule:</strong> ${t.reasons.sm_tractability}<br><strong>Antibody:</strong> ${t.reasons.ab_tractability}</div>`;
+    html += `<div class="notes-section"><div class="notes-section-title">Pathway / Biology</div><strong>Pathways:</strong> ${t.reasons.pathways}<br><strong>Expression:</strong> ${t.reasons.expression}<br><strong>Literature:</strong> ${t.reasons.literature}</div>`;
+    html += `<div class="notes-section"><div class="notes-section-title">Safety</div>${t.reasons.safety}</div>`;
+
+    if (t.drugs && t.drugs.rows && t.drugs.rows.length > 0) {
+      const uniqueDrugs = [...new Set(t.drugs.rows.map(r => `${r.drug.name} (Phase ${r.phase || "?"})`))].slice(0, 6);
+      html += `<div class="notes-section"><div class="notes-section-title">Known Drugs (${t.drugs.uniqueDrugs} unique)</div>${uniqueDrugs.join(" · ")}</div>`;
+    }
+
+    html += `<div class="notes-section" style="margin-top:12px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)"><div class="notes-section-title">Recommendation</div><strong>${t.recommendation.text}</strong> — Composite: ${t.composite}/5.00 (${t.confidence} confidence)${t.vetoed ? " ⚠ VETOED due to safety liabilities" : ""}</div>`;
+
+    document.getElementById("notes-text").innerHTML = html;
+    panel.classList.add("visible");
+  } else {
+    panel.classList.remove("visible");
+  }
+}
+
+// ── Enter key triggers validation ──
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !document.getElementById("btn-run").disabled) runValidation();
+});
+</script>
+</body>
+</html>
