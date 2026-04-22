@@ -1,0 +1,435 @@
+{
+  "EGFR|non-small cell lung carcinoma": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "non-small cell lung carcinoma",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000146648",
+                  "approvedSymbol": "EGFR"
+                },
+                "score": 0.8878809855539699,
+                "datatypeScores": [
+                  {
+                    "id": "clinical",
+                    "score": 0.9957819068463406
+                  },
+                  {
+                    "id": "genetic_literature",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "affected_pathway",
+                    "score": 0.8255278297988587
+                  },
+                  {
+                    "id": "literature",
+                    "score": 0.9993648722282994
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.9333873648538534
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.9311298240142721
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9957819068463406
+                  },
+                  {
+                    "id": "cancer_gene_census",
+                    "score": 0.9369630011358216
+                  },
+                  {
+                    "id": "eva",
+                    "score": 0.9333873648538534
+                  },
+                  {
+                    "id": "intogen",
+                    "score": 0.9223699260770677
+                  },
+                  {
+                    "id": "eva_somatic",
+                    "score": 0.8983410002790377
+                  },
+                  {
+                    "id": "clingen",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "cancer_biomarkers",
+                    "score": 0.9688369669963677
+                  },
+                  {
+                    "id": "crispr",
+                    "score": 0.25229128100882275
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.9993648722282994
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000146648",
+          "approvedSymbol": "EGFR",
+          "approvedName": "epidermal growth factor receptor",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Receptor tyrosine kinase binding ligands of the EGF family and activating several signaling cascades to convert extracellular cues into appropriate cellular responses (PubMed:10805725, PubMed:27153536, PubMed:2790960, PubMed:35538033). Known ligands include EGF, TGFA/TGF- alpha, AREG, epigen/EPGN, BTC/betacellulin, epiregulin/EREG and HBEGF/heparin-binding EGF (PubMed:12297049, PubMed:15611079, PubMed:17909029, PubMed:20837704, PubMed:27153536, PubMed:2790960, PubMed:7679104, PubMed:8144591, PubMed:9419975). Ligand binding triggers receptor homo- and/or heterodimerization and autophosphorylation on key cytoplasmic residues. The phosphorylated receptor recruits adapter proteins like GRB2 which in turn activates complex downstream signaling cascades. Activates at least 4 major downstream signaling cascades including the RAS-RAF-MEK-ERK, PI3 kinase-AKT, PLCgamma-PKC and STATs modules (PubMed:27153536). May also activate the NF-kappa-B signaling cascade (PubMed:11116146). Also directly phosphorylates other proteins like RGS16, activating its GTPase activity and probably coupling the EGF receptor signaling to the G protein-coupled receptor signaling (PubMed:11602604). Also phosphorylates MUC1 and increases its interaction with SRC and CTNNB1/beta-catenin (PubMed:11483589). Positively regulates cell migration via interaction with CCDC88A/GIV which retains EGFR at the cell membrane following ligand stimulation, promoting EGFR signaling which triggers cell migration (PubMed:20462955). Plays a role in enhancing learning and memory performance (By similarity). Plays a role in mammalian pain signaling (long-lasting hypersensitivity) (By similarity). {ECO:0000250|UniProtKB:Q01279, ECO:0000269|PubMed:10805725, ECO:0000269|PubMed:11116146, ECO:0000269|PubMed:11483589, ECO:0000269|PubMed:11602604, ECO:0000269|PubMed:12297049, ECO:0000269|PubMed:12297050, ECO:0000269|PubMed:12620237, ECO:0000269|PubMed:12873986, ECO:0000269|PubMed:15374980, ECO:0000269|PubMed:15590694, ECO:0000269|PubMed:15611079, ECO:0000269|PubMed:17115032, ECO:0000269|PubMed:17909029, ECO:0000269|PubMed:19560417, ECO:0000269|PubMed:20462955, ECO:0000269|PubMed:20837704, ECO:0000269|PubMed:21258366, ECO:0000269|PubMed:27153536, ECO:0000269|PubMed:2790960, ECO:0000269|PubMed:35538033, ECO:0000269|PubMed:7679104, ECO:0000269|PubMed:8144591, ECO:0000269|PubMed:9419975}.",
+            "Isoform 2 may act as an antagonist of EGF action.",
+            "(Microbial infection) Acts as a receptor for hepatitis C virus (HCV) in hepatocytes and facilitates its cell entry. Mediates HCV entry by promoting the formation of the CD81-CLDN1 receptor complexes that are essential for HCV entry and by enhancing membrane fusion of cells expressing HCV envelope glycoproteins. ."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cell membrane"
+            },
+            {
+              "location": "Endoplasmic reticulum membrane"
+            },
+            {
+              "location": "Golgi apparatus membrane"
+            },
+            {
+              "location": "Nucleus membrane"
+            },
+            {
+              "location": "Endosome"
+            },
+            {
+              "location": "Endosome membrane"
+            },
+            {
+              "location": "Nucleus"
+            },
+            {
+              "location": "[Isoform 2]: Secreted"
+            },
+            {
+              "location": "Golgi apparatus"
+            },
+            {
+              "location": "Plasma membrane"
+            },
+            {
+              "location": "Basal body"
+            },
+            {
+              "location": "Cell Junctions"
+            },
+            {
+              "location": "End piece"
+            },
+            {
+              "location": "Mid piece"
+            },
+            {
+              "location": "Primary cilium"
+            },
+            {
+              "location": "Principal piece"
+            },
+            {
+              "location": "Predicted to be secreted"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": true
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.08211000263690948,
+              "oe": 0.9939299821853638,
+              "oeLower": 0.9290000200271606,
+              "oeUpper": 1.062999963760376
+            },
+            {
+              "constraintType": "mis",
+              "score": 3.063499927520752,
+              "oe": 0.7933200001716614,
+              "oeLower": 0.7570000290870667,
+              "oeUpper": 0.8299999833106995
+            },
+            {
+              "constraintType": "lof",
+              "score": 0.982509970664978,
+              "oe": 0.3814300000667572,
+              "oeLower": 0.30799999833106995,
+              "oeUpper": 0.4749999940395355
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Extra-nuclear estrogen signaling"
+            },
+            {
+              "pathway": "PI5P, PP2A and IER3 Regulate PI3K/AKT Signaling"
+            },
+            {
+              "pathway": "SHC1 events in EGFR signaling"
+            },
+            {
+              "pathway": "ERBB2 Activates PTK6 Signaling"
+            },
+            {
+              "pathway": "Signaling by EGFR"
+            },
+            {
+              "pathway": "Constitutive Signaling by EGFRvIII"
+            },
+            {
+              "pathway": "EGFR downregulation"
+            },
+            {
+              "pathway": "Downregulation of ERBB2 signaling"
+            },
+            {
+              "pathway": "PTK6 promotes HIF1A stabilization"
+            },
+            {
+              "pathway": "Cargo recognition for clathrin-mediated endocytosis"
+            },
+            {
+              "pathway": "RAF/MAP kinase cascade"
+            },
+            {
+              "pathway": "Signaling by ERBB2"
+            },
+            {
+              "pathway": "EGFR Transactivation by Gastrin"
+            },
+            {
+              "pathway": "GRB2 events in ERBB2 signaling"
+            },
+            {
+              "pathway": "GAB1 signalosome"
+            },
+            {
+              "pathway": "Signaling by ERBB2 KD Mutants"
+            },
+            {
+              "pathway": "Signal transduction by L1"
+            },
+            {
+              "pathway": "Constitutive Signaling by Ligand-Responsive EGFR Cancer Variants"
+            },
+            {
+              "pathway": "TFAP2 (AP-2) family regulates transcription of growth factors and their receptors"
+            },
+            {
+              "pathway": "ERBB2 Regulates Cell Motility"
+            },
+            {
+              "pathway": "HCMV Early Events"
+            },
+            {
+              "pathway": "NOTCH3 Activation and Transmission of Signal to the Nucleus"
+            },
+            {
+              "pathway": "Clathrin-mediated endocytosis"
+            },
+            {
+              "pathway": "PIP3 activates AKT signaling"
+            },
+            {
+              "pathway": "GRB2 events in EGFR signaling"
+            },
+            {
+              "pathway": "PLCG1 events in ERBB2 signaling"
+            },
+            {
+              "pathway": "EGFR interacts with phospholipase C-gamma"
+            },
+            {
+              "pathway": "PI3K events in ERBB2 signaling"
+            },
+            {
+              "pathway": "SHC1 events in ERBB2 signaling"
+            },
+            {
+              "pathway": "Constitutive Signaling by Aberrant PI3K in Cancer"
+            },
+            {
+              "pathway": "Respiratory syncytial virus (RSV) attachment and entry"
+            },
+            {
+              "pathway": "Developmental Lineage of Mammary Gland Myoepithelial Cells"
+            },
+            {
+              "pathway": "Inhibition of Signaling by Overexpressed EGFR"
+            },
+            {
+              "pathway": "Signaling by ERBB2 ECD mutants"
+            },
+            {
+              "pathway": "Signaling by ERBB4"
+            },
+            {
+              "pathway": "Estrogen-dependent nuclear events downstream of ESR-membrane signaling"
+            },
+            {
+              "pathway": "Signaling by ERBB2 TMD/JMD mutants"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  }
+}
