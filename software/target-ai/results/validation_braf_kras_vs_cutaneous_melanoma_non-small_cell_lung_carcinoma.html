@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Target Validation — cutaneous melanoma, non-small cell lung carcinoma</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: #f8f9fb; color: #374151; padding: 24px; }
+  .container { max-width: 1060px; margin: 0 auto; background: white; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  h1 { font-size: 22px; font-weight: 700; color: #1e3a5f; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 24px; line-height: 1.5; }
+
+  .matrix-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { text-align: center; padding: 10px 8px; border-bottom: 2px solid #1e3a5f; font-weight: 700; color: #1e3a5f; }
+  thead th:first-child { text-align: left; min-width: 170px; }
+  thead th.wt-col { color: #6b7280; font-weight: 600; font-size: 11px; width: 44px; }
+  thead .target-head { cursor: pointer; min-width: 120px; transition: background 0.15s; }
+  thead .target-head:hover { background: #f0f5ff; }
+  thead .target-head.selected { background: #f0f5ff; }
+  thead .target-head.vetoed { color: #991b1b; }
+  .target-name { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; }
+  .target-context { font-size: 10px; font-weight: 400; color: #6b7280; margin-top: 2px; line-height: 1.3; }
+
+  tbody td { padding: 8px 8px; border-bottom: 1px solid #e5e7eb; text-align: center; }
+  tbody td:first-child { text-align: left; font-weight: 600; color: #374151; padding-left: 12px; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody td.selected-col { background: #f0f5ff !important; }
+  .subdim td:first-child { font-weight: 400; color: #6b7280; padding-left: 28px; font-size: 12px; }
+  .section-row td:first-child { font-weight: 700; color: #1e3a5f; }
+  .section-row { border-top: 1px solid #e0e5ec; }
+
+  .dim-label { display: flex; align-items: center; gap: 6px; }
+  .veto-label { border-left: 3px solid #ef4444; padding-left: 9px; }
+  .veto-badge { font-size: 10px; color: #ef4444; font-weight: 700; }
+
+  .score-cell { position: relative; display: inline-block; }
+  .score-chip { display: inline-block; padding: 3px 12px; border-radius: 6px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 14px; min-width: 28px; text-align: center; border: 1.5px solid; cursor: default; }
+  .score-0 { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
+  .score-1 { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+  .score-2 { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+  .score-3 { background: #ecfdf5; color: #065f46; border-color: #6ee7b7; }
+  .score-4 { background: #d1fae5; color: #064e3b; border-color: #34d399; }
+  .score-5 { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+  .score-veto { background: #fde8e8; color: #991b1b; border-color: #f87171; }
+
+  .tooltip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 400; max-width: 300px; white-space: normal; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); pointer-events: none; line-height: 1.4; }
+  .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #1f2937; }
+  .score-cell:hover .tooltip { display: block; }
+
+  .total-row td { border-top: 2px solid #1e3a5f; padding: 10px 8px; font-weight: 700; font-size: 15px; color: #1e3a5f; }
+  .total-row td:first-child { font-weight: 700; }
+  .total-pct { font-size: 11px; font-weight: 400; color: #6b7280; margin-left: 4px; }
+  .total-vetoed { text-decoration: line-through; color: #9ca3af; }
+
+  .conf-row td { padding: 8px 8px; }
+  .conf-pill { display: inline-block; padding: 3px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; }
+  .conf-high { background: #d1fae5; color: #064e3b; }
+  .conf-med { background: #fef9c3; color: #854d0e; }
+  .conf-low { background: #fef2f2; color: #991b1b; }
+
+  .rec-row td { padding: 10px 8px; }
+  .rec-pill { display: inline-block; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 12px; letter-spacing: 0.05em; }
+  .rec-advance { background: #d1fae5; color: #064e3b; }
+  .rec-investigate { background: #fffbeb; color: #92400e; }
+  .rec-park { background: #f3f4f6; color: #6b7280; }
+  .rec-kill { background: #fde8e8; color: #991b1b; }
+
+  .rank-row td { padding: 10px 8px; }
+  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 13px; }
+  .rank-1 { background: #1e3a5f; color: white; }
+  .rank-other { background: #e5e7eb; color: #374151; }
+  .rank-vetoed { background: #fde8e8; color: #991b1b; }
+
+  .notes-panel { margin-top: 16px; padding: 16px; background: #f0f5ff; border-radius: 8px; border-left: 4px solid #1e3a5f; display: none; }
+  .notes-panel.visible { display: block; }
+  .notes-title { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: #1e3a5f; margin-bottom: 6px; }
+  .notes-text { font-size: 13px; color: #374151; line-height: 1.6; }
+  .notes-text strong { color: #1e3a5f; }
+  .notes-section { margin-top: 8px; }
+  .notes-section-title { font-weight: 700; color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+
+  .legend { margin-top: 20px; padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; }
+  .legend-title { font-weight: 700; font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .legend-items { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #4b5563; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-chip { display: inline-block; width: 22px; height: 22px; border-radius: 4px; text-align: center; line-height: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; border: 1.5px solid; }
+  .legend-note { margin-top: 10px; font-size: 12px; color: #6b7280; line-height: 1.5; }
+
+  .generated { margin-top: 16px; font-size: 11px; color: #9ca3af; text-align: right; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Target Validation Scoring Matrix</h1>
+  <p class="subtitle">2 target(s) (BRAF, KRAS) scored against 2 disease(s) (cutaneous melanoma, non-small cell lung carcinoma) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
+
+  <div class="matrix-wrap">
+    <table id="matrix">
+      <thead><tr>
+        <th style="text-align:left; min-width:170px;">Dimension</th>
+        <th class="wt-col">Wt.</th>
+      </tr></thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+
+  <div class="notes-panel" id="notes-panel">
+    <div class="notes-title" id="notes-title"></div>
+    <div class="notes-text" id="notes-text"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">How to read this</div>
+    <div class="legend-items">
+      <div class="legend-item"><span class="legend-chip score-0">0</span> None</div>
+      <div class="legend-item"><span class="legend-chip score-1">1</span> Minimal</div>
+      <div class="legend-item"><span class="legend-chip score-2">2</span> Weak</div>
+      <div class="legend-item"><span class="legend-chip score-3">3</span> Moderate</div>
+      <div class="legend-item"><span class="legend-chip score-4">4</span> Strong</div>
+      <div class="legend-item"><span class="legend-chip score-5">5</span> Excellent</div>
+      <div class="legend-item"><span class="legend-chip score-veto">✗</span> Safety veto</div>
+    </div>
+    <div class="legend-note">
+      <strong>Weights:</strong> Clinical ×0.40 · Druggability ×0.35 · Pathway ×0.25. Safety liabilities trigger a veto regardless of total. Data sourced from Open Targets Platform. Hover over scores for evidence. Click target names for detailed notes.
+    </div>
+  </div>
+
+  <div class="generated">Generated 2026-03-29 21:59 · Data: Open Targets Platform GraphQL API</div>
+</div>
+
+<script>
+// ── DATA (injected by open_targets_client.py) ────────────────────────────
+const DISEASE_NAME = "cutaneous melanoma, non-small cell lung carcinoma";
+
+const DIMENSIONS = [
+  { key: "genetic",           label: "Genetic Association",  group: "clinical",     weight: 0, isVeto: false, descriptions: ["No GWAS or rare-variant signal","Suggestive association","Significant GWAS hit (p<5e-8)","GWAS + rare-variant convergence","Strong colocalisation confirmed","Protective LoF + Mendelian evidence"] },
+  { key: "trials",            label: "Clinical Trials",      group: "clinical",     weight: 0, isVeto: false, descriptions: ["No trials found","Preclinical compounds only","Phase 1 trial(s)","Phase 2 trial(s)","Phase 3 trial(s)","Approved drug for this indication"] },
+  { key: "clinical_total",    label: "Clinical Evidence",    group: "section",      weight: 0.40, isVeto: false, descriptions: ["No evidence","Minimal","Suggestive","Moderate","Strong","Excellent"] },
+  { key: "sm_tractability",   label: "Small Molecule",       group: "druggability", weight: 0, isVeto: false, descriptions: ["Not tractable","Predicted family","Confirmed family","High-confidence pocket","Clinical candidate","Approved SM drug"] },
+  { key: "ab_tractability",   label: "Antibody Access",      group: "druggability", weight: 0, isVeto: false, descriptions: ["Inaccessible","Unknown","Predicted accessible","Accessible, moderate consv.","Clinical-stage biologic","Approved biologic"] },
+  { key: "druggability_total",label: "Druggability",         group: "section",      weight: 0.35, isVeto: false, descriptions: ["Undruggable","Low","Some signals","Moderate","High","Fully validated"] },
+  { key: "pathways",          label: "Pathway Membership",   group: "pathway",      weight: 0, isVeto: false, descriptions: ["No annotation","Isolated","One relevant pathway","Multiple pathways","Central hub","Hub + disease models"] },
+  { key: "expression",        label: "Disease Expression",   group: "pathway",      weight: 0, isVeto: false, descriptions: ["Not expressed","Expressed, not DE","Weak DE","Differentially expressed","DE + tissue-specific","DE + cell-type specific"] },
+  { key: "literature",        label: "Literature Support",   group: "pathway",      weight: 0, isVeto: false, descriptions: ["No publications","Few mentions","Mentioned in context","Multiple papers","Strongly supported","Field consensus"] },
+  { key: "pathway_total",     label: "Pathway / Biology",    group: "section",      weight: 0.25, isVeto: false, descriptions: ["No rationale","Minimal","Weak","Moderate","Strong","Excellent"] },
+  { key: "safety",            label: "Safety Profile",       group: "safety",       weight: 0, isVeto: true,  descriptions: ["Major liabilities — VETO","Significant concerns","Moderate concerns","Minor / manageable","Minimal concerns","Clean profile"] },
+];
+
+const TARGETS = [
+  {
+    "name": "BRAF",
+    "fullName": "B-Raf proto-oncogene, serine/threonine kinase",
+    "ensemblId": "ENSG00000157764",
+    "disease": "cutaneous melanoma",
+    "context": "Protein kinase involved in the transduction of mitogenic signals from the cell m",
+    "scores": {
+      "genetic": 4,
+      "trials": 4,
+      "clinical_total": 4,
+      "sm_tractability": 3,
+      "ab_tractability": 2,
+      "druggability_total": 3,
+      "pathways": 5,
+      "expression": 4,
+      "literature": 5,
+      "pathway_total": 5,
+      "safety": 1
+    },
+    "reasons": {
+      "genetic": "Genetic score (somatic_mutation): 0.84",
+      "trials": "Genetic score (somatic_mutation): 0.84",
+      "clinical_total": "Genetic score (somatic_mutation): 0.84",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
+      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
+      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
+      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
+      "safety": "High LoF intolerance (pLI-like score=1.00)"
+    },
+    "notes": "Clinical: Genetic score (somatic_mutation): 0.84. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf. Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72."
+  },
+  {
+    "name": "BRAF",
+    "fullName": "B-Raf proto-oncogene, serine/threonine kinase",
+    "ensemblId": "ENSG00000157764",
+    "disease": "non-small cell lung carcinoma",
+    "context": "Protein kinase involved in the transduction of mitogenic signals from the cell m",
+    "scores": {
+      "genetic": 4,
+      "trials": 4,
+      "clinical_total": 4,
+      "sm_tractability": 3,
+      "ab_tractability": 2,
+      "druggability_total": 3,
+      "pathways": 5,
+      "expression": 4,
+      "literature": 5,
+      "pathway_total": 5,
+      "safety": 1
+    },
+    "reasons": {
+      "genetic": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
+      "trials": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
+      "clinical_total": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
+      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
+      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
+      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
+      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
+      "safety": "High LoF intolerance (pLI-like score=1.00)"
+    },
+    "notes": "Clinical: Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf. Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98."
+  },
+  {
+    "name": "KRAS",
+    "fullName": "KRAS proto-oncogene, GTPase",
+    "ensemblId": "ENSG00000133703",
+    "disease": "non-small cell lung carcinoma",
+    "context": "Ras proteins bind GDP/GTP and possess intrinsic GTPase activity (PubMed:20949621",
+    "scores": {
+      "genetic": 4,
+      "trials": 4,
+      "clinical_total": 4,
+      "sm_tractability": 3,
+      "ab_tractability": 2,
+      "druggability_total": 3,
+      "pathways": 5,
+      "expression": 4,
+      "literature": 5,
+      "pathway_total": 5,
+      "safety": 1
+    },
+    "reasons": {
+      "genetic": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
+      "trials": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
+      "clinical_total": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
+      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "pathways": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
+      "expression": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
+      "literature": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
+      "pathway_total": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
+      "safety": "High LoF intolerance (pLI-like score=1.00)"
+    },
+    "notes": "Clinical: Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf. Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00."
+  },
+  {
+    "name": "KRAS",
+    "fullName": "KRAS proto-oncogene, GTPase",
+    "ensemblId": "ENSG00000133703",
+    "disease": "cutaneous melanoma",
+    "context": "Ras proteins bind GDP/GTP and possess intrinsic GTPase activity (PubMed:20949621",
+    "scores": {
+      "genetic": 4,
+      "trials": 4,
+      "clinical_total": 4,
+      "sm_tractability": 3,
+      "ab_tractability": 2,
+      "druggability_total": 3,
+      "pathways": 4,
+      "expression": 3,
+      "literature": 4,
+      "pathway_total": 4,
+      "safety": 1
+    },
+    "reasons": {
+      "genetic": "Genetic score (somatic_mutation): 0.68",
+      "trials": "Genetic score (somatic_mutation): 0.68",
+      "clinical_total": "Genetic score (somatic_mutation): 0.68",
+      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "pathways": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
+      "expression": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
+      "literature": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
+      "pathway_total": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
+      "safety": "High LoF intolerance (pLI-like score=1.00)"
+    },
+    "notes": "Clinical: Genetic score (somatic_mutation): 0.68. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf. Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17."
+  }
+];
+
+// ── ENGINE ───────────────────────────────────────────────────────────────
+function computeComposite(scores) {
+  return +((scores.clinical_total || 0) * 0.40 + (scores.druggability_total || 0) * 0.35 + (scores.pathway_total || 0) * 0.25).toFixed(2);
+}
+function hasVeto(scores) { return scores.safety === 0; }
+function getConfidence(comp, scores) {
+  const n = [scores.clinical_total, scores.druggability_total, scores.pathway_total].filter(s => s > 0).length;
+  if (comp >= 3.5 && n >= 3) return "High";
+  if (comp >= 2.0) return "Medium";
+  return "Low";
+}
+function getRec(comp, vetoed) {
+  if (vetoed) return { text: "KILL", cls: "rec-kill" };
+  if (comp >= 3.5) return { text: "ADVANCE", cls: "rec-advance" };
+  if (comp >= 2.0) return { text: "INVESTIGATE", cls: "rec-investigate" };
+  return { text: "PARK", cls: "rec-park" };
+}
+
+const ranked = TARGETS.map(t => {
+  const comp = computeComposite(t.scores);
+  const vetoed = hasVeto(t.scores);
+  return { ...t, composite: comp, vetoed, confidence: getConfidence(comp, t.scores), rec: getRec(comp, vetoed) };
+}).sort((a, b) => {
+  if (a.vetoed && !b.vetoed) return 1;
+  if (!a.vetoed && b.vetoed) return -1;
+  return b.composite - a.composite;
+});
+
+let selectedTarget = null;
+
+// ── RENDER ───────────────────────────────────────────────────────────────
+function render() {
+  const headerRow = document.querySelector("thead tr");
+  headerRow.querySelectorAll(".target-head").forEach(el => el.remove());
+  ranked.forEach((t, i) => {
+    const th = document.createElement("th");
+    th.className = "target-head" + (t.vetoed ? " vetoed" : "") + (selectedTarget === i ? " selected" : "");
+    th.innerHTML = `<div class="target-name">${t.name}</div><div class="target-context">${t.disease || ""}</div>`;
+    th.onclick = () => { selectedTarget = selectedTarget === i ? null : i; render(); };
+    headerRow.appendChild(th);
+  });
+
+  const tbody = document.getElementById("matrix-body");
+  tbody.innerHTML = "";
+
+  const groups = [
+    { dims: ["genetic","trials","clinical_total"] },
+    { dims: ["sm_tractability","ab_tractability","druggability_total"] },
+    { dims: ["pathways","expression","literature","pathway_total"] },
+    { dims: ["safety"] },
+  ];
+
+  groups.forEach(group => {
+    group.dims.forEach(key => {
+      const dim = DIMENSIONS.find(d => d.key === key);
+      if (!dim) return;
+      const isSection = dim.group === "section";
+      const isSub = !isSection && dim.group !== "safety";
+
+      const tr = document.createElement("tr");
+      if (isSection) tr.className = "section-row";
+      if (isSub) tr.className = "subdim";
+
+      const tdLabel = document.createElement("td");
+      if (dim.isVeto) {
+        tdLabel.innerHTML = `<div class="dim-label veto-label">${dim.label} <span class="veto-badge">VETO</span></div>`;
+      } else {
+        tdLabel.textContent = dim.label;
+      }
+      tr.appendChild(tdLabel);
+
+      const tdWt = document.createElement("td");
+      tdWt.style.cssText = "color:#9ca3af;font-weight:600;font-size:12px;";
+      tdWt.textContent = dim.weight > 0 ? `×${dim.weight}` : dim.isVeto ? "—" : "";
+      tr.appendChild(tdWt);
+
+      ranked.forEach((t, ti) => {
+        const td = document.createElement("td");
+        if (selectedTarget === ti) td.classList.add("selected-col");
+        const score = t.scores[key];
+        const reason = (t.reasons && t.reasons[key]) || "";
+        const isVetoScore = dim.isVeto && score === 0;
+        const chipClass = isVetoScore ? "score-veto" : `score-${Math.min(score || 0, 5)}`;
+        const label = isVetoScore ? "✗" : (score ?? "—");
+        const descText = dim.descriptions[Math.min(score || 0, dim.descriptions.length - 1)] || "";
+        const tooltipHtml = reason ? `${descText}<br><em style="color:#d1d5db">${reason}</em>` : descText;
+        td.innerHTML = `<div class="score-cell"><span class="score-chip ${chipClass}" ${isSection ? 'style="font-size:16px;padding:4px 14px"' : ""}>${label}</span><div class="tooltip">${tooltipHtml}</div></div>`;
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  });
+
+  // Composite row
+  const totalRow = document.createElement("tr");
+  totalRow.className = "total-row";
+  totalRow.innerHTML = `<td>Composite Score</td><td style="text-align:center;font-size:11px;color:#9ca3af;font-weight:400">/5.00</td>`;
+  ranked.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    td.innerHTML = t.vetoed
+      ? `<span class="total-vetoed">${t.composite}</span><span class="total-pct">(vetoed)</span>`
+      : `${t.composite}<span class="total-pct">(${Math.round(t.composite / 5 * 100)}%)</span>`;
+    totalRow.appendChild(td);
+  });
+  tbody.appendChild(totalRow);
+
+  // Confidence row
+  const confRow = document.createElement("tr");
+  confRow.className = "conf-row";
+  confRow.innerHTML = `<td style="font-weight:700;color:#6b7280">Confidence</td><td></td>`;
+  ranked.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    const cls = t.confidence === "High" ? "conf-high" : t.confidence === "Medium" ? "conf-med" : "conf-low";
+    td.innerHTML = `<span class="conf-pill ${cls}">${t.confidence.toUpperCase()}</span>`;
+    confRow.appendChild(td);
+  });
+  tbody.appendChild(confRow);
+
+  // Recommendation row
+  const recRow = document.createElement("tr");
+  recRow.className = "rec-row";
+  recRow.innerHTML = `<td style="font-weight:700;color:#1e3a5f">Recommendation</td><td></td>`;
+  ranked.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    td.innerHTML = `<span class="rec-pill ${t.rec.cls}">${t.rec.text}</span>`;
+    recRow.appendChild(td);
+  });
+  tbody.appendChild(recRow);
+
+  // Rank row
+  const rankRow = document.createElement("tr");
+  rankRow.className = "rank-row";
+  rankRow.innerHTML = `<td style="font-weight:700;color:#1e3a5f">Portfolio Rank</td><td></td>`;
+  ranked.forEach((t, i) => {
+    const td = document.createElement("td");
+    if (selectedTarget === i) td.classList.add("selected-col");
+    const cls = t.vetoed ? "rank-vetoed" : i === 0 ? "rank-1" : "rank-other";
+    td.innerHTML = `<span class="rank-badge ${cls}">${t.vetoed ? "—" : "#" + (i + 1)}</span>`;
+    rankRow.appendChild(td);
+  });
+  tbody.appendChild(rankRow);
+
+  // Notes panel
+  const panel = document.getElementById("notes-panel");
+  if (selectedTarget !== null) {
+    const t = ranked[selectedTarget];
+    document.getElementById("notes-title").textContent = `${t.name} — ${t.fullName || ""}`;
+    let html = "";
+    if (t.ensemblId) html += `<div class="notes-section"><div class="notes-section-title">Ensembl ID</div>${t.ensemblId}</div>`;
+    if (t.reasons) {
+      html += `<div class="notes-section"><div class="notes-section-title">Clinical Evidence</div><strong>Genetic:</strong> ${t.reasons.genetic || "—"}<br><strong>Trials:</strong> ${t.reasons.trials || "—"}</div>`;
+      html += `<div class="notes-section"><div class="notes-section-title">Druggability</div><strong>Small Molecule:</strong> ${t.reasons.sm_tractability || "—"}<br><strong>Antibody:</strong> ${t.reasons.ab_tractability || "—"}</div>`;
+      html += `<div class="notes-section"><div class="notes-section-title">Pathway / Biology</div><strong>Pathways:</strong> ${t.reasons.pathways || "—"}<br><strong>Expression:</strong> ${t.reasons.expression || "—"}<br><strong>Literature:</strong> ${t.reasons.literature || "—"}</div>`;
+      html += `<div class="notes-section"><div class="notes-section-title">Safety</div>${t.reasons.safety || "—"}</div>`;
+    }
+    if (t.notes) html += `<div class="notes-section" style="margin-top:10px;padding-top:8px;border-top:1px solid #e5e7eb"><div class="notes-section-title">Summary</div>${t.notes}</div>`;
+    html += `<div class="notes-section" style="margin-top:10px;padding-top:8px;border-top:1px solid #e5e7eb"><div class="notes-section-title">Verdict</div><strong>${t.rec.text}</strong> — Composite: ${t.composite}/5.00 (${t.confidence} confidence)${t.vetoed ? " ⚠ VETOED due to safety liabilities" : ""}</div>`;
+    document.getElementById("notes-text").innerHTML = html;
+    panel.classList.add("visible");
+  } else {
+    panel.classList.remove("visible");
+  }
+}
+
+render();
+</script>
+</body>
+</html>
