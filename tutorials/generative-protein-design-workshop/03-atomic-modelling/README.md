@@ -145,13 +145,11 @@ python $EVOSITE3D_SCRIPTS/export_results.py
 Before considering your design complete, verify:
 
 - [ ] **Files exist:**
-
   - [ ] `two_helix_scaffold.pdb` (from Tutorial 1)
   - [ ] `designed_sequence.fasta` (from Tutorial 2)
   - [ ] `best_model.pdb` (from Tutorial 3)
 
 - [ ] **Model quality:**
-
   - [ ] All atoms present (check with validation script)
   - [ ] No severe clashes (< 5)
   - [ ] Correct number of residues
@@ -186,13 +184,11 @@ Before considering your design complete, verify:
 ### Key Concepts:
 
 1. **Spatial Restraints**: Constraints that guide modeling
-
    - Distance restraints
    - Dihedral angle restraints
    - Secondary structure restraints
 
 2. **Optimization Levels**:
-
    - `refine.very_fast`: Quick but rough
    - `refine.fast`: Balanced
    - `refine.slow`: Thorough
