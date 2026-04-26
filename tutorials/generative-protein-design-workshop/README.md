@@ -43,24 +43,20 @@ To successfully complete these tutorials, you should have:
 Before starting, ensure you have the following tools installed:
 
 1. **RFdiffusion** (v1.1.0 or later)
-
    - Repository: https://github.com/RosettaCommons/RFdiffusion
    - Requires: PyTorch, CUDA-enabled GPU
    - Note: macOS users could follow the installation there:
      https://github.com/romainstuder/RFdiffusion/blob/update-readme/README-macos.md
 
 2. **ProteinMPNN** (latest version)
-
    - Repository: https://github.com/dauparas/ProteinMPNN
    - Requires: PyTorch, NumPy
 
 3. **MODELLER** (v10.4 or later)
-
    - Website: https://salilab.org/modeller/
    - Requires: Academic license (free)
 
 4. **PyMOL** (for visualisation)
-
    - Website: https://pymol.org/
 
 5. **Python environment** with:
