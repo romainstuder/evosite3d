@@ -1,0 +1,1222 @@
+{
+  "CDK4|breast carcinoma": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "breast carcinoma",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000135446",
+                  "approvedSymbol": "CDK4"
+                },
+                "score": 0.6779710688997118,
+                "datatypeScores": [
+                  {
+                    "id": "clinical",
+                    "score": 0.9005444943870103
+                  },
+                  {
+                    "id": "affected_pathway",
+                    "score": 0.3981682350153665
+                  },
+                  {
+                    "id": "literature",
+                    "score": 0.9367312936288646
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.634865509339136
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9005444943870103
+                  },
+                  {
+                    "id": "cancer_gene_census",
+                    "score": 0.634865509339136
+                  },
+                  {
+                    "id": "crispr",
+                    "score": 0.3981682350153665
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.9367312936288646
+                  },
+                  {
+                    "id": "eva",
+                    "score": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000135446",
+          "approvedSymbol": "CDK4",
+          "approvedName": "cyclin dependent kinase 4",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Ser/Thr-kinase component of cyclin D-CDK4 (DC) complexes that phosphorylate and inhibit members of the retinoblastoma (RB) protein family including RB1 and regulate the cell-cycle during G(1)/S transition. Phosphorylation of RB1 allows dissociation of the transcription factor E2F from the RB/E2F complexes and the subsequent transcription of E2F target genes which are responsible for the progression through the G(1) phase. Hypophosphorylates RB1 in early G(1) phase. Cyclin D-CDK4 complexes are major integrators of various mitogenenic and antimitogenic signals. Also phosphorylates SMAD3 in a cell-cycle-dependent manner and represses its transcriptional activity. Component of the ternary complex, cyclin D/CDK4/CDKN1B, required for nuclear translocation and activity of the cyclin D-CDK4 complex. {ECO:0000269|PubMed:15241418, ECO:0000269|PubMed:18827403, ECO:0000269|PubMed:9003781}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Nucleus"
+            },
+            {
+              "location": "Nucleus membrane"
+            },
+            {
+              "location": "Cytosol"
+            },
+            {
+              "location": "Nucleoplasm"
+            },
+            {
+              "location": "Nuclear membrane"
+            },
+            {
+              "location": "Nucleoli"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": -0.09401900321245193,
+              "oe": 1.0139000415802002,
+              "oeLower": 0.8889999985694885,
+              "oeUpper": 1.1579999923706055
+            },
+            {
+              "constraintType": "mis",
+              "score": 2.255500078201294,
+              "oe": 0.6900500059127808,
+              "oeLower": 0.6240000128746033,
+              "oeUpper": 0.7630000114440918
+            },
+            {
+              "constraintType": "lof",
+              "score": 0.5666800141334534,
+              "oe": 0.3836599886417389,
+              "oeLower": 0.24899999797344208,
+              "oeUpper": 0.6100000143051147
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Transcriptional regulation of white adipocyte differentiation"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Ubiquitin-dependent degradation of Cyclin D"
+            },
+            {
+              "pathway": "Oxidative Stress Induced Senescence"
+            },
+            {
+              "pathway": "Transcriptional regulation by RUNX2"
+            },
+            {
+              "pathway": "SCF(Skp2)-mediated degradation of p27/p21"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4"
+            },
+            {
+              "pathway": "Drug-mediated inhibition of CDK4/CDK6 activity"
+            },
+            {
+              "pathway": "PTK6 Regulates Cell Cycle"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Senescence-Associated Secretory Phenotype (SASP)"
+            },
+            {
+              "pathway": "Meiotic recombination"
+            },
+            {
+              "pathway": "RMTs methylate histone arginines"
+            },
+            {
+              "pathway": "Transcriptional regulation of granulopoiesis"
+            },
+            {
+              "pathway": "SPOP-mediated proteasomal degradation of PD-L1(CD274)"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4"
+            },
+            {
+              "pathway": "Oncogene Induced Senescence"
+            },
+            {
+              "pathway": "Cyclin D associated events in G1"
+            },
+            {
+              "pathway": "Defective binding of RB1 mutants to E2F1,(E2F2, E2F3)"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "CDK4|ovarian carcinoma": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "ovarian carcinoma",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000135446",
+                  "approvedSymbol": "CDK4"
+                },
+                "score": 0.43122004787999596,
+                "datatypeScores": [
+                  {
+                    "id": "clinical",
+                    "score": 0.06079307976116211
+                  },
+                  {
+                    "id": "affected_pathway",
+                    "score": 0.3223770212233144
+                  },
+                  {
+                    "id": "literature",
+                    "score": 0.11033363031975169
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.6205960225618631
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "cancer_gene_census",
+                    "score": 0.6205960225618631
+                  },
+                  {
+                    "id": "crispr",
+                    "score": 0.3223770212233144
+                  },
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.06079307976116211
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.11033363031975169
+                  },
+                  {
+                    "id": "eva",
+                    "score": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000135446",
+          "approvedSymbol": "CDK4",
+          "approvedName": "cyclin dependent kinase 4",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Ser/Thr-kinase component of cyclin D-CDK4 (DC) complexes that phosphorylate and inhibit members of the retinoblastoma (RB) protein family including RB1 and regulate the cell-cycle during G(1)/S transition. Phosphorylation of RB1 allows dissociation of the transcription factor E2F from the RB/E2F complexes and the subsequent transcription of E2F target genes which are responsible for the progression through the G(1) phase. Hypophosphorylates RB1 in early G(1) phase. Cyclin D-CDK4 complexes are major integrators of various mitogenenic and antimitogenic signals. Also phosphorylates SMAD3 in a cell-cycle-dependent manner and represses its transcriptional activity. Component of the ternary complex, cyclin D/CDK4/CDKN1B, required for nuclear translocation and activity of the cyclin D-CDK4 complex. {ECO:0000269|PubMed:15241418, ECO:0000269|PubMed:18827403, ECO:0000269|PubMed:9003781}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Nucleus"
+            },
+            {
+              "location": "Nucleus membrane"
+            },
+            {
+              "location": "Cytosol"
+            },
+            {
+              "location": "Nucleoplasm"
+            },
+            {
+              "location": "Nuclear membrane"
+            },
+            {
+              "location": "Nucleoli"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": -0.09401900321245193,
+              "oe": 1.0139000415802002,
+              "oeLower": 0.8889999985694885,
+              "oeUpper": 1.1579999923706055
+            },
+            {
+              "constraintType": "mis",
+              "score": 2.255500078201294,
+              "oe": 0.6900500059127808,
+              "oeLower": 0.6240000128746033,
+              "oeUpper": 0.7630000114440918
+            },
+            {
+              "constraintType": "lof",
+              "score": 0.5666800141334534,
+              "oe": 0.3836599886417389,
+              "oeLower": 0.24899999797344208,
+              "oeUpper": 0.6100000143051147
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Transcriptional regulation of white adipocyte differentiation"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Ubiquitin-dependent degradation of Cyclin D"
+            },
+            {
+              "pathway": "Oxidative Stress Induced Senescence"
+            },
+            {
+              "pathway": "Transcriptional regulation by RUNX2"
+            },
+            {
+              "pathway": "SCF(Skp2)-mediated degradation of p27/p21"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4"
+            },
+            {
+              "pathway": "Drug-mediated inhibition of CDK4/CDK6 activity"
+            },
+            {
+              "pathway": "PTK6 Regulates Cell Cycle"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Senescence-Associated Secretory Phenotype (SASP)"
+            },
+            {
+              "pathway": "Meiotic recombination"
+            },
+            {
+              "pathway": "RMTs methylate histone arginines"
+            },
+            {
+              "pathway": "Transcriptional regulation of granulopoiesis"
+            },
+            {
+              "pathway": "SPOP-mediated proteasomal degradation of PD-L1(CD274)"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4"
+            },
+            {
+              "pathway": "Oncogene Induced Senescence"
+            },
+            {
+              "pathway": "Cyclin D associated events in G1"
+            },
+            {
+              "pathway": "Defective binding of RB1 mutants to E2F1,(E2F2, E2F3)"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "CDK6|breast carcinoma": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "breast carcinoma",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000105810",
+                  "approvedSymbol": "CDK6"
+                },
+                "score": 0.6834953056320341,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.2463638483133877
+                  },
+                  {
+                    "id": "rna_expression",
+                    "score": 0.0628044653054016
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.8699743018321302
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9005444943870103
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9005444943870103
+                  },
+                  {
+                    "id": "cancer_gene_census",
+                    "score": 0.8699743018321302
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.2463638483133877
+                  },
+                  {
+                    "id": "expression_atlas",
+                    "score": 0.0628044653054016
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000105810",
+          "approvedSymbol": "CDK6",
+          "approvedName": "cyclin dependent kinase 6",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Serine/threonine-protein kinase involved in the control of the cell cycle and differentiation; promotes G1/S transition. Phosphorylates pRB/RB1 and NPM1. Interacts with D-type G1 cyclins during interphase at G1 to form a pRB/RB1 kinase and controls the entrance into the cell cycle. Involved in initiation and maintenance of cell cycle exit during cell differentiation; prevents cell proliferation and negatively regulates cell differentiation, but is required for the proliferation of specific cell types (e.g. erythroid and hematopoietic cells). Essential for cell proliferation within the dentate gyrus of the hippocampus and the subventricular zone of the lateral ventricles. Required during thymocyte development. Promotes the production of newborn neurons, probably by modulating G1 length. Promotes, at least in astrocytes, changes in patterns of gene expression, changes in the actin cytoskeleton including loss of stress fibers, and enhanced motility during cell differentiation. Prevents myeloid differentiation by interfering with RUNX1 and reducing its transcription transactivation activity, but promotes proliferation of normal myeloid progenitors. Delays senescence. Promotes the proliferation of beta-cells in pancreatic islets of Langerhans. May play a role in the centrosome organization during the cell cycle phases (PubMed:23918663). {ECO:0000269|PubMed:12833137, ECO:0000269|PubMed:14985467, ECO:0000269|PubMed:15254224, ECO:0000269|PubMed:15809340, ECO:0000269|PubMed:17420273, ECO:0000269|PubMed:17431401, ECO:0000269|PubMed:20333249, ECO:0000269|PubMed:20668294, ECO:0000269|PubMed:23918663, ECO:0000269|PubMed:8114739}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Nucleus"
+            },
+            {
+              "location": "Cell projection"
+            },
+            {
+              "location": "Nucleoplasm"
+            },
+            {
+              "location": "Cytosol"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.38451001048088074,
+              "oe": 0.9413099884986877,
+              "oeLower": 0.8180000185966492,
+              "oeUpper": 1.0850000381469727
+            },
+            {
+              "constraintType": "mis",
+              "score": 3.1382999420166016,
+              "oe": 0.5413100123405457,
+              "oeLower": 0.47999998927116394,
+              "oeUpper": 0.6100000143051147
+            },
+            {
+              "constraintType": "lof",
+              "score": 0.9972800016403198,
+              "oe": 0.19599999487400055,
+              "oeLower": 0.10100000351667404,
+              "oeUpper": 0.41200000047683716
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Regulation of RUNX1 Expression and Activity"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Oxidative Stress Induced Senescence"
+            },
+            {
+              "pathway": "Oncogene Induced Senescence"
+            },
+            {
+              "pathway": "Drug-mediated inhibition of CDK4/CDK6 activity"
+            },
+            {
+              "pathway": "Cyclin D associated events in G1"
+            },
+            {
+              "pathway": "Defective binding of RB1 mutants to E2F1,(E2F2, E2F3)"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Senescence-Associated Secretory Phenotype (SASP)"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "CDK6|ovarian carcinoma": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "ovarian carcinoma",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000105810",
+                  "approvedSymbol": "CDK6"
+                },
+                "score": 0.44685775364201163,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.03495602086266821
+                  },
+                  {
+                    "id": "rna_expression",
+                    "score": 0.0772097728966843
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.7176960805137194
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.06079307976116211
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "cancer_gene_census",
+                    "score": 0.7176960805137194
+                  },
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.06079307976116211
+                  },
+                  {
+                    "id": "expression_atlas",
+                    "score": 0.0772097728966843
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.03495602086266821
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000105810",
+          "approvedSymbol": "CDK6",
+          "approvedName": "cyclin dependent kinase 6",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Serine/threonine-protein kinase involved in the control of the cell cycle and differentiation; promotes G1/S transition. Phosphorylates pRB/RB1 and NPM1. Interacts with D-type G1 cyclins during interphase at G1 to form a pRB/RB1 kinase and controls the entrance into the cell cycle. Involved in initiation and maintenance of cell cycle exit during cell differentiation; prevents cell proliferation and negatively regulates cell differentiation, but is required for the proliferation of specific cell types (e.g. erythroid and hematopoietic cells). Essential for cell proliferation within the dentate gyrus of the hippocampus and the subventricular zone of the lateral ventricles. Required during thymocyte development. Promotes the production of newborn neurons, probably by modulating G1 length. Promotes, at least in astrocytes, changes in patterns of gene expression, changes in the actin cytoskeleton including loss of stress fibers, and enhanced motility during cell differentiation. Prevents myeloid differentiation by interfering with RUNX1 and reducing its transcription transactivation activity, but promotes proliferation of normal myeloid progenitors. Delays senescence. Promotes the proliferation of beta-cells in pancreatic islets of Langerhans. May play a role in the centrosome organization during the cell cycle phases (PubMed:23918663). {ECO:0000269|PubMed:12833137, ECO:0000269|PubMed:14985467, ECO:0000269|PubMed:15254224, ECO:0000269|PubMed:15809340, ECO:0000269|PubMed:17420273, ECO:0000269|PubMed:17431401, ECO:0000269|PubMed:20333249, ECO:0000269|PubMed:20668294, ECO:0000269|PubMed:23918663, ECO:0000269|PubMed:8114739}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Nucleus"
+            },
+            {
+              "location": "Cell projection"
+            },
+            {
+              "location": "Nucleoplasm"
+            },
+            {
+              "location": "Cytosol"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.38451001048088074,
+              "oe": 0.9413099884986877,
+              "oeLower": 0.8180000185966492,
+              "oeUpper": 1.0850000381469727
+            },
+            {
+              "constraintType": "mis",
+              "score": 3.1382999420166016,
+              "oe": 0.5413100123405457,
+              "oeLower": 0.47999998927116394,
+              "oeUpper": 0.6100000143051147
+            },
+            {
+              "constraintType": "lof",
+              "score": 0.9972800016403198,
+              "oe": 0.19599999487400055,
+              "oeLower": 0.10100000351667404,
+              "oeUpper": 0.41200000047683716
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Regulation of RUNX1 Expression and Activity"
+            },
+            {
+              "pathway": "Evasion of Oncogene Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Oxidative Stress Induced Senescence"
+            },
+            {
+              "pathway": "Oncogene Induced Senescence"
+            },
+            {
+              "pathway": "Drug-mediated inhibition of CDK4/CDK6 activity"
+            },
+            {
+              "pathway": "Cyclin D associated events in G1"
+            },
+            {
+              "pathway": "Defective binding of RB1 mutants to E2F1,(E2F2, E2F3)"
+            },
+            {
+              "pathway": "Evasion of Oxidative Stress Induced Senescence Due to Defective p16INK4A binding to CDK4 and CDK6"
+            },
+            {
+              "pathway": "Senescence-Associated Secretory Phenotype (SASP)"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  }
+}
