@@ -36,17 +36,16 @@ import argparse
 import re
 import shutil
 import subprocess
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 from _common import (
-    GET_POS_SCRIPT,
     BebSite,
     LnL,
     add_common_args,
     check_tool,
     log,
+    map_sites_to_cds,
     parse_beb_sites,
     parse_lnl,
     resolve_gene,
@@ -221,41 +220,8 @@ def report_lrts(prefix: str, outdir: Path) -> None:
 
 
 # =====================================================================
-#  BEB site mapping and extraction
+#  BEB site extraction
 # =====================================================================
-
-
-_GET_POS_RE = re.compile(r"site_index:\s*(\d+)\s+CDS pos:\s*(\d+|N/A)\s+AA:\s*(\S+)")
-
-
-def map_sites_to_cds(
-    full_aln: Path,
-    trimal_cols: Path,
-    target: str,
-    sites: list[int],
-) -> dict[int, tuple[int | None, str]]:
-    """Map CodeML/trimal column indices to CDS positions in the target."""
-    if not sites:
-        return {}
-    site_arg = " ".join(str(s) for s in sites)
-    cmd = [
-        sys.executable,
-        str(GET_POS_SCRIPT),
-        str(full_aln),
-        str(trimal_cols),
-        target,
-        site_arg,
-    ]
-    result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-    mapping: dict[int, tuple[int | None, str]] = {}
-    for line in result.stdout.splitlines():
-        m = _GET_POS_RE.search(line)
-        if not m:
-            continue
-        pos = int(m.group(1))
-        cds = None if m.group(2) == "N/A" else int(m.group(2))
-        mapping[pos] = (cds, m.group(3))
-    return mapping
 
 
 def write_beb_sites_tsv(

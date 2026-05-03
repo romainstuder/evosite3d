@@ -30,7 +30,16 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-exclude = ["outputs*", "tutorials*", "ncbi_data*", "test_outputs*"]
+include = ["lib*"]
+exclude = [
+    "outputs*",
+    "tutorials*",
+    "ncbi_data*",
+    "test_outputs*",
+    "scripts*",
+    "software*",
+    "build*",
+]
 
 [tool.ruff]
 target-version = "py311"

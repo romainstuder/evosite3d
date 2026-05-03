@@ -22,7 +22,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "lib"))
-from api_utils import ENSEMBL_REST, http_get_json
+from api_utils import ENSEMBL_REST, http_get_json, http_get_text, http_post_json
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -65,14 +65,26 @@ def extract_protein_ids_from_msa(msa_path: Path) -> list[str]:
 # =====================================================================
 
 
+def _chunked(items: list[str], size: int):
+    for i in range(0, len(items), size):
+        yield items[i : i + size]
+
+
 def fetch_cds_sequences(ensembl_gene: str, protein_ids: list[str]) -> dict[str, str]:
     """Fetch CDS nucleotide sequences for a set of Ensembl protein IDs.
 
-    For each protein ID, looks up the parent transcript and then fetches
-    the coding sequence (via :func:`fetch_cds_for_protein`). Querying
-    ``/sequence/id/{protein_id}?type=cds`` directly returns the protein
-    sequence rather than the CDS, so the parent-transcript indirection
-    is required.
+    Uses Ensembl's batch POST endpoints to collapse what would otherwise be
+    ``2 * len(protein_ids)`` sequential requests into a small number of
+    batch calls:
+
+        1. ``POST /lookup/id`` (≤ 1000 IDs) maps each protein → parent
+           transcript.
+        2. ``POST /sequence/id?type=cds`` (≤ 50 IDs) fetches the CDS for
+           every transcript.
+
+    Querying ``/sequence/id/{protein_id}?type=cds`` directly returns the
+    protein sequence rather than the CDS, so the parent-transcript
+    indirection is required.
 
     Args:
         ensembl_gene: Ensembl gene ID (kept for API compatibility; currently
@@ -83,13 +95,61 @@ def fetch_cds_sequences(ensembl_gene: str, protein_ids: list[str]) -> dict[str, 
         Dict mapping protein ID to CDS nucleotide sequence string.
     """
     del ensembl_gene  # reserved for future use
+    if not protein_ids:
+        return {}
+
+    log.info(f"Start fetch_cds_sequences {protein_ids}")
+    # Step 1 — batch lookup: protein_id → transcript_id
+    # protein_ids = protein_ids[0:5]
+    prot_to_tx: dict[str, str] = {}
+    missing_lookup: list[str] = []
+    for batch in _chunked(protein_ids, 10):
+        log.info(f"batch {batch}")
+        data = http_post_json(f"{ENSEMBL_REST}/lookup/id", {"ids": batch})
+        if not isinstance(data, dict):
+            missing_lookup.extend(batch)
+            continue
+        for prot_id in batch:
+            entry = data.get(prot_id)
+            tx = entry.get("Parent") if isinstance(entry, dict) else None
+            if tx:
+                prot_to_tx[prot_id] = tx
+            else:
+                missing_lookup.append(prot_id)
+
+    # Step 2 — batch fetch CDS keyed by transcript ID
+    tx_ids = list(dict.fromkeys(prot_to_tx.values()))
+    tx_to_cds: dict[str, str] = {}
+    for batch in _chunked(tx_ids, 10):
+        log.info(f"batch {batch}")
+
+        data = http_post_json(
+            f"{ENSEMBL_REST}/sequence/id?type=cds",
+            {"ids": batch},
+        )
+        if not isinstance(data, list):
+            continue
+        for entry in data:
+            if not isinstance(entry, dict):
+                continue
+            tx_id = entry.get("id") or entry.get("query")
+            seq = entry.get("seq")
+            if tx_id and seq:
+                tx_to_cds[tx_id] = seq
+
     cds: dict[str, str] = {}
-    for prot_id in protein_ids:
+    for prot_id, tx_id in prot_to_tx.items():
+        seq = tx_to_cds.get(tx_id)
+        if seq:
+            cds[prot_id] = seq
+
+    # Step 3 — single-ID fallback for proteins missed by the batch lookup
+    # (e.g. retired IDs the batch endpoint silently drops).
+    for prot_id in missing_lookup:
         seq = fetch_cds_for_protein(prot_id)
         if seq:
             cds[prot_id] = seq
-        else:
-            log.debug("No CDS for %s", prot_id)
+
     log.info("Fetched CDS for %d / %d proteins.", len(cds), len(protein_ids))
     return cds
 
@@ -109,6 +169,7 @@ def fetch_cds_for_protein(ensembl_protein: str) -> str | None:
     if not ensembl_protein:
         return None
 
+    log.info(f"lookup/id/ensembl_protein {ensembl_protein}")
     # Get parent transcript
     url = f"{ENSEMBL_REST}/lookup/id/{ensembl_protein}"
     data = http_get_json(url)
@@ -148,8 +209,20 @@ def fetch_compara_protein_msa(ensembl_gene: str, prune_taxon: int = 7742) -> dic
         f"?aligned=1&sequence=protein&prune_taxon={prune_taxon}"
     )
     data = http_get_json(url)
-    if not data or "tree" not in data:
-        log.warning("No Compara tree returned for %s", ensembl_gene)
+    if data is None:
+        log.error(
+            "Compara MSA API call failed for %s (URL=%s) — likely transient, retry the run",
+            ensembl_gene,
+            url,
+        )
+        return {}
+    if "tree" not in data:
+        log.error(
+            "Compara MSA response for %s missing 'tree' key (URL=%s, top-level keys=%s)",
+            ensembl_gene,
+            url,
+            list(data.keys()),
+        )
         return {}
 
     msa: dict[str, str] = {}
@@ -255,19 +328,15 @@ def fetch_gene_tree_newick(ensembl_gene: str, prune_taxon: int = 7742) -> str | 
         f"{ENSEMBL_REST}/genetree/member/id/human/{ensembl_gene}"
         f"?nh_format=simple&prune_taxon={prune_taxon}"
     )
-    try:
-        req = Request(
+    text = http_get_text(url, accept="text/x-nh", timeout=120)
+    if text is None:
+        log.error(
+            "Gene tree fetch failed for %s (URL=%s) — likely transient, retry the run",
+            ensembl_gene,
             url,
-            headers={
-                "Content-Type": "text/x-nh",
-                "Accept": "text/x-nh",
-            },
         )
-        with urlopen(req, timeout=120) as resp:
-            return resp.read().decode().strip()
-    except Exception as e:
-        log.warning("Failed to fetch gene tree: %s", e)
         return None
+    return text.strip()
 
 
 # =====================================================================
