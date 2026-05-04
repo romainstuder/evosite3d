@@ -22,7 +22,6 @@ Given `$ARGUMENTS`:
 2. **Resolve.** Map to Ensembl and EFO IDs via the Open Targets search API.
 
 3. **Deep data collection.** Go beyond the standard queries — also fetch:
-
    - Genetic constraint (pLI, LOEUF from gnomAD via Open Targets)
    - Mouse phenotypes (IMPC data from Open Targets)
    - Tissue expression (baseline expression from Open Targets)
@@ -30,20 +29,17 @@ Given `$ARGUMENTS`:
    - Safety liabilities and adverse events
 
 4. **Supplementary search.** Use web search to find:
-
    - Latest clinical trial updates on ClinicalTrials.gov
    - Recent publications (last 2 years) about this target
    - Patent landscape (any composition-of-matter patents?)
    - Competitive landscape (who else is developing drugs against this target?)
 
 5. **Score.** Apply the standard rubrics, but also provide sub-scores:
-
    - Clinical: Genetic evidence sub-score + Trial evidence sub-score
    - Druggability: Structural sub-score + Chemical matter sub-score + Modality sub-score
    - Pathway: Pathway centrality sub-score + Expression sub-score + Animal model sub-score
 
 6. **Output.** Present a detailed profile card for the target including:
-
    - Summary table with all scores
    - Strengths / Weaknesses / Opportunities / Threats (SWOT) analysis
    - Comparison across diseases if multiple provided

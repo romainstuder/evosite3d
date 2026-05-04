@@ -131,7 +131,15 @@ def resolve(identifier: str, id_type: str) -> dict:
             r["sequence"] = data.get("seq")
 
     if not r["sequence"]:
-        raise ValueError(f"Cannot resolve sequence for '{identifier}' (id_type={id_type})")
+        raise ValueError(
+            f"Cannot resolve sequence for '{identifier}' (id_type={id_type}). "
+            f"Partial resolution: gene_symbol={r['gene_symbol']!r}, "
+            f"ensembl_gene={r['ensembl_gene']!r}, "
+            f"ensembl_protein={r['ensembl_protein']!r}, "
+            f"uniprot={r['uniprot']!r}. "
+            f"A None field indicates the corresponding API call returned no data — "
+            f"likely transient (Ensembl/UniProt rate-limit). Re-run with -resume."
+        )
 
     return r
 

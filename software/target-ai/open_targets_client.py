@@ -462,7 +462,8 @@ def format_narrative(results):
     sections = []
     for r in results:
         sections.append(
-            f"**{r['target']}×{r['disease']}** C{r['clinical']} D{r['druggability']} P{r['pathway']} S{r['safety']} → {r['composite']} ({r['confidence']})\n"
+            f"**{r['target']}×{r['disease']}** C{r['clinical']} D{r['druggability']}"
+            f" P{r['pathway']} S{r['safety']} → {r['composite']} ({r['confidence']})\n"
             f"  Clin: {r['clinical_reason'][:120]}\n"
             f"  Drug: {r['druggability_reason'][:120]}\n"
             f"  Path: {r['pathway_reason'][:120]}\n"
@@ -521,7 +522,8 @@ def generate_html(results, disease_name):
     unique_diseases = list(dict.fromkeys(r["disease"] for r in results))
     subtitle = (
         f"{len(unique_targets)} target(s) ({', '.join(unique_targets)}) scored against "
-        f"{len(unique_diseases)} disease(s) ({', '.join(unique_diseases)}) across 7 evidence sub-dimensions. "
+        f"{len(unique_diseases)} disease(s) ({', '.join(unique_diseases)}) across 7 evidence "
+        f"sub-dimensions. "
         f"Scores 0-5 per dimension. Weighted composite determines ranking. "
         f"Safety score of 0 = veto. Hover scores for details. Click target names for notes."
     )
@@ -542,6 +544,7 @@ def generate_html(results, disease_name):
     return html
 
 
+# ruff: disable[E501]
 def generate_pathway_html(all_pathway_data: dict) -> str:
     """Generate an interactive HTML pathway visualization for multiple targets."""
     data_json = json.dumps(all_pathway_data, indent=2)
@@ -781,6 +784,9 @@ render();
 </html>"""
 
 
+# ruff: enable[E501]
+
+
 def _make_slug(results):
     targets = list(dict.fromkeys(r["target"] for r in results))
     diseases = list(dict.fromkeys(r["disease"] for r in results))
@@ -798,10 +804,12 @@ def save_results(validation, output_dir="results"):
 
     with open(f"{output_dir}/validation_{slug}.md", "w") as f:
         f.write(
-            f"# Target Validation Report\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
+            f"# Target Validation Report\n"
+            f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
         )
         f.write(
-            f"## Summary\n\n{format_markdown_table(results)}\n\n## Details\n\n{format_narrative(results)}\n"
+            f"## Summary\n\n{format_markdown_table(results)}\n\n"
+            f"## Details\n\n{format_narrative(results)}\n"
         )
 
     if results:

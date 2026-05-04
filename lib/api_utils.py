@@ -28,8 +28,13 @@ RCSB_REST = "https://data.rcsb.org"
 # ── HTTP helpers ─────────────────────────────────────────────────
 
 
-def http_get_json(url: str, retries: int = 3, delay: float = 0.4) -> Optional[dict]:
-    """GET → parsed JSON with retry & rate-limit back-off."""
+def http_get_json(url: str, retries: int = 5, delay: float = 0.5) -> Optional[dict]:
+    """GET → parsed JSON with retry & exponential back-off.
+
+    Treats only 404 as a permanent "not found" (returns ``None`` immediately).
+    All other HTTP errors and network errors are retried with exponential
+    backoff — Ensembl in particular returns transient 400s under load.
+    """
     headers = {"Accept": "application/json", "Content-Type": "application/json"}
     for attempt in range(retries):
         try:
@@ -37,31 +42,122 @@ def http_get_json(url: str, retries: int = 3, delay: float = 0.4) -> Optional[di
             with urlopen(req, timeout=60) as resp:
                 return json.loads(resp.read().decode())
         except HTTPError as e:
-            if e.code == 429:
-                wait = delay * 2**attempt
-                log.warning("Rate-limited %s – wait %.1fs", url, wait)
-                time.sleep(wait)
-            elif e.code in (400, 404):
-                log.debug("HTTP %d: %s", e.code, url)
+            if e.code == 404:
+                log.debug("HTTP 404 (not found): %s", url)
                 return None
-            else:
-                log.warning("HTTP %d: %s (attempt %d/%d)", e.code, url, attempt + 1, retries)
-                time.sleep(delay)
+            wait = delay * 2**attempt
+            log.warning(
+                "HTTP %d on %s – retrying in %.1fs (%d/%d)",
+                e.code,
+                url,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
         except (URLError, TimeoutError, OSError) as e:
-            log.warning("Network error %s: %s (%d/%d)", url, e, attempt + 1, retries)
-            time.sleep(delay)
-    log.error("Failed after %d retries: %s", retries, url)
+            wait = delay * 2**attempt
+            log.warning(
+                "Network error on %s: %s – retrying in %.1fs (%d/%d)",
+                url,
+                e,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
+    log.error("GET failed after %d retries: %s", retries, url)
     return None
 
 
-def http_get_text(url: str, retries: int = 3, delay: float = 0.4) -> Optional[str]:
-    """GET → raw text with retry."""
+def http_post_json(
+    url: str,
+    payload: dict,
+    retries: int = 5,
+    delay: float = 0.5,
+) -> Optional[dict | list]:
+    """POST JSON → parsed JSON with retry & exponential back-off.
+
+    Same retry policy as :func:`http_get_json`: 404 is a permanent miss,
+    everything else is retried with exponential backoff.
+    """
+    headers = {"Accept": "application/json", "Content-Type": "application/json"}
+    body = json.dumps(payload).encode()
     for attempt in range(retries):
         try:
-            req = Request(url, headers={"Accept": "*/*"})
-            with urlopen(req, timeout=60) as resp:
+            req = Request(url, data=body, headers=headers, method="POST")
+            with urlopen(req, timeout=120) as resp:
+                return json.loads(resp.read().decode())
+        except HTTPError as e:
+            if e.code == 404:
+                log.debug("HTTP 404 (not found): %s", url)
+                return None
+            wait = delay * 2**attempt
+            log.warning(
+                "HTTP %d on %s – retrying in %.1fs (%d/%d)",
+                e.code,
+                url,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
+        except (URLError, TimeoutError, OSError) as e:
+            wait = delay * 2**attempt
+            log.warning(
+                "Network error on %s: %s – retrying in %.1fs (%d/%d)",
+                url,
+                e,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
+    log.error("POST failed after %d retries: %s", retries, url)
+    return None
+
+
+def http_get_text(
+    url: str,
+    retries: int = 5,
+    delay: float = 0.5,
+    accept: str = "*/*",
+    timeout: int = 60,
+) -> Optional[str]:
+    """GET → raw text with retry & exponential back-off.
+
+    Same retry policy as :func:`http_get_json`: 404 is a permanent miss,
+    everything else is retried with exponential backoff.
+    """
+    for attempt in range(retries):
+        try:
+            req = Request(url, headers={"Accept": accept})
+            with urlopen(req, timeout=timeout) as resp:
                 return resp.read().decode()
-        except (HTTPError, URLError, TimeoutError, OSError) as e:
-            log.warning("Error %s: %s (%d/%d)", url, e, attempt + 1, retries)
-            time.sleep(delay)
+        except HTTPError as e:
+            if e.code == 404:
+                log.debug("HTTP 404 (not found): %s", url)
+                return None
+            wait = delay * 2**attempt
+            log.warning(
+                "HTTP %d on %s – retrying in %.1fs (%d/%d)",
+                e.code,
+                url,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
+        except (URLError, TimeoutError, OSError) as e:
+            wait = delay * 2**attempt
+            log.warning(
+                "Network error on %s: %s – retrying in %.1fs (%d/%d)",
+                url,
+                e,
+                wait,
+                attempt + 1,
+                retries,
+            )
+            time.sleep(wait)
+    log.error("GET failed after %d retries: %s", retries, url)
     return None

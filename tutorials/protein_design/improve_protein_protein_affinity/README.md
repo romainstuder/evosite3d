@@ -30,13 +30,11 @@ This pipeline uses FoldX, an empirical force field-based method, to computationa
 1. **Interface Identification**: Locate residues at the protein-protein interface where mutations will have the greatest impact
 
 2. **Single-Point Mutagenesis Screening (PSSM)**:
-
    - Systematically mutate each interface residue to all 19 other amino acids
    - Calculate ΔΔG (change in binding free energy)
    - Negative ΔΔG indicates improved binding affinity
 
 3. **Combinatorial Optimisation**:
-
    - Combine beneficial single mutations (ΔΔG < threshold)
    - Test double and triple mutants
    - Identify synergistic or additive effects
@@ -743,7 +741,6 @@ pip install pandas numpy matplotlib seaborn biopython scipy
 ### Validation Strategy
 
 1. **Computational validation**:
-
    - Check structural clashes in mutant models
    - Verify conservation of key interactions
    - Compare multiple modeling methods (Rosetta, AlphaFold2)
