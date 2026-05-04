@@ -2,7 +2,8 @@
 
 A hands-on tutorial for computational biologists.
 
-[![Open Part 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/romainstuder/evosite3d/blob/esm2-tutorial/tutorials/esm2-mutation-effects/01_zero_shot_scoring.ipynb) **Part 1: Zero-shot scoring**
+[![Open Part 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)]
+(https://colab.research.google.com/github/romainstuder/evosite3d/blob/main/tutorials/esm2-mutation-effects/01_zero_shot_scoring.ipynb) **Part 1: Zero-shot scoring**
 
 ---
 
@@ -34,12 +35,12 @@ What lets evolution navigate this constraint is the accumulation of apparently _
 **compensatory mutations** that buy back stability ahead of, alongside, or after the
 function-altering change.
 
-We have seen the same pattern in RuBisCO, the enzyme that fixes CO₂ in photosynthesis: the
-evolution of C4 photosynthesis required destabilizing mutations near the active site, which were
-tolerated only because earlier stabilizing mutations had built up a structural "buffer," and
-were followed by compensatory mutations that restored global stability ([Studer et al. 2014][studer]).
-This pattern shapes protein evolution broadly, from natural adaptation to laboratory directed
-evolution.
+During my postdoc I worked on RuBisCO — the enzyme that fixes CO₂ in photosynthesis — and
+observed the same pattern there. The evolution of C4 photosynthesis required destabilizing
+mutations near the active site, which were tolerated only because earlier stabilizing mutations
+had built up a structural "buffer," and were followed by compensatory mutations that restored
+global stability ([Studer et al. 2014][studer]). This pattern shapes protein evolution broadly,
+from natural adaptation to laboratory directed evolution.
 
 ### TEM-1 β-lactamase as a model system
 
@@ -102,20 +103,18 @@ By the end of this tutorial, you'll have:
 - Basic understanding of transformers (helpful but not required)
 - A laptop with 8GB+ RAM, **or** a free Google Colab account
 
-Total runtime: ~1 hour for both notebooks combined.
+Runtime: ~10 minutes on a CPU laptop.
 
 ## Tutorial structure
 
 ### Part 1 — Zero-shot scoring with ESM-2
 
-uv run jupyter lab
-
-**Notebook:** `01_zero_shot_scoring.ipynb`
+**Notebook:** [`01_zero_shot_scoring.ipynb`](01_zero_shot_scoring.ipynb)
 
 We start without any training. ESM-2 was pretrained on ~65 million protein sequences using
 masked language modeling, learning a rich prior over plausible protein sequences. We can exploit
-this directly to score mutations.
-https://en.wikipedia.org/wiki/Zero-shot_learning
+this directly to score mutations — a setup known as
+[zero-shot learning](https://en.wikipedia.org/wiki/Zero-shot_learning).
 
 You'll learn to:
 
@@ -131,12 +130,7 @@ pretraining alone. But its scores are relative, not calibrated to specific exper
 
 ## How to run
 
-### Option A: Google Colab (recommended for GPU access)
-
-Click the "Open in Colab" badges at the top. The notebooks install dependencies automatically.
-For Part 2, enable GPU via **Runtime → Change runtime type → T4 GPU**.
-
-### Option B: Local installation
+### Option A: Local installation
 
 ```bash
 git clone https://github.com/romainstuder/evosite3d.git
@@ -145,11 +139,18 @@ uv sync
 uv run jupyter lab
 ```
 
-Then open the notebooks in order.
+Then open `01_zero_shot_scoring.ipynb`.
+
+### Option B: Google Colab
+
+Click the "Open in Colab" badge at the top. The notebook installs its dependencies
+automatically. A GPU is not required for Part 1 — the 35M model runs on CPU in a few minutes —
+but if you want to switch to the 650M model, enable one via
+**Runtime → Change runtime type → T4 GPU**.
 
 ## Data
 
-Both notebooks download the Firnberg et al. (2014) deep mutational scanning data from ProteinGym
+The notebook downloads the Firnberg et al. (2014) deep mutational scanning data from ProteinGym
 automatically. No manual data preparation required.
 
 ## Going further
@@ -168,8 +169,16 @@ Once you've completed this tutorial, natural next steps include:
 
 ## References
 
+> A note: several of the biology references below are from 2005–2014 — they pre-date ESM-2 by
+> a decade. That's because they come out of my own postdoc work on the stability–activity
+> tradeoff, and they remain the clearest framing of the problem I know. The biology hasn't
+> moved much since; what has moved is our ability to predict its consequences from sequence
+> alone, which is the modern half of this tutorial.
+
 - **ESM-2:** Lin et al. (2023). _Evolutionary-scale prediction of atomic-level protein structure._ Science 379(6637):1123-1130.
 - **TEM-1 DMS data:** Firnberg et al. (2014). _A comprehensive, high-resolution map of a gene's fitness landscape._ Mol Biol Evol 31(6):1581-1592.
+- **Stability–function tradeoff:** Tokuriki, Stricher, Serrano & Tawfik (2008). _How protein stability and new functions trade off._ PLoS Comput Biol 4(2):e1000002.
+- **β-lactamase mechanism:** Chen, Shoichet & Bonnet (2005). _Structure, function, and inhibition along the reaction coordinate of CTX-M β-lactamases._ J Am Chem Soc 127(15):5423-5434.
 - **RuBisCO motivation:** Studer et al. (2014). _Stability-activity tradeoffs constrain the adaptive evolution of RubisCO._ PNAS 111(6):2223-2228.
 - **ProteinGym benchmark:** Notin et al. (2023). _ProteinGym: large-scale benchmarks for protein fitness prediction._ NeurIPS Datasets and Benchmarks.
 
