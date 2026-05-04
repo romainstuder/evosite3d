@@ -2,9 +2,6 @@
 
 A hands-on tutorial for computational biologists.
 
-[![Open Part 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)]
-(https://colab.research.google.com/github/romainstuder/evosite3d/blob/main/tutorials/esm2-mutation-effects/01_zero_shot_scoring.ipynb) **Part 1: Zero-shot scoring**
-
 ---
 
 ## Why this tutorial?
@@ -132,8 +129,9 @@ pretraining alone. But its scores are relative, not calibrated to specific exper
 
 ### Option A: Local installation
 
+Instructions to install dependencies are [here](../../INSTALL.md)
+
 ```bash
-git clone https://github.com/romainstuder/evosite3d.git
 cd evosite3d/tutorials/esm2-mutation-effects
 uv sync
 uv run jupyter lab
@@ -143,10 +141,12 @@ Then open `01_zero_shot_scoring.ipynb`.
 
 ### Option B: Google Colab
 
-Click the "Open in Colab" badge at the top. The notebook installs its dependencies
+Click the "Open in Colab" badge below. The notebook installs its dependencies
 automatically. A GPU is not required for Part 1 — the 35M model runs on CPU in a few minutes —
 but if you want to switch to the 650M model, enable one via
 **Runtime → Change runtime type → T4 GPU**.
+
+[![Open Part 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/romainstuder/evosite3d/blob/main/tutorials/esm2-mutation-effects/01_zero_shot_scoring.ipynb) **Part 1: Zero-shot scoring**
 
 ## Data
 
