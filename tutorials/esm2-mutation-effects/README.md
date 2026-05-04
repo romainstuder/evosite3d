@@ -4,14 +4,15 @@ A hands-on tutorial for computational biologists.
 
 [![Open Part 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/romainstuder/evosite3d/blob/esm2-tutorial/tutorials/esm2-mutation-effects/01_zero_shot_scoring.ipynb) **Part 1: Zero-shot scoring**
 
-[![Open Part 2 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/romainstuder/evosite3d/blob/esm2-tutorial/tutorials/esm2-mutation-effects/02_fine_tuning.ipynb) **Part 2: Fine-tuning**
-
 ---
 
 ## Why this tutorial?
 
 Proteins evolve under competing pressures: they must remain stably folded while also performing
-their function. (ADD TAWFIK)
+their function.
+Ref:
+https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000002
+https://pmc.ncbi.nlm.nih.gov/articles/PMC1360657/
 
 In a previous study of RuBisCO, the enzyme that fixes CO₂ during photosynthesis,
 illustrates this tension elegantly, showed that the evolution of C4 photosynthesis required
