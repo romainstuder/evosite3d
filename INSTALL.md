@@ -86,7 +86,8 @@ git clone https://github.com/romainstuder/evosite3d.git
 cd evosite3d
 
 # Create environments
-uv venv
+uv python install 3.11
+uv venv --python 3.11
 source .venv/bin/activate
 
 # Install packages
