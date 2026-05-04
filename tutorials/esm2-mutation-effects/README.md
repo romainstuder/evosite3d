@@ -8,29 +8,85 @@ A hands-on tutorial for computational biologists.
 
 ## Why this tutorial?
 
-Proteins evolve under competing pressures: they must remain stably folded while also performing
-their function.
-Ref:
-https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000002
-https://pmc.ncbi.nlm.nih.gov/articles/PMC1360657/
+### The stability–activity tradeoff
 
-In a previous study of RuBisCO, the enzyme that fixes CO₂ during photosynthesis,
-illustrates this tension elegantly, showed that the evolution of C4 photosynthesis required
-destabilizing mutations near the active site, which were tolerated only because earlier
-stabilizing mutations had built up a structural "buffer," and were followed by compensatory
-mutations that restored global stability. This stability-activity tradeoff shapes protein
-evolution broadly, from natural adaptation to laboratory directed evolution. (Reference Studer
-et al. (2014) https://www.pnas.org/doi/10.1073/pnas.1310811111)
+Proteins live under two competing pressures. They must remain **stably folded** in their cellular
+environment, and they must **perform a function** — bind a substrate, catalyze a reaction, signal
+to a partner. These two requirements pull in opposite directions at the residue level:
+
+- **Stability** is a global property. It comes from a network of well-packed hydrophobic cores,
+  satisfied hydrogen bonds, and favorable electrostatics distributed across the fold. Most random
+  mutations chip away at this network — the average single mutation costs roughly +1 kcal/mol of
+  unfolding free energy ([Tokuriki et al. 2008][tokuriki]).
+- **Activity** is local and chemically demanding. Catalytic residues are typically charged or
+  polar groups placed in geometrically strained, often desolvated positions — exactly the
+  configurations the folding energy "wants" to avoid. The same residues that make the active site
+  reactive also make it a stability liability ([Chen et al. 2005][chen] dissect this for the
+  CTX-M β-lactamase, where catalytic Lys73 and Glu166 sit in a strained, water-mediated
+  geometry).
+
+The consequence is a **stability–activity tradeoff**: mutations that introduce or refine activity
+are frequently _destabilizing_, and mutations that stabilize the fold are often _neutral or
+slightly deleterious for activity_. Tokuriki and Tawfik analyzed 548 function-altering mutations
+across 22 enzymes and found them, on average, to be no more destabilizing than random mutations —
+roughly +0.9 kcal/mol — but this is enough that, without compensation, the protein would unfold.
+What lets evolution navigate this constraint is the accumulation of apparently _silent_
+**compensatory mutations** that buy back stability ahead of, alongside, or after the
+function-altering change.
+
+We have seen the same pattern in RuBisCO, the enzyme that fixes CO₂ in photosynthesis: the
+evolution of C4 photosynthesis required destabilizing mutations near the active site, which were
+tolerated only because earlier stabilizing mutations had built up a structural "buffer," and
+were followed by compensatory mutations that restored global stability ([Studer et al. 2014][studer]).
+This pattern shapes protein evolution broadly, from natural adaptation to laboratory directed
+evolution.
+
+### TEM-1 β-lactamase as a model system
 
 In this tutorial, we explore the same phenomenon in a system with much richer experimental data:
 **TEM-1 β-lactamase**, the enzyme responsible for bacterial resistance to penicillin-class
 antibiotics. Firnberg et al. (2014) measured the fitness effect of nearly every possible single
 mutation in TEM-1 by growing mutant libraries under ampicillin selection — giving us
-experimental ground truth for ~5,000 variants, including classic examples of the tradeoff (G238S
-extends the substrate range but destabilizes; M182T compensates).
+experimental ground truth for ~5,000 variants, including textbook examples of the tradeoff:
+**G238S** extends the substrate range to third-generation cephalosporins but destabilizes the
+fold; **M182T** is the canonical compensatory mutation that restores stability without changing
+activity.
+
+### Where ESM-2 comes in
+
+[ESM-2][esm2] (Evolutionary Scale Modeling, v2) is a family of protein **language models**
+released by Meta AI in 2022–2023. Architecturally, it is a transformer encoder — the same kind
+of model as BERT — but trained on protein sequences instead of natural language. The training
+objective is **masked language modeling**: random residues are hidden, and the model learns to
+reconstruct them from surrounding context. The training corpus is ~65 million unique sequences
+from UniRef50, spanning the full diversity of life.
+
+Because the model has to predict masked residues across this corpus, it implicitly learns:
+
+- which residues are **conserved** in a given structural or functional context,
+- which **substitutions** are evolutionarily acceptable at a given position,
+- and longer-range dependencies between positions (co-evolution, contacts, motifs).
+
+In other words, ESM-2's predicted distribution at a masked position is a learned **evolutionary
+prior** — a compressed summary of the substitutions that nature has tolerated in similar
+contexts across billions of years. ESM-2 ships in several sizes, from 8M to 15B parameters
+(the largest, ESM-2 3B and 15B, were used in ESMFold for structure prediction). For this
+tutorial we use the smallest practical model, **ESM-2 35M** (`esm2_t12_35M_UR50D`), which fits on
+a CPU laptop; the 650M variant gives sharper predictions if you have a GPU.
+
+The key idea we exploit is this: if a mutation is destabilizing, function-disrupting, or simply
+unprecedented in evolution, ESM-2 should assign it a **lower likelihood** than the wild-type
+residue. We never train it on TEM-1 fitness data; we just read off the probabilities it learned
+during pretraining. This is the **zero-shot** setting.
 
 **Our central question:** Can ESM-2, a protein language model trained only on sequences, predict
-which mutations preserve, break, or enhance TEM-1 function?
+which mutations preserve, break, or enhance TEM-1 function — and how does its signal relate to
+the stability–activity tradeoff above?
+
+[tokuriki]: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000002
+[chen]: https://pmc.ncbi.nlm.nih.gov/articles/PMC1360657/
+[studer]: https://www.pnas.org/doi/10.1073/pnas.1310811111
+[esm2]: https://www.science.org/doi/10.1126/science.ade2574
 
 ## What you'll learn
 
