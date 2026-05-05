@@ -73,15 +73,12 @@ virtual environment automatically — do not create or activate `.venv` yourself
 ```shell
 # Pin the interpreter the project expects (one-time)
 uv python install 3.12
-```
 
 # Install runtime dependencies into a managed .venv
-
-```shell
 uv sync
 ```
 
-# Run anything Python-related through `uv run`:
+Run anything Python-related through `uv run`:
 
 ```shell
 uv run jupyter lab
