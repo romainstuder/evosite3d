@@ -6,6 +6,7 @@ dependencies = [
     "accelerate>=0.30",
     "biopython>=1.85",
     "datasets>=2.18",
+    "esm>=3.2.3",
     "jupyter>=1.0",
     "jupyterlab>=1.0",
     "matplotlib>=3.7",
