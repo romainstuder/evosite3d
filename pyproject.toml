@@ -46,4 +46,4 @@ select = ["E", "F", "W", "I"]
 ignore = ["E501"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["scripts/tests", "software/tests", "tutorials/tests"]
