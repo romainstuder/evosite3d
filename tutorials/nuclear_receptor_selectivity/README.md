@@ -26,10 +26,9 @@ These six proteins form the NR3 subfamily and split into two groups:
 
 Within each group there is real cross-reactivity, and across groups there is little. Concrete examples:
 
-- ERα vs ERβ: pockets differ by only two residues; many ligands hit both. Selective ligands (DPN for ERβ, PPT for ERα are pharmacologically valuable.
+- ERα vs ERβ: pockets differ by only two residues; many ligands hit both. Selective ligands (DPN for ERβ, PPT for ERα) are pharmacologically valuable.
 - AR vs PR: progesterone is a partial AR ligand; many AR antagonists hit PR.
-- GR vs MR: pockets are extremely similar; spironolactone (an MR antagonist) hits AR and PR; aldosterone is the only
-- well-discriminated MR ligand.
+- GR vs MR: pockets are extremely similar; spironolactone (an MR antagonist) hits AR and PR; aldosterone is the only well-discriminated MR ligand.
 - ER vs the 3-ketosteroid group: very little overlap.
 
 A model that has actually learned chemistry should reproduce this block structure: ERα and ERβ as one cluster,
@@ -73,11 +72,26 @@ return loss.sum() / mask.sum()
 
 Six receptors makes the masked-loss benefit even more pronounced: the shared trunk sees every molecule regardless of which receptor it was tested on, and learns a single representation of "steroid-like chemistry" that all heads draw on.
 
-### 3. What "binder" means
+### 3. Preventing data leakage with Tanimoto filtering
+
+ChEMBL contains the canonical reference ligands (estradiol, cortisol, aldosterone, etc.) and many
+close analogs. With a random train/test split, a model could appear to "predict" these ligands
+correctly simply by memorizing near-duplicates seen during training.
+
+To make the canonical-ligand evaluation a real test of generalization, the notebook removes
+all molecules with Tanimoto similarity ≥ 0.7 (Morgan/ECFP4) to any canonical reference ligand
+before training. This typically removes a few hundred molecules out of ~10k — small in volume
+but high-leverage, because the remaining training set must teach the model "what makes an ER
+ligand" or "what makes an MR ligand" without seeing the canonical molecules themselves.
+
+The Tanimoto-vs-prediction diagnostic plot at the end of the notebook then quantifies how much
+each canonical-ligand prediction depends on having close training neighbors.
+
+### 4. What "binder" means
 
 Bioactivity comes as IC50, Ki, Kd, or EC50 in nM. We convert to a pActivity (`-log10` of molar concentration) and call anything with pActivity ≥ 6 (≤ 1 µM) a binder. This is a coarse threshold but standard in cheminformatics, and the masked-loss machinery generalizes if you want to do regression instead.
 
-### 4. The selectivity story
+### 5. The selectivity story
 
 When you embed test molecules with the trained network and run t-SNE, expect to see:
 
@@ -85,7 +99,7 @@ When you embed test molecules with the trained network and run t-SNE, expect to 
 - A larger **3-ketosteroid cluster** (AR + PR + GR + MR ligands) — classic steroid scaffolds
 - Within the 3-ketosteroid blob, sub-structure: AR ligands somewhat distinct (DHT-like), GR/MR strongly overlapping, PR sitting in between
 
-The ERα/ERβ ligands will be hard to separate from each other within the ER cluster — that is the model honestly representing the biology, not a bug. Same for GR/MR.
+The ERα/ERβ ligands will be hard to separate from each other within the ER cluster — that is the model honestly representing the biology, not a bug. Same for GR/MR — and MR especially, given its near-identical pocket to GR and smaller dataset, is consistently the hardest task in this tutorial.
 
 ## Expected results
 
@@ -100,6 +114,8 @@ After 50 epochs on a typical ChEMBL pull, AUROCs roughly follow data volume and 
 | ERβ      | 0.75–0.85      | Less data, very similar to ERα |
 | MR       | 0.65–0.75      | Least data, very similar to GR |
 
+Exact numbers will vary between runs because training is stochastic (no global random seed is set for PyTorch/NumPy, only for the train/val/test split). The big-picture pattern — ER and GR strong, AR/PR/ERβ middling, MR hardest — is stable; specific cell values in the canonical-ligand clustermap can shift by ±0.10 between runs, especially for MR.
+
 A scaffold split (instead of random) typically gives a more conservative estimate of generalization,
 since structurally related molecules are forced into different splits. AUROCs commonly drop by
 roughly 0.05–0.10 under that setup, though the exact gap depends on the dataset and on the
@@ -112,8 +128,7 @@ A nice diagnostic with six receptors: compute Pearson correlations between predi
 - **High correlation within blocks** (ERα↔ERβ, GR↔MR, AR↔PR predictions correlate)
 - **Low correlation across blocks** (ER vs 3-ketosteroid predictions decorrelate)
 
-The notebook computes and plots this 6×6 matrix. The NR3A / NR3C block structure should pop out
-clearly — the model reconstructs the subfamily split purely from ligand chemistry.
+The notebook computes and plots this 6×6 matrix. Within-subfamily correlations (especially ERα↔ERβ) tend to be the most stable across runs; the broader NR3A/NR3C block structure is suggestive but depends on the specific run.
 
 ## Running on Apple Silicon
 
@@ -128,7 +143,7 @@ The notebook caches each target separately to parquet so you can resume if it's 
 
 ## Setup
 
-Instructions to install dependencies are [here](../../INSTALL.md)
+Instructions to install dependencies are [here](../../INSTALL.md).
 
 ```bash
 cd evosite3d/tutorials/nuclear_receptor_selectivity
