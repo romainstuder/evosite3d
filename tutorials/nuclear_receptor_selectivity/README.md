@@ -117,12 +117,11 @@ clearly — the model reconstructs the subfamily split purely from ligand chemis
 
 ## Running on Apple Silicon
 
-The notebook runs comfortably on an M1 MacBook with 16 GB RAM:
+The notebook runs on an M1 MacBook with 16 GB RAM:
 
 - Dataset: ~10–20k unique molecules across all six receptors
 - Model: ~55k parameters
-- Training: 5–10 minutes on CPU; MPS optional
-- Peak RAM: well under 1 GB
+- Training: ~30 minutes on CPU; MPS optional
 
 One slow step is the initial ChEMBL API pull (10–15 minutes for six targets, network-bound).
 The notebook caches each target separately to parquet so you can resume if it's interrupted.
