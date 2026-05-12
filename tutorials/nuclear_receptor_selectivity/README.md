@@ -26,12 +26,14 @@ These six proteins form the NR3 subfamily and split into two groups:
 
 Within each group there is real cross-reactivity, and across groups there is little. Concrete examples:
 
-- ERα vs ERβ: pockets differ by only two residues; many ligands hit both. Selective ligands (DPN for ERβ, PPT for ERα) are pharmacologically valuable.
+- ERα vs ERβ: pockets differ by only two residues; many ligands hit both. Selective ligands (DPN for ERβ, PPT for ERα are pharmacologically valuable.
 - AR vs PR: progesterone is a partial AR ligand; many AR antagonists hit PR.
-- GR vs MR: pockets are extremely similar; spironolactone (an MR antagonist) hits AR and PR; aldosterone is the only well-discriminated MR ligand.
+- GR vs MR: pockets are extremely similar; spironolactone (an MR antagonist) hits AR and PR; aldosterone is the only
+- well-discriminated MR ligand.
 - ER vs the 3-ketosteroid group: very little overlap.
 
-A model that has actually learned chemistry should reproduce this block structure: ERα and ERβ as one cluster, AR/PR/GR/MR as another, with cross-block confusion being rare.
+A model that has actually learned chemistry should reproduce this block structure: ERα and ERβ as one cluster,
+AR/PR/GR/MR as another, with cross-block confusion being rare.
 
 ## What you will build
 
@@ -105,8 +107,7 @@ scaffold-clustering choices. The tutorial uses a random split for simplicity.
 
 ## The cross-reactivity matrix
 
-A nice diagnostic with six receptors: compute Pearson correlations between predicted
-probabilities across receptors. You should see:
+A nice diagnostic with six receptors: compute Pearson correlations between predicted probabilities across receptors. You should see:
 
 - **High correlation within blocks** (ERα↔ERβ, GR↔MR, AR↔PR predictions correlate)
 - **Low correlation across blocks** (ER vs 3-ketosteroid predictions decorrelate)
@@ -123,12 +124,16 @@ The notebook runs comfortably on an M1 MacBook with 16 GB RAM:
 - Training: 5–10 minutes on CPU; MPS optional
 - Peak RAM: well under 1 GB
 
-The slowest step is the initial ChEMBL API pull (10–15 minutes for six targets, network-bound).
+One slow step is the initial ChEMBL API pull (10–15 minutes for six targets, network-bound).
 The notebook caches each target separately to parquet so you can resume if it's interrupted.
 
 ## Setup
 
+Instructions to install dependencies are [here](../../INSTALL.md)
+
 ```bash
+cd evosite3d/tutorials/nuclear_receptor_selectivity
+uv sync
 uv run jupyter lab nuclear_receptor_selectivity.ipynb
 ```
 
