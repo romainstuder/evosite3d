@@ -34,6 +34,8 @@ _Figure: Multiple sequence alignment of Ebola virus glycoprotein sequences showi
 
 **Disulfide Bridge Preserved**: Cysteines at positions **511** and **556** are identical in both strains (C511C, C556C). This disulfide bond is conserved across comparison, suggesting structural constraints may limit mutation in this region.
 
+![Structure](image_structure.png)
+
 ### Regional Clustering
 
 The **GP1-GP2 junction region (positions 503-509)** contains the highest density of sequence variation, with differences at 6 of 7 positions in this cluster. Several of these changes involve significant chemical shifts:
