@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(python3 open_targets_client.py *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(pip3 install *)",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(curl *)",
+      "Bash(python3 -c *)",
+      "Bash(python -c *)"
+    ]
+  }
+}

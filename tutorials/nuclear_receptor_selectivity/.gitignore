@@ -1,0 +1,5 @@
+chembl_cache/
+canonical_smiles.json
+best_model.pt
+__pycache__/
+.ipynb_checkpoints/

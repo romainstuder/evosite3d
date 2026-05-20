@@ -1,0 +1,1277 @@
+{
+  "JAK1|rheumatoid arthritis": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "rheumatoid arthritis",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000162434",
+                  "approvedSymbol": "JAK1"
+                },
+                "score": 0.6903808968126417,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.3785285514892235
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.2584313820647001
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.5291414251952968
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9916966583306238
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9916966583306238
+                  },
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.5291414251952968
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.3785285514892235
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.2584313820647001
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000162434",
+          "approvedSymbol": "JAK1",
+          "approvedName": "Janus kinase 1",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Tyrosine kinase of the non-receptor type, involved in the IFN-alpha/beta/gamma signal pathway (PubMed:16239216, PubMed:28111307, PubMed:32750333, PubMed:7615558, PubMed:8232552). Kinase partner for the interleukin (IL)-2 receptor (PubMed:11909529) as well as interleukin (IL)-10 receptor (PubMed:12133952). Kinase partner for the type I interferon receptor IFNAR2 (PubMed:16239216, PubMed:28111307, PubMed:32750333, PubMed:7615558, PubMed:8232552). In response to interferon-binding to IFNAR1-IFNAR2 heterodimer, phosphorylates and activates its binding partner IFNAR2, creating docking sites for STAT proteins (PubMed:7759950). Directly phosphorylates STAT proteins but also activates STAT signaling through the transactivation of other JAK kinases associated with signaling receptors (PubMed:16239216, PubMed:32750333, PubMed:8232552). {ECO:0000269|PubMed:11909529, ECO:0000269|PubMed:12133952, ECO:0000269|PubMed:16239216, ECO:0000269|PubMed:28111307, ECO:0000269|PubMed:32750333, ECO:0000269|PubMed:7615558, ECO:0000269|PubMed:7657660, ECO:0000269|PubMed:8232552}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Endomembrane system"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.9205099940299988,
+              "oe": 0.9243000149726868,
+              "oeLower": 0.8560000061988831,
+              "oeUpper": 0.9980000257492065
+            },
+            {
+              "constraintType": "mis",
+              "score": 5.868800163269043,
+              "oe": 0.5665900111198425,
+              "oeLower": 0.5329999923706055,
+              "oeUpper": 0.6010000109672546
+            },
+            {
+              "constraintType": "lof",
+              "score": 1,
+              "oe": 0.1058799996972084,
+              "oeLower": 0.06800000369548798,
+              "oeUpper": 0.1679999977350235
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Interleukin-35 Signalling"
+            },
+            {
+              "pathway": "Interleukin-10 signaling"
+            },
+            {
+              "pathway": "Interleukin-7 signaling"
+            },
+            {
+              "pathway": "Interleukin-9 signaling"
+            },
+            {
+              "pathway": "Interferon alpha/beta signaling"
+            },
+            {
+              "pathway": "Interleukin-6 signaling"
+            },
+            {
+              "pathway": "MAPK3 (ERK1) activation"
+            },
+            {
+              "pathway": "RAF/MAP kinase cascade"
+            },
+            {
+              "pathway": "Inactivation of CSF3 (G-CSF) signaling"
+            },
+            {
+              "pathway": "Interleukin-27 signaling"
+            },
+            {
+              "pathway": "Interferon gamma signaling"
+            },
+            {
+              "pathway": "Interleukin-4 and Interleukin-13 signaling"
+            },
+            {
+              "pathway": "Interleukin-20 family signaling"
+            },
+            {
+              "pathway": "Interleukin-12 signaling"
+            },
+            {
+              "pathway": "SARS-CoV-2 activates/modulates innate and adaptive immune responses"
+            },
+            {
+              "pathway": "IFNG signaling activates MAPKs"
+            },
+            {
+              "pathway": "Evasion by RSV of host interferon responses"
+            },
+            {
+              "pathway": "Interleukin-15 signaling"
+            },
+            {
+              "pathway": "Regulation of IFNG signaling"
+            },
+            {
+              "pathway": "Potential therapeutics for SARS"
+            },
+            {
+              "pathway": "Regulation of IFNA/IFNB signaling"
+            },
+            {
+              "pathway": "IL-6-type cytokine receptor ligand interactions"
+            },
+            {
+              "pathway": "Interleukin-2 signaling"
+            },
+            {
+              "pathway": "ISG15 antiviral mechanism"
+            },
+            {
+              "pathway": "MAPK1 (ERK2) activation"
+            },
+            {
+              "pathway": "Interleukin-21 signaling"
+            },
+            {
+              "pathway": "Signaling by CSF3 (G-CSF)"
+            },
+            {
+              "pathway": "Other interleukin signaling"
+            },
+            {
+              "pathway": "Interleukin receptor SHC signaling"
+            },
+            {
+              "pathway": "PD-L1(CD274) glycosylation and translocation to plasma membrane"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "JAK2|rheumatoid arthritis": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "rheumatoid arthritis",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000096968",
+                  "approvedSymbol": "JAK2"
+                },
+                "score": 0.6934326771029184,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.4508261645295845
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.3603205837444078
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.5377736259951232
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9916783263329138
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9916783263329138
+                  },
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.5377736259951232
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.4508261645295845
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.3603205837444078
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000096968",
+          "approvedSymbol": "JAK2",
+          "approvedName": "Janus kinase 2",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Non-receptor tyrosine kinase involved in various processes such as cell growth, development, differentiation or histone modifications. Mediates essential signaling events in both innate and adaptive immunity. In the cytoplasm, plays a pivotal role in signal transduction via its association with type I receptors such as growth hormone (GHR), prolactin (PRLR), leptin (LEPR), erythropoietin (EPOR), thrombopoietin receptor (MPL/TPOR); or type II receptors including IFN- alpha, IFN-beta, IFN-gamma and multiple interleukins (PubMed:15690087, PubMed:7615558, PubMed:9657743, PubMed:15899890). Following ligand- binding to cell surface receptors, phosphorylates specific tyrosine residues on the cytoplasmic tails of the receptor, creating docking sites for STATs proteins (PubMed:15690087, PubMed:9618263). Subsequently, phosphorylates the STATs proteins once they are recruited to the receptor. Phosphorylated STATs then form homodimer or heterodimers and translocate to the nucleus to activate gene transcription. For example, cell stimulation with erythropoietin (EPO) during erythropoiesis leads to JAK2 autophosphorylation, activation, and its association with erythropoietin receptor (EPOR) that becomes phosphorylated in its cytoplasmic domain (PubMed:9657743). Then, STAT5 (STAT5A or STAT5B) is recruited, phosphorylated and activated by JAK2. Once activated, dimerized STAT5 translocates into the nucleus and promotes the transcription of several essential genes involved in the modulation of erythropoiesis. Part of a signaling cascade that is activated by increased cellular retinol and that leads to the activation of STAT5 (STAT5A or STAT5B) (PubMed:21368206). In addition, JAK2 mediates angiotensin-2-induced ARHGEF1 phosphorylation (PubMed:20098430). Plays a role in cell cycle by phosphorylating CDKN1B (PubMed:21423214). Cooperates with TEC through reciprocal phosphorylation to mediate cytokine-driven activation of FOS transcription. In the nucleus, plays a key role in chromatin by specifically mediating phosphorylation of 'Tyr-41' of histone H3 (H3Y41ph), a specific tag that promotes exclusion of CBX5 (HP1 alpha) from chromatin (PubMed:19783980). Up-regulates the potassium voltage- gated channel activity of KCNA3 (PubMed:25644777). {ECO:0000269|PubMed:12023369, ECO:0000269|PubMed:15690087, ECO:0000269|PubMed:19783980, ECO:0000269|PubMed:20098430, ECO:0000269|PubMed:21368206, ECO:0000269|PubMed:21423214, ECO:0000269|PubMed:25644777, ECO:0000269|PubMed:7615558, ECO:0000269|PubMed:9618263, ECO:0000269|PubMed:9657743}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Endomembrane system"
+            },
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Nucleoplasm"
+            },
+            {
+              "location": "Focal adhesion sites"
+            },
+            {
+              "location": "Plasma membrane"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": -0.551639974117279,
+              "oe": 1.0742000341415405,
+              "oeLower": 0.9559999704360962,
+              "oeUpper": 1.2079999446868896
+            },
+            {
+              "constraintType": "mis",
+              "score": -0.0299919992685318,
+              "oe": 1.003499984741211,
+              "oeLower": 0.9359999895095825,
+              "oeUpper": 1.0759999752044678
+            },
+            {
+              "constraintType": "lof",
+              "score": 2.2543999875779264e-06,
+              "oe": 0.6217700242996216,
+              "oeLower": 0.4620000123977661,
+              "oeUpper": 0.8479999899864197
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Signaling by SCF-KIT"
+            },
+            {
+              "pathway": "Interleukin-35 Signalling"
+            },
+            {
+              "pathway": "Signaling by phosphorylated juxtamembrane, extracellular and kinase domain KIT mutants"
+            },
+            {
+              "pathway": "MAPK3 (ERK1) activation"
+            },
+            {
+              "pathway": "Interleukin-6 signaling"
+            },
+            {
+              "pathway": "Signaling by BRAF and RAF1 fusions"
+            },
+            {
+              "pathway": "Signaling by RAF1 mutants"
+            },
+            {
+              "pathway": "RAF/MAP kinase cascade"
+            },
+            {
+              "pathway": "Inactivation of CSF3 (G-CSF) signaling"
+            },
+            {
+              "pathway": "Paradoxical activation of RAF signaling by kinase inactive BRAF"
+            },
+            {
+              "pathway": "Signaling downstream of RAS mutants"
+            },
+            {
+              "pathway": "Interleukin-27 signaling"
+            },
+            {
+              "pathway": "Interferon gamma signaling"
+            },
+            {
+              "pathway": "Interleukin-4 and Interleukin-13 signaling"
+            },
+            {
+              "pathway": "Interleukin-20 family signaling"
+            },
+            {
+              "pathway": "Interleukin-12 signaling"
+            },
+            {
+              "pathway": "Interleukin-23 signaling"
+            },
+            {
+              "pathway": "IFNG signaling activates MAPKs"
+            },
+            {
+              "pathway": "Erythropoietin activates Phospholipase C gamma (PLCG)"
+            },
+            {
+              "pathway": "Regulation of IFNG signaling"
+            },
+            {
+              "pathway": "Prolactin receptor signaling"
+            },
+            {
+              "pathway": "Potential therapeutics for SARS"
+            },
+            {
+              "pathway": "IL-6-type cytokine receptor ligand interactions"
+            },
+            {
+              "pathway": "Erythropoietin activates STAT5"
+            },
+            {
+              "pathway": "MAPK1 (ERK2) activation"
+            },
+            {
+              "pathway": "Factors involved in megakaryocyte development and platelet production"
+            },
+            {
+              "pathway": "RMTs methylate histone arginines"
+            },
+            {
+              "pathway": "RAF activation"
+            },
+            {
+              "pathway": "Signaling by Erythropoietin"
+            },
+            {
+              "pathway": "Erythropoietin activates Phosphoinositide-3-kinase (PI3K)"
+            },
+            {
+              "pathway": "Growth hormone receptor signaling"
+            },
+            {
+              "pathway": "Signaling by Leptin"
+            },
+            {
+              "pathway": "Interleukin-3, Interleukin-5 and GM-CSF signaling"
+            },
+            {
+              "pathway": "Signaling by CSF3 (G-CSF)"
+            },
+            {
+              "pathway": "Erythropoietin activates RAS"
+            },
+            {
+              "pathway": "Cyclin D associated events in G1"
+            },
+            {
+              "pathway": "Interleukin receptor SHC signaling"
+            },
+            {
+              "pathway": "Signaling by moderate kinase activity BRAF mutants"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "JAK3|rheumatoid arthritis": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "rheumatoid arthritis",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000105639",
+                  "approvedSymbol": "JAK3"
+                },
+                "score": 0.618253481113395,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.3386335634265732
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.4085531377482498
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9890271833412604
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9890271833412604
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.4085531377482498
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.3386335634265732
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000105639",
+          "approvedSymbol": "JAK3",
+          "approvedName": "Janus kinase 3",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Non-receptor tyrosine kinase involved in various processes such as cell growth, development, or differentiation. Mediates essential signaling events in both innate and adaptive immunity and plays a crucial role in hematopoiesis during T-cells development. In the cytoplasm, plays a pivotal role in signal transduction via its association with type I receptors sharing the common subunit gamma such as IL2R, IL4R, IL7R, IL9R, IL15R and IL21R. Following ligand binding to cell surface receptors, phosphorylates specific tyrosine residues on the cytoplasmic tails of the receptor, creating docking sites for STATs proteins. Subsequently, phosphorylates the STATs proteins once they are recruited to the receptor. Phosphorylated STATs then form homodimer or heterodimers and translocate to the nucleus to activate gene transcription. For example, upon IL2R activation by IL2, JAK1 and JAK3 molecules bind to IL2R beta (IL2RB) and gamma chain (IL2RG) subunits inducing the tyrosine phosphorylation of both receptor subunits on their cytoplasmic domain. Then, STAT5A and STAT5B are recruited, phosphorylated and activated by JAK1 and JAK3. Once activated, dimerized STAT5 translocates to the nucleus and promotes the transcription of specific target genes in a cytokine-specific fashion. {ECO:0000269|PubMed:11909529, ECO:0000269|PubMed:20440074, ECO:0000269|PubMed:7662955, ECO:0000269|PubMed:8022485}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Endomembrane system"
+            },
+            {
+              "location": "Cytosol"
+            },
+            {
+              "location": "Plasma membrane"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.06834299862384796,
+              "oe": 0.9948599934577942,
+              "oeLower": 0.9290000200271606,
+              "oeUpper": 1.065000057220459
+            },
+            {
+              "constraintType": "mis",
+              "score": 1.6785999536514282,
+              "oe": 0.8783100247383118,
+              "oeLower": 0.8379999995231628,
+              "oeUpper": 0.9200000166893005
+            },
+            {
+              "constraintType": "lof",
+              "score": 1.5795000606945728e-23,
+              "oe": 0.7816799879074097,
+              "oeLower": 0.6570000052452087,
+              "oeUpper": 0.9330000281333923
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Interleukin-21 signaling"
+            },
+            {
+              "pathway": "Signaling by ALK"
+            },
+            {
+              "pathway": "Interleukin-7 signaling"
+            },
+            {
+              "pathway": "Interleukin-9 signaling"
+            },
+            {
+              "pathway": "Interleukin-15 signaling"
+            },
+            {
+              "pathway": "Potential therapeutics for SARS"
+            },
+            {
+              "pathway": "Interleukin-20 family signaling"
+            },
+            {
+              "pathway": "Interleukin-4 and Interleukin-13 signaling"
+            },
+            {
+              "pathway": "RAF/MAP kinase cascade"
+            },
+            {
+              "pathway": "Interleukin receptor SHC signaling"
+            },
+            {
+              "pathway": "Interleukin-2 signaling"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  },
+  "TYK2|rheumatoid arthritis": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "rheumatoid arthritis",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000105397",
+                  "approvedSymbol": "TYK2"
+                },
+                "score": 0.7517870740478155,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.7819688254142984
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.9206099686872204
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9891030741032509
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9891030741032509
+                  },
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.9206099686872204
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.7819688254142984
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000105397",
+          "approvedSymbol": "TYK2",
+          "approvedName": "tyrosine kinase 2",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Tyrosine kinase of the non-receptor type involved in numerous cytokines and interferons signaling, which regulates cell growth, development, cell migration, innate and adaptive immunity (PubMed:10542297, PubMed:10995743, PubMed:7657660, PubMed:7813427, PubMed:8232552). Plays both structural and catalytic roles in numerous interleukins and interferons (IFN-alpha/beta) signaling (PubMed:10542297). Associates with heterodimeric cytokine receptor complexes and activates STAT family members including STAT1, STAT3, STAT4 or STAT6 (PubMed:10542297, PubMed:7638186). The heterodimeric cytokine receptor complexes are composed of (1) a TYK2-associated receptor chain (IFNAR1, IL12RB1, IL10RB or IL13RA1), and (2) a second receptor chain associated either with JAK1 or JAK2 (PubMed:10542297, PubMed:25762719, PubMed:7526154, PubMed:7813427). In response to cytokine-binding to receptors, phosphorylates and activates receptors (IFNAR1, IL12RB1, IL10RB or IL13RA1), creating docking sites for STAT members (PubMed:7526154, PubMed:7657660). In turn, recruited STATs are phosphorylated by TYK2 (or JAK1/JAK2 on the second receptor chain), form homo- and heterodimers, translocate to the nucleus, and regulate cytokine/growth factor responsive genes (PubMed:10542297, PubMed:25762719, PubMed:7657660). Negatively regulates STAT3 activity by promototing phosphorylation at a specific tyrosine that differs from the site used for signaling (PubMed:29162862). {ECO:0000269|PubMed:10542297, ECO:0000269|PubMed:10995743, ECO:0000269|PubMed:25762719, ECO:0000269|PubMed:29162862, ECO:0000269|PubMed:7526154, ECO:0000269|PubMed:7638186, ECO:0000269|PubMed:7657660, ECO:0000269|PubMed:7813427, ECO:0000269|PubMed:8232552}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytosol"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.1738000065088272,
+              "oe": 0.9875400066375732,
+              "oeLower": 0.925000011920929,
+              "oeUpper": 1.0540000200271606
+            },
+            {
+              "constraintType": "mis",
+              "score": 2.0420000553131104,
+              "oe": 0.8601899743080139,
+              "oeLower": 0.8220000267028809,
+              "oeUpper": 0.8989999890327454
+            },
+            {
+              "constraintType": "lof",
+              "score": 1.5716000234533567e-07,
+              "oe": 0.5064299702644348,
+              "oeLower": 0.41200000047683716,
+              "oeUpper": 0.6259999871253967
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "Interleukin-35 Signalling"
+            },
+            {
+              "pathway": "Interleukin-10 signaling"
+            },
+            {
+              "pathway": "Evasion by RSV of host interferon responses"
+            },
+            {
+              "pathway": "Signaling by ALK fusions and activated point mutants"
+            },
+            {
+              "pathway": "Potential therapeutics for SARS"
+            },
+            {
+              "pathway": "MAPK3 (ERK1) activation"
+            },
+            {
+              "pathway": "Interferon alpha/beta signaling"
+            },
+            {
+              "pathway": "Interleukin-6 signaling"
+            },
+            {
+              "pathway": "IL-6-type cytokine receptor ligand interactions"
+            },
+            {
+              "pathway": "Regulation of IFNA/IFNB signaling"
+            },
+            {
+              "pathway": "Inactivation of CSF3 (G-CSF) signaling"
+            },
+            {
+              "pathway": "MAPK1 (ERK2) activation"
+            },
+            {
+              "pathway": "Interleukin-27 signaling"
+            },
+            {
+              "pathway": "Interleukin-4 and Interleukin-13 signaling"
+            },
+            {
+              "pathway": "Signaling by CSF3 (G-CSF)"
+            },
+            {
+              "pathway": "Interleukin-20 family signaling"
+            },
+            {
+              "pathway": "Interleukin-12 signaling"
+            },
+            {
+              "pathway": "SARS-CoV-2 activates/modulates innate and adaptive immune responses"
+            },
+            {
+              "pathway": "Other interleukin signaling"
+            },
+            {
+              "pathway": "Interleukin-23 signaling"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "error": "HTTP Error 400: Bad Request"
+    }
+  }
+}
