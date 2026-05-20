@@ -36,7 +36,16 @@ _Figure: Multiple sequence alignment of Ebola virus glycoprotein sequences showi
 
 ### Regional Clustering
 
-The **GP1-GP2 junction region (positions 503-509)** contains the highest density of sequence variation, with differences at 6 of 7 positions in this cluster. This region warrants further investigation.
+The **GP1-GP2 junction region (positions 503-509)** contains the highest density of sequence variation, with differences at 6 of 7 positions in this cluster. Several of these changes involve significant chemical shifts:
+
+- **Position 509 (Pro→Ala)**: Proline is a cyclic amino acid with unique conformational constraints; replacing it with alanine removes those constraints, potentially allowing backbone flexibility changes that could shift local geometry.
+- **Position 552 (Asp→Asn)**: Charged acidic residue becomes polar neutral—removes a negative charge from the interface, potentially altering electrostatic interactions with antibodies.
+
+**Notable outlier:**
+
+- **Position 41 (Ser→Asn)**: Located in the N-terminal region, this mutation occurs in an otherwise highly conserved interface sector. Both residues are polar, but the substitution introduces a larger side chain. This isolated change in a stable region suggests possible localized selection pressure and warrants structural attention.
+
+These types of mutations warrant further structural and functional investigation.
 
 ## Next Steps for Validation
 
