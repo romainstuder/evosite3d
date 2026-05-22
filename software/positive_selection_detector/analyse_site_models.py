@@ -13,8 +13,8 @@ and Step 2 has produced ``{prefix}_beb.txt`` and
 ``{prefix}_beb_sites.tsv``.
 
 Example:
-    python analyze_site_models.py --gene-symbol HLA-DQB1
-    python analyze_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ --chain B --resi-offset 32
+    python analyse_site_models.py --gene-symbol HLA-DQB1
+    python analyse_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ --chain B --resi-offset 32
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from _common import (
+from ._common import (
     PLOT_SCRIPT,
     add_common_args,
     log,
