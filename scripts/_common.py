@@ -4,7 +4,7 @@ This module is imported by the three pipeline scripts:
 
     1. ``prepare_data.py``          — data acquisition and preparation
     2. ``run_codeml_site_models.py`` — CodeML execution and result extraction
-    3. ``analyze_site_models.py``    — visualisation (Jalview, PyMOL, plots)
+    3. ``analyse_site_models.py``    — visualisation (Jalview, PyMOL, plots)
 
 It provides path constants, ID resolution helpers, data classes for
 parsed CodeML outputs, and common CLI argument definitions.
@@ -33,7 +33,7 @@ sys.path.insert(0, str(_REPO / "bin"))
 sys.path.insert(0, str(_REPO / "lib"))
 sys.path.insert(0, str(_REPO / "scripts"))
 
-from resolve_ids import resolve as resolve_identifier  # noqa: E402
+from resolve_ids import resolve as resolve_identifier  # noqa: E402  # type: ignore
 
 # ── URLs ──────────────────────────────────────────────────────────────
 ALPHAFOLD_FILES = "https://alphafold.ebi.ac.uk/files"

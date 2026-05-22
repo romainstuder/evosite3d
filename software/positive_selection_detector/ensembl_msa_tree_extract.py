@@ -23,13 +23,14 @@ import logging
 import sys
 from pathlib import Path
 
-from _common import (
-    add_common_args,
-    resolve_gene,
-)
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+from ._common import (
+    add_common_args,
+    resolve_gene,
+)
 
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent
@@ -39,13 +40,13 @@ sys.path.insert(0, str(_REPO / "lib"))
 
 # Make the helper scripts importable for ``reference_species``.
 sys.path.insert(0, str(_REPO / "scripts"))
-from ensembl import (  # noqa: E402
+from ensembl import (  # noqa: E402  # type: ignore
     extract_protein_ids_from_newick,
     fetch_cds_sequences,
     fetch_compara_protein_msa,
     fetch_gene_tree_newick,
 )
-from reference_species import is_reference_species  # noqa: E402
+from reference_species import is_reference_species  # noqa: E402  # type: ignore
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)

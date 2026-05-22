@@ -57,7 +57,7 @@ parallelism.
 
 ```bash
 # Step 1: fetch alignment, tree, and structure
-python prepare_data.py --gene-symbol HLA-DQB1
+uv run python prepare_data.py --gene-symbol HLA-DQB1
 
 # Step 2: run both CodeML models, LRT, BEB extraction
 python run_codeml_site_models.py --gene-symbol HLA-DQB1
@@ -66,7 +66,7 @@ python run_codeml_site_models.py --gene-symbol HLA-DQB1
 python run_hyphy_site_models.py --gene-symbol HLA-DQB1
 
 # Step 3: plots, Jalview annotation, PyMOL script
-python analyze_site_models.py --gene-symbol HLA-DQB1
+python analyse_site_models.py --gene-symbol HLA-DQB1
 ```
 
 ### Common options
@@ -80,7 +80,7 @@ python prepare_data.py --gene-symbol HLA-DQB1 --uniprot P01920
 
 # Use an experimental PDB instead of AlphaFold
 python prepare_data.py     --gene-symbol HLA-DQB1 --pdb 1UVQ
-python analyze_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
+python analyse_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
     --chain B --resi-offset 32
 
 # Run a single CodeML model (designed for parallel execution)
