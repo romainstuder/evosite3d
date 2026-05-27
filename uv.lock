@@ -546,7 +546,10 @@ dependencies = [
     { name = "jupyter" },
     { name = "jupyterlab" },
     { name = "matplotlib" },
+    { name = "mdtraj" },
     { name = "numpy" },
+    { name = "openmm" },
+    { name = "openmmforcefields" },
     { name = "pandas" },
     { name = "peft" },
     { name = "pyqt6" },
@@ -583,7 +586,10 @@ requires-dist = [
     { name = "jupyter", specifier = ">=1.0" },
     { name = "jupyterlab", specifier = ">=1.0" },
     { name = "matplotlib", specifier = ">=3.10.9" },
+    { name = "mdtraj", specifier = ">=1.11" },
     { name = "numpy", specifier = ">=2.4.3" },
+    { name = "openmm", specifier = ">=8.5.1" },
+    { name = "openmmforcefields", specifier = ">=0.15.1" },
     { name = "pandas", specifier = ">=3.0.2" },
     { name = "peft", specifier = ">=0.10" },
     { name = "pyqt6", specifier = ">=6.11.0" },
@@ -1323,6 +1329,24 @@ wheels = [
 ]
 
 [[package]]
+name = "mdtraj"
+version = "1.11.1.post1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "pyparsing" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/66/3b/55f24465b9d5905eea28e14173e0a15c3a24d4e85280073f5062fac0d3b7/mdtraj-1.11.1.post1.tar.gz", hash = "sha256:4ccb3daef822096249994bd15247140df0fa4c03c961792522878fc3bf1588e8", size = 2742026, upload-time = "2026-01-26T15:41:12.546Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/4a/227f3a3e4718a84bb9e3977f18ab84537b94441f96f202384af37212197e/mdtraj-1.11.1.post1-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:a6fe241369e5bf4195f8a59ea33144e9128175ca3980d7de6a948f389e7eb44a", size = 2458470, upload-time = "2026-01-26T15:40:48.858Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/b9/4f49381147092bd40fbc101961506088a2a7a5883e6acc85eb5d1f03d210/mdtraj-1.11.1.post1-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:4a3f46ae3eeb83c641f43efd4bb68a411fc39a58f9744abcdc041550c69cfde9", size = 8034516, upload-time = "2026-01-26T15:40:51.265Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/aa/b344aed2d1ec6bc2ac4e5e897ded78148b51b2ee730c5eaccce851d26082/mdtraj-1.11.1.post1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:095851a681fedc846f66662b217a7da5aa721af552c1a7aa04b709a16054624a", size = 8349291, upload-time = "2026-01-26T15:40:53.201Z" },
+    { url = "https://files.pythonhosted.org/packages/92/13/e017236bd57f4564e0b43b9f1783a5c88f329cf7cf4b75076e1a1e37df03/mdtraj-1.11.1.post1-cp312-cp312-win_amd64.whl", hash = "sha256:e18341f4da3849c078d9141f774fac3a7ace8580109210ffba2c6bd94a1348e3", size = 1342401, upload-time = "2026-01-26T15:40:54.908Z" },
+]
+
+[[package]]
 name = "mdurl"
 version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1661,6 +1685,27 @@ source = { registry = "https://pypi.org/simple" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/87/20/199b8713428322a2f22b722c62b8cc278cc53dffa9705d744484b5035ee9/nvidia_nvtx_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl", hash = "sha256:781e950d9b9f60d8241ccea575b32f5105a5baf4c2351cab5256a24869f12a1a", size = 99144, upload-time = "2024-04-03T20:56:12.406Z" },
 ]
+
+[[package]]
+name = "openmm"
+version = "8.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/a8/1f6fc3e36e444621d026be9a145c0f6400c1de11c4a0426d1a60d37d0e91/openmm-8.5.1-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:2fc0f52337cf12706bdb9c157dc4f02079dc95cdf270e2057a21de1f00317652", size = 13336987, upload-time = "2026-04-10T21:15:34.091Z" },
+    { url = "https://files.pythonhosted.org/packages/64/27/afd4f608560e439ff9f425afe9e2b3b7fb9e9eeb0cdf1b8533db49eb1a40/openmm-8.5.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:ac0db7b6b488f29925d7e3135cc5f11b6021e4b1f3588b3a7518fb74336e79a2", size = 12836895, upload-time = "2026-04-10T21:15:38.295Z" },
+    { url = "https://files.pythonhosted.org/packages/55/29/aa385017888e58de81037451deca484ca5f69e8dcf6806fad1c3e113eb07/openmm-8.5.1-cp312-cp312-manylinux_2_34_aarch64.whl", hash = "sha256:ed5853a2745c35b4ac7c1aabf356ac47c7c10baee5e093167f463c4b6d27f2a6", size = 13981598, upload-time = "2026-04-10T21:15:42.939Z" },
+    { url = "https://files.pythonhosted.org/packages/58/dc/958ea1a61d53379a6ba49209cbfeffe1c5239dea4d63306f82f86a441cd2/openmm-8.5.1-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:8349602a76107eb130d07573be44d7ed439f286d254687114e2bfe43e463b048", size = 14386765, upload-time = "2026-04-10T21:15:47.876Z" },
+    { url = "https://files.pythonhosted.org/packages/03/5e/c4a926ad73b9d791abf5cb37720b73cec55766f2d8f4c602dd5d3d536c2a/openmm-8.5.1-cp312-cp312-win_amd64.whl", hash = "sha256:56e447955539037aedf62f169c35a4f7c463720a36fff5d07e6b00b4addeb7b2", size = 13207985, upload-time = "2026-04-10T21:15:52.187Z" },
+]
+
+[[package]]
+name = "openmmforcefields"
+version = "0.15.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/84/c6/92730898236872d856066e180283291786e2dc4649491141b5b9efe0fa4c/openmmforcefields-0.15.1.tar.gz", hash = "sha256:c8c5e806ed89c81691e742fb86f768f4c3c06f0173f7343e8420b78ee8645595", size = 5304142, upload-time = "2026-02-26T10:12:26.75Z" }
 
 [[package]]
 name = "packaging"
