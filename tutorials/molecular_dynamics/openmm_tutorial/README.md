@@ -1,6 +1,6 @@
 # OpenMM Ubiquitin Molecular Dynamics Tutorial
 
-A complete Jupyter notebook tutorial for running a 1 ns molecular dynamics (MD) simulation of ubiquitin using OpenMM. Runs on CUDA, OpenCL, or CPU — the notebook auto-detects the fastest available platform.
+A complete Jupyter notebook tutorial for running a 5 ns molecular dynamics (MD) simulation of ubiquitin using OpenMM, plus VMD scripts for visualisation and movie rendering. Runs on CUDA, OpenCL, or CPU — the notebook auto-detects the fastest available platform.
 
 ## Table of Contents
 
@@ -10,6 +10,7 @@ A complete Jupyter notebook tutorial for running a 1 ns molecular dynamics (MD) 
 - [Workflow Overview](#workflow-overview)
 - [Step-by-Step Guide](#step-by-step-guide)
 - [Expected Results](#expected-results)
+- [Trajectory Visualisation (VMD)](#trajectory-visualisation-vmd)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -116,11 +117,11 @@ Otherwise the notebook will fall back to OpenCL (works on most Macs) or CPU.
 | 3    | Energy Minimization        | Fix bad contacts                               | ~15 s                   |
 | 4    | NVT Equilibration (100 ps) | Heat to 300 K                                  | ~75 s                   |
 | 5    | NPT Equilibration (100 ps) | Equilibrate pressure                           | ~80 s                   |
-| 6    | **Production MD (1 ns)**   | **Sample equilibrium dynamics**                | **~12 min**             |
+| 6    | **Production MD (5 ns)**   | **Sample equilibrium dynamics**                | **~60 min**             |
 | 7    | Analysis                   | Concatenate trajectories, compute RMSD/RMSF/Rg | ~10 s                   |
 | 8    | Visualization              | Generate stage-annotated plots                 | <5 s                    |
 
-**Total time:** ~15 min on Apple OpenCL. CUDA is comparable; pure CPU is 5-10× slower.
+**Total time:** ~65 min on Apple OpenCL. CUDA is comparable; pure CPU is 5-10× slower. Set `sim_ns = 1` in cell 21 to fall back to a 1 ns / ~15 min run for quick iteration.
 
 ---
 
@@ -184,18 +185,18 @@ This step uses a **Langevin thermostat** to control temperature, which adds fric
 
 A **Monte Carlo barostat** randomly adjusts the box size to maintain target pressure.
 
-### Step 6: Production MD (1 ns)
+### Step 6: Production MD (5 ns)
 
 **What:** Run the actual simulation, collecting trajectory data
 
 **Why:** This is where the science happens. Once equilibrated, the system explores conformational space, and we record:
 
-- 🎬 **Trajectory** (DCD file) - Atomic positions over time
+- 🎬 **Trajectory** (DCD file) - Atomic positions over time, sampled every 10 ps
 - ⚡ **Energy** (text file) - Potential, kinetic, total energy
 - 🌡️ **Temperature & density** - System properties
 - 💾 **Checkpoint** - Periodic snapshot for crash recovery (`CheckpointReporter`)
 
-The 1 ns duration is short but sufficient to observe local protein dynamics. For larger conformational changes, longer simulations (μs-ms) are needed.
+The simulation length is controlled by the `sim_ns` variable in cell 21. 5 ns gives a clear equilibrium plateau on the RMSD plot; 1 ns is enough for a first run. For large conformational changes you'd need μs-ms simulations, beyond the scope of this tutorial.
 
 ### Step 7: Trajectory Analysis
 
@@ -268,6 +269,53 @@ You should observe:
 
 ---
 
+## Trajectory Visualisation (VMD)
+
+Two helper Tcl scripts wrap a sensible default view and a turntable movie pipeline.
+
+### `setup_view.tcl` — interactive scene
+
+```bash
+vmd -e setup_view.tcl
+```
+
+What it does:
+
+- Loads `output/step3_minimised.pdb` + `output/step6_trajectory.dcd`
+- Hides solvent (only `protein` selections get reps)
+- Builds a NewCartoon for the backbone
+- Aligns every frame to frame 0 on the backbone, so the protein doesn't drift
+- **Colours the cartoon by per-residue RMSF** using `output/step7_rmsf.txt` (BGYR scale: rigid β-sheet core in blue, flexible C-terminal tail in red)
+- White background, orthographic projection, axes off
+
+Configurable variables at the top of the script let you repoint the files or set `RMSF_FILE ""` to fall back to standard secondary-structure coloring.
+
+### `make_movie.tcl` — render a turntable movie
+
+```bash
+vmd -e make_movie.tcl
+```
+
+Sources `setup_view.tcl` first (so you get the same RMSF-coloured scene), then renders one TGA per frame while doing a 360° turntable rotation. Configurable knobs at the top:
+
+| Variable           | Default | Purpose                                       |
+| ------------------ | ------- | --------------------------------------------- |
+| `STRIDE`           | 1       | Render every Nth trajectory frame             |
+| `ROTATE_TOTAL_DEG` | 360.0   | Total camera rotation across the movie        |
+| `ROTATE_AXIS`      | `"y"`   | `x` (tumble), `y` (turntable), `z` (roll)     |
+| `ZOOM`             | 2.0     | View scale; >1 zooms in to crop empty solvent |
+
+Frames land in `output/movie_frames/`. Stitch into MP4 with ffmpeg:
+
+```bash
+ffmpeg -framerate 25 -i output/movie_frames/frame_%04d.tga \
+       -c:v libx264 -pix_fmt yuv420p output/movie.mp4
+```
+
+The script prints this command at the end as a reminder.
+
+---
+
 ## Force Field Details
 
 **AMBER99SB-ILDN** is used because:
@@ -328,7 +376,7 @@ properties = {'Precision': 'single'}
 
 After completing this tutorial:
 
-1. **Run longer** - Bump `simulation.step(500000)` (1 ns) to `simulation.step(2500000)` (5 ns) for a more meaningful equilibrium plateau. On OpenCL this takes ~1 h.
+1. **Run longer** - Bump `sim_ns` from 5 to 50 ns (~10 h on OpenCL) for converged sampling of loop dynamics
 2. **Run multiple replicas** - Statistical significance requires 3-5 independent simulations with different random seeds
 3. **Different proteins** - Apply this workflow to your protein of interest
 4. **Advanced analysis** - DSSP (secondary structure), hydrogen bonds, contact maps
