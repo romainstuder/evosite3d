@@ -11,6 +11,7 @@
  *   2b2. run_codeml_site_models.py --model M8a    — null model
  *   2b3. run_codeml_site_models.py --extract-only — LRT + BEB extraction
  *   2c. run_hyphy_site_models.py                 — FUBAR (parallel per-site cross-check)
+ *   2d. run_codeml_branch_site_models.py         — branch-site model A along the target lineage
  *   3.  analyse_site_models.py                   — Jalview, PyMOL, dN/dS plot
  *
  * Steps 1a (Bronze) and 1b (structure) run in parallel; 2a (Silver) consumes
@@ -37,6 +38,7 @@ params.outdir          = "results"
 params.codeml_method   = "M8"       // CODEML MODEL (set "" to skip)
 params.skip_codeml_run = false      // Skip 2b1/2b2; reuse existing .mlc in silver
 params.hyphy_method    = ""    // FUBAR, BUSTED, or BOTH (set "" to skip)
+params.branch_site     = false      // Run branch-site model A along the target lineage
 params.max_pdb         = 5          // Max RCSB PDBs from SIFTS (0 to disable)
 
 // Per-gene overrides (single gene via --gene_symbols only)
@@ -346,6 +348,33 @@ process RUN_HYPHY {
 
 
 // ---------------------------------------------------------------------------
+//  Step 2d: Silver — CodeML branch-site model A along the target lineage
+// ---------------------------------------------------------------------------
+
+process RUN_CODEML_BRANCH_SITE {
+    tag "${gene_symbol} branch-site"
+    publishDir { "${params.outdir}/${gene_symbol.replaceAll(/[^A-Za-z0-9_]/, '_')}_${params.taxon}" },
+    mode: 'copy'
+    cpus 1
+
+    input:
+    tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset), path(silver)
+
+    output:
+    tuple val(gene_symbol), path(silver), emit: silver
+
+    script:
+    def uniprot_arg = uniprot ? "--uniprot ${uniprot}" : ''
+    """
+    uv run python ${params.script_dir}/run_codeml_branch_site_models.py \\
+        --gene-symbol '${gene_symbol}' \\
+        --outdir 2_silver \\
+        ${uniprot_arg}
+    """
+}
+
+
+// ---------------------------------------------------------------------------
 //  Step 3: Analyse results (Jalview, PyMOL, dN/dS plot)
 // ---------------------------------------------------------------------------
 
@@ -443,5 +472,10 @@ workflow {
     // Step 2c: HyPhy site models (parallel cross-check of CodeML M8)
     if (params.hyphy_method) {
         RUN_HYPHY(ch_silver)
+    }
+
+    // Step 2d: CodeML branch-site model A along the target lineage
+    if (params.branch_site) {
+        RUN_CODEML_BRANCH_SITE(ch_silver)
     }
 }

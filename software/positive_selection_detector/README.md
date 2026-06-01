@@ -28,12 +28,13 @@ Given a gene symbol the pipeline:
 The pipeline is split into focused steps so each can run in parallel
 under Nextflow:
 
-| Step | Script                      | Role                                          |
-| ---- | --------------------------- | --------------------------------------------- |
-| 1    | `prepare_data.py`           | Fetch CDS alignment + tree + 3D structure     |
-| 2    | `run_codeml_site_models.py` | Run CodeML M8 and M8a; LRT and BEB extraction |
-| 2b   | `run_hyphy_site_models.py`  | Run HyPhy FUBAR (default) and/or BUSTED       |
-| 3    | `analyze_site_models.py`    | dN/dS plot, Jalview annotation, PyMOL script  |
+| Step | Script                             | Role                                              |
+| ---- | ---------------------------------- | ------------------------------------------------- |
+| 1    | `prepare_data.py`                  | Fetch CDS alignment + tree + 3D structure         |
+| 2    | `run_codeml_site_models.py`        | Run CodeML M8 and M8a; LRT and BEB extraction     |
+| 2b   | `run_hyphy_site_models.py`         | Run HyPhy FUBAR (default) and/or BUSTED           |
+| 2c   | `run_codeml_branch_site_models.py` | Branch-site model A (MA vs MA0) along the lineage |
+| 3    | `analyse_site_models.py`           | dN/dS plot, Jalview annotation, PyMOL script      |
 
 `main.nf` orchestrates all four under Nextflow with the obvious
 parallelism.
@@ -94,6 +95,37 @@ python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BUSTED
 python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BOTH
 ```
 
+### Branch-site model A (lineage to the target)
+
+`run_codeml_branch_site_models.py` runs CodeML branch-site **model A**
+(`model = 2`, `NSsites = 2`) on every branch of the path from the root to
+the target protein's leaf, testing each as the foreground (`#1`) branch.
+For each branch it runs the alternative (MA) and null (MA0, `fix_omega = 1`,
+`omega = 1`) models and reports the LRT (2ΔlnL vs a 50:50 mixture of a point
+mass at 0 and χ²₁); BEB sites are extracted for branches that test
+significant.
+
+```bash
+# Preview the lineage branches (no codeml)
+python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --list-branches
+
+# Run model A on every branch from the root to the target
+python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1
+
+# Run a single branch by index (1 = nearest the root); good for parallelism
+python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --branch 3
+```
+
+Outputs (per branch `bNN`, numbered from the root towards the target):
+
+| File                              | Description                                        |
+| --------------------------------- | -------------------------------------------------- |
+| `{prefix}_bNN.tree`               | Pruned tree with branch `bNN` marked `#1`          |
+| `{prefix}_bsMA_bNN.mlc`           | CodeML output for the alternative model A          |
+| `{prefix}_bsMA0_bNN.mlc`          | CodeML output for the null model A0                |
+| `{prefix}_bsMA_bNN_beb_sites.tsv` | BEB sites with protein positions (significant)     |
+| `{prefix}_branch_site_lrt.tsv`    | Per-branch LRT summary (2ΔlnL, p-value, BEB count) |
+
 ### Nextflow
 
 ```bash
@@ -108,6 +140,9 @@ nextflow run main.nf --input genes.csv
 
 # Skip HyPhy
 nextflow run main.nf --gene_symbols "HLA-DQB1" --hyphy_method ""
+
+# Also run branch-site model A along the target lineage (off by default; slow)
+nextflow run main.nf --gene_symbols "HLA-DQB1" --branch_site true
 ```
 
 ## Outputs
