@@ -23,14 +23,13 @@ import logging
 import sys
 from pathlib import Path
 
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-from ._common import (
+from _common import (  # type: ignore
     add_common_args,
     resolve_gene,
 )
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent
@@ -120,16 +119,12 @@ def run_extract(
     aa_aligned = fetch_compara_protein_msa(ensembl_gene, prune_taxon=taxon)
     if not aa_aligned:
         raise RuntimeError(f"Failed to download protein MSA for {ensembl_gene}")
-    log.info("aa_aligned {aa_aligned}")
     aa_aligned = {pid: aa_aligned[pid] for pid in aa_aligned if is_reference_species(pid)}
-    log.info("aa_aligned {aa_aligned}")
     log.info("Protein MSA has %d sequences", len(aa_aligned))
     write_seq_fasta(aa_aligned, aa_fasta)
 
     # ── 4. Fetch CDS for every protein in the MSA ────────────────
     aa_ids = list(aa_aligned.keys())
-    # aa_ids = {pid for pid in aa_ids if is_reference_species(pid)}
-    log.info("Protein MSA has %d sequences", len(aa_ids))
     cds_map = fetch_cds_sequences(ensembl_gene, aa_ids)
     if not cds_map:
         raise RuntimeError("No CDS sequences could be fetched from Ensembl.")

@@ -25,7 +25,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from ._common import (
+from _common import (  # type: ignore
     PLOT_SCRIPT,
     add_common_args,
     log,

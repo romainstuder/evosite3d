@@ -47,14 +47,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-from ._common import (
+from _common import (  # type: ignore
     add_common_args,
     resolve_gene,
 )
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent
