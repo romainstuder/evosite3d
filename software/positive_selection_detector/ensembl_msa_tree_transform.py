@@ -42,25 +42,27 @@ from __future__ import annotations
 
 import argparse
 import logging
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 from _common import (  # type: ignore
     add_common_args,
+    check_tool,
+    read_fasta_dict,
     resolve_gene,
+    write_seq_fasta,
 )
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+# ``reference_species`` (scripts/) is importable because importing
+# ``_common`` puts that directory on sys.path.
+from reference_species import is_reference_species  # type: ignore
+
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent
-
-# Make the helper scripts importable for ``reference_species``.
-sys.path.insert(0, str(_REPO / "scripts"))
-from reference_species import is_reference_species  # noqa: E402  # type: ignore
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -79,12 +81,6 @@ _DEFAULT_SILVER_ROOT = Path("results/2_silver")
 # =====================================================================
 
 
-def _check_tool(name: str) -> None:
-    """Raise ``RuntimeError`` if an external binary is missing from ``PATH``."""
-    if shutil.which(name) is None:
-        raise RuntimeError(f"Required tool '{name}' not found on PATH.")
-
-
 def _run_python_script(script: Path, *args: str, stdout: Path | None = None) -> None:
     """Run one of the repository's helper Python scripts via subprocess."""
     cmd = [sys.executable, str(script), *args]
@@ -98,7 +94,7 @@ def _run_python_script(script: Path, *args: str, stdout: Path | None = None) -> 
 
 def run_trimal(in_fasta: Path, out_fasta: Path, html: Path, cols: Path) -> None:
     """Clean an MSA with TrimAl using the tutorial's settings."""
-    _check_tool("trimal")
+    check_tool("trimal")
     log.info("Running TrimAl on %s", in_fasta)
     cmd = [
         "trimal",
@@ -124,7 +120,7 @@ def run_trimal(in_fasta: Path, out_fasta: Path, html: Path, cols: Path) -> None:
 
 def run_nw_prune(tree_file: Path, keep_ids: list[str], out_tree: Path) -> None:
     """Prune a Newick tree to ``keep_ids`` and prepend the PAML header line."""
-    _check_tool("nw_prune")
+    check_tool("nw_prune")
     if not keep_ids:
         raise ValueError("Cannot prune tree: no sequences to keep.")
     log.info("Pruning tree to %d taxa", len(keep_ids))
@@ -138,17 +134,6 @@ def run_nw_prune(tree_file: Path, keep_ids: list[str], out_tree: Path) -> None:
 # =====================================================================
 #  In-process helpers
 # =====================================================================
-
-
-def read_fasta_dict(in_fasta: Path) -> dict[str, str]:
-    """Read a FASTA file into a ``{id: sequence}`` mapping."""
-    return {r.id: str(r.seq) for r in SeqIO.parse(in_fasta, "fasta")}
-
-
-def write_seq_fasta(seqs: dict[str, str], out_fasta: Path) -> None:
-    """Write a ``{id: sequence}`` mapping as multi-FASTA."""
-    records = [SeqRecord(Seq(seq), id=sid, description="") for sid, seq in seqs.items()]
-    SeqIO.write(records, out_fasta, "fasta")
 
 
 def move_target_to_top(fasta: Path, target: str) -> None:

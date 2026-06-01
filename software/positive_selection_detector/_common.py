@@ -23,6 +23,10 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent
 GET_POS_SCRIPT = _REPO / "scripts" / "get_position_cds_trimal.py"
@@ -74,6 +78,22 @@ def http_get(url: str, timeout: int = 60) -> bytes | None:
     except (HTTPError, URLError, TimeoutError) as e:
         log.warning("HTTP GET failed for %s: %s", url, e)
         return None
+
+
+# =====================================================================
+#  FASTA helpers
+# =====================================================================
+
+
+def read_fasta_dict(in_fasta: Path) -> dict[str, str]:
+    """Read a FASTA file into a ``{id: sequence}`` mapping."""
+    return {r.id: str(r.seq) for r in SeqIO.parse(in_fasta, "fasta")}
+
+
+def write_seq_fasta(seqs: dict[str, str], out_fasta: Path) -> None:
+    """Write a ``{id: sequence}`` mapping as multi-FASTA."""
+    records = [SeqRecord(Seq(seq), id=sid, description="") for sid, seq in seqs.items()]
+    SeqIO.write(records, out_fasta, "fasta")
 
 
 # =====================================================================

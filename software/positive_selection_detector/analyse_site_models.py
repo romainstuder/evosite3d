@@ -58,6 +58,26 @@ def plot_beb_per_site(beb_txt: Path, out_png: Path, threshold: float = 0.50) -> 
 # =====================================================================
 
 
+def _load_trimal_aa_columns(trimal_file_path: Path) -> list[int]:
+    """Return the unique 1-based AA column indices kept by TrimAl.
+
+    Reads the ``#ColumnsMap`` line from a TrimAl ``.cols`` file (CDS column
+    indices), converts each to its amino-acid position, and de-duplicates
+    while preserving order.
+    """
+    column_str_list: list[str] = []
+    with open(trimal_file_path) as file_in:
+        for line in file_in:
+            line = line.rstrip()
+            if line.startswith("#"):
+                cleaned_line = line.replace(",", "")
+                column_str_list = cleaned_line.split()[1:]
+
+    column_int_list = [int(x) for x in column_str_list]
+    trimal_aa_cols = [(pos // 3) + 1 for pos in column_int_list]
+    return list(dict.fromkeys(trimal_aa_cols))
+
+
 def write_jalview_annotation(
     path: Path,
     trimal_file_path: Path,
@@ -75,26 +95,7 @@ def write_jalview_annotation(
         log.warning("Empty BEB table — skipping Jalview annotation.")
         return
 
-    # Load first sequences
-    # first_aa_seq = next(SeqIO.parse(msa_aa_aln, format="fasta"))
-    # print("seq_id", first_aa_seq.id)
-    # print("seq", first_aa_seq.seq)
-
-    # Load trimal cols
-    def load_trimal_columns(trimal_file_path):
-        column_str_list = []
-        with open(trimal_file_path, "r") as file_in:
-            for line in file_in:
-                line = line.rstrip()
-                if line.startswith("#"):
-                    cleaned_line = line.replace(",", "")
-                    column_str_list = cleaned_line.split()[1:]
-
-        column_int_list = [int(x) for x in column_str_list]
-        trimal_aa_cols = [(pos // 3) + 1 for pos in column_int_list]
-        return list(dict.fromkeys(trimal_aa_cols))
-
-    trimal_cols = load_trimal_columns(trimal_file_path)
+    trimal_cols = _load_trimal_aa_columns(trimal_file_path)
 
     beb_probs_dict: dict[int, float] = {}
     mean_omegas_dict: dict[int, float] = {}
@@ -150,29 +151,20 @@ def write_jalview_annotation(
 # =====================================================================
 
 
-def _parse_beb_sites_tsv(tsv_path: Path) -> list[tuple[int | None, float]]:
-    """Read ``{prefix}_beb_sites.tsv`` and return (protein_pos, prob) pairs."""
+def _parse_sites_tsv(tsv_path: Path, prob_col: int) -> list[tuple[int | None, float]]:
+    """Read a sites TSV and return ``(protein_pos, prob)`` pairs.
+
+    ``{prefix}_beb_sites.tsv`` and ``{prefix}_fubar_sites.tsv`` share the same
+    ``trimal_pos``/``protein_pos``/… column layout; ``prob_col`` selects the
+    probability column (3 for CodeML BEB, 5 for HyPhy FUBAR).
+    """
     results: list[tuple[int | None, float]] = []
     for line in tsv_path.read_text().splitlines():
         if line.startswith("#") or line.startswith("trimal_pos"):
             continue
         cols = line.split("\t")
         protein_pos = int(cols[1]) if cols[1] else None
-        prob = float(cols[3])
-        results.append((protein_pos, prob))
-    return results
-
-
-def _parse_fubar_sites_tsv(tsv_path: Path) -> list[tuple[int | None, float]]:
-    """Read ``{prefix}_fubar_sites.tsv`` and return (protein_pos, prob) pairs."""
-    results: list[tuple[int | None, float]] = []
-    for line in tsv_path.read_text().splitlines():
-        if line.startswith("#") or line.startswith("trimal_pos"):
-            continue
-        cols = line.split("\t")
-        protein_pos = int(cols[1]) if cols[1] else None
-        prob = float(cols[5])
-        results.append((protein_pos, prob))
+        results.append((protein_pos, float(cols[prob_col])))
     return results
 
 
@@ -198,7 +190,7 @@ def write_pymol_script(
     ``Pr(beta > alpha) >= fubar_threshold``. CodeML layers are drawn
     after, so overlapping sites display the higher-confidence colour.
     """
-    parsed = _parse_beb_sites_tsv(sites_tsv)
+    parsed = _parse_sites_tsv(sites_tsv, prob_col=3)
 
     high, low = [], []
     for protein_pos, prob in parsed:
@@ -211,7 +203,7 @@ def write_pymol_script(
 
     fubar: list[int] = []
     if fubar_sites_tsv is not None and fubar_sites_tsv.exists():
-        for protein_pos, prob in _parse_fubar_sites_tsv(fubar_sites_tsv):
+        for protein_pos, prob in _parse_sites_tsv(fubar_sites_tsv, prob_col=5):
             if protein_pos is None or prob < fubar_threshold:
                 continue
             fubar.append(protein_pos)
@@ -347,7 +339,6 @@ def run_analysis(
     if beb_txt.exists():
         beb_png = workdir / f"{prefix}_beb.png"
         jlv = workdir / f"{prefix}_beb.jlv"
-        # msa_aa_aln= workdir / f"{prefix}_subset.aa.mafft.fasta"
         trimal_cols = workdir / f"{prefix}_subset.cds.mafft.trimal.cols"
         try:
             plot_beb_per_site(beb_txt, beb_png, threshold=plot_threshold)

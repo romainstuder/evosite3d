@@ -20,13 +20,12 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
-import sys
 from pathlib import Path
 
+# ``sifts`` (lib/) is importable because importing ``_common`` puts that
+# directory on sys.path.
 from _common import add_common_args, log, resolve_gene  # type: ignore
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "lib"))
-from sifts import (  # noqa: E402  # ty:ignore[unresolved-import]
+from sifts import (  # type: ignore
     build_residue_map,
     renumber_pdb_chain,
 )

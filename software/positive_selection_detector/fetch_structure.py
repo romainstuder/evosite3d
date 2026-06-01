@@ -24,9 +24,10 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
+# ``sifts`` (lib/) is importable because importing ``_common`` puts that
+# directory on sys.path.
 from _common import (  # type: ignore
     ALPHAFOLD_API,
     ALPHAFOLD_FILES,
@@ -36,10 +37,7 @@ from _common import (  # type: ignore
     log,
     resolve_gene,
 )
-
-# SIFTS helpers live in lib/sifts.py
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "lib"))
-from sifts import get_sifts_mappings, pick_best_structures  # noqa: E402  # type: ignore
+from sifts import get_sifts_mappings, pick_best_structures  # type: ignore
 
 
 def fetch_alphafold_pdb(uniprot: str, out_path: Path) -> bool:

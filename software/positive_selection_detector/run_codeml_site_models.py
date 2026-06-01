@@ -39,7 +39,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from _common import (
+from _common import (  # type: ignore
     BebSite,
     LnL,
     add_common_args,
@@ -174,6 +174,24 @@ def run_codeml(ctl: Path, workdir: Path, mlc: Path | None = None) -> None:
     for path in rundir.iterdir():
         path.unlink()
     rundir.rmdir()
+
+
+def _preserve_m8_rst(workdir: Path, prefix: str, warn_if_missing: bool = False) -> None:
+    """Move CodeML's ``rst`` output to ``{prefix}_M8.rst.txt`` for BEB extraction.
+
+    CodeML writes a generic ``rst`` (here ``{prefix}_M8_rst`` after the
+    run-directory move); rename it to a stable name so the extract step can
+    find it. When ``warn_if_missing`` is set, log a warning if no rst exists.
+    """
+    rst_src = workdir / f"{prefix}_M8_rst"
+    rst_dst = workdir / f"{prefix}_M8.rst.txt"
+    if rst_src.exists() and (
+        not rst_dst.exists() or rst_src.stat().st_mtime >= rst_dst.stat().st_mtime
+    ):
+        shutil.move(str(rst_src), str(rst_dst))
+        log.info("Moved %s → %s", rst_src.name, rst_dst.name)
+    elif warn_if_missing and not rst_dst.exists():
+        log.warning("No rst file produced by CodeML – BEB analysis will be unavailable.")
 
 
 # =====================================================================
@@ -379,13 +397,7 @@ def run_single_model(
 
     # Preserve rst for M8 (needed for BEB extraction)
     if model_name == "M8":
-        rst_src = workdir / f"{prefix}_M8_rst"
-        rst_dst = workdir / f"{prefix}_M8.rst.txt"
-        if rst_src.exists() and (
-            not rst_dst.exists() or rst_src.stat().st_mtime >= rst_dst.stat().st_mtime
-        ):
-            shutil.move(str(rst_src), str(rst_dst))
-            log.info("Moved %s → %s", rst_src.name, rst_dst.name)
+        _preserve_m8_rst(workdir, prefix)
 
 
 # =====================================================================
@@ -510,15 +522,7 @@ def run_codeml_pipeline(
         return
 
     # Preserve M8 rst
-    rst_src = workdir / f"{prefix}_M8_rst"
-    rst_dst = workdir / f"{prefix}_M8.rst.txt"
-    if rst_src.exists() and (
-        not rst_dst.exists() or rst_src.stat().st_mtime >= rst_dst.stat().st_mtime
-    ):
-        shutil.move(str(rst_src), str(rst_dst))
-        log.info("Moved %s → %s", rst_src.name, rst_dst.name)
-    elif not rst_dst.exists():
-        log.warning("No rst file produced by CodeML – BEB analysis will be unavailable.")
+    _preserve_m8_rst(workdir, prefix, warn_if_missing=True)
 
     # Extract results
     run_extract(gene_symbol, outdir=outdir, uniprot=uniprot)

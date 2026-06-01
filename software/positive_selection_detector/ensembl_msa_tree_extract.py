@@ -20,32 +20,22 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 
+# ``ensembl`` (lib/) and ``reference_species`` (scripts/) are importable
+# because importing ``_common`` puts those directories on sys.path.
 from _common import (  # type: ignore
     add_common_args,
     resolve_gene,
+    write_seq_fasta,
 )
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-# ── Repository layout ─────────────────────────────────────────────────
-_REPO = Path(__file__).resolve().parent.parent.parent
-
-# Ensembl API helpers (from lib/)
-sys.path.insert(0, str(_REPO / "lib"))
-
-# Make the helper scripts importable for ``reference_species``.
-sys.path.insert(0, str(_REPO / "scripts"))
-from ensembl import (  # noqa: E402  # type: ignore
+from ensembl import (  # type: ignore
     extract_protein_ids_from_newick,
     fetch_cds_sequences,
     fetch_compara_protein_msa,
     fetch_gene_tree_newick,
 )
-from reference_species import is_reference_species  # noqa: E402  # type: ignore
+from reference_species import is_reference_species  # type: ignore
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -57,12 +47,6 @@ _DEFAULT_ROOT = Path("results/1_bronze")
 # =====================================================================
 #  Helpers
 # =====================================================================
-
-
-def write_seq_fasta(seqs: dict[str, str], out_fasta: Path) -> None:
-    """Write a ``{id: sequence}`` mapping as multi-FASTA."""
-    records = [SeqRecord(Seq(seq), id=sid, description="") for sid, seq in seqs.items()]
-    SeqIO.write(records, out_fasta, "fasta")
 
 
 def write_leaf_names(newick: str, out_path: Path) -> list[str]:
