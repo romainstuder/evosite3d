@@ -68,7 +68,7 @@ A pipeline for detecting and analyzing pervasive positive selection in protein s
 
 #### [Detecting Pervasive Positive Selection (PAML Site Models)](./tutorials/pervasive_selection_site_models/)
 
-Learn to detect continuous positive selection using CodeML/PAML. Covers dN/dS ratios, site-specific models (M0, M1a, M2a, M7, M8), and includes a complete HLA_DQB1 example with sequence alignment, phylogenetic trees, and structural visualization.
+Learn to detect continuous positive selection using CodeML/PAML. Covers dN/dS ratios, site-specific models (M0, M1a, M2a, M7, M8), and includes a complete HLA_DQB1 example with sequence alignment, phylogenetic trees, and structural visualisation.
 
 #### [Detecting Episodic Positive Selection (Branch-Site Models)](./tutorials/positive_selection/)
 
@@ -82,7 +82,7 @@ Reconstruct ancestral sequences at internal nodes of phylogenetic trees using ma
 
 #### [Estimating Mutation Stability Effects with FoldX](./tutorials/stability_impact/)
 
-Learn to compute free energy changes (ΔG, ΔΔG) for protein mutations. Covers both FoldX 3 and FoldX 4 approaches. Suitable for understanding stability-activity tradeoffs and mutation effects.
+Learn to compute free energy changes (ΔG, ΔΔG) for protein mutations. Covers both FoldX 3 and FoldX 4 approaches. Suitable for understanding stability–activity trade-offs and mutation effects.
 
 #### [Assessing Protein Structure Quality](./tutorials/assess_protein_structure_quality/)
 
@@ -96,7 +96,7 @@ A comprehensive three-part tutorial on de novo protein design:
 
 1. **Structure Generation with RFdiffusion** — Generate novel protein backbones using diffusion models
 2. **Sequence Design with ProteinMPNN** — Design amino acid sequences for your generated structures
-3. **Full Atomic Modeling with MODELLER** — Build complete 3D models with all-atom resolution
+3. **Full Atomic Modelling with MODELLER** — Build complete 3D models with all-atom resolution
 
 Learn the full pipeline from backbone generation through atomic-level detail.
 
@@ -112,7 +112,7 @@ Introduction to structure-based protein design using RFdiffusion for backbone ge
 
 #### [Predicting Mutation Effects with ESM-2](./tutorials/esm2-mutation-effects/)
 
-Use pre-trained protein language models (Facebook's ESM-2) to predict the functional impact of amino acid mutations without experimental training data. Covers the stability–activity tradeoff in protein engineering.
+Use pre-trained protein language models (Facebook's ESM-2) to predict the functional impact of amino acid mutations without experimental training data. Covers the stability–activity trade-off in protein engineering.
 
 #### [Predicting Steroid Receptor Selectivity with PyTorch](./tutorials/nuclear_receptor_selectivity/)
 
@@ -132,13 +132,13 @@ Integrate multi-modal omics data (genomics, transcriptomics, proteomics, etc.) u
 
 #### [Graph Queries with Neo4j](./tutorials/omics/graph_queries_with_neo4j/)
 
-Leverage graph databases to query and analyze biological networks and relationships.
+Leverage graph databases to query and analyse biological networks and relationships.
 
 ### Post-Translational Modifications
 
 #### [Phosphosite Identification with OpenMS](./tutorials/identification_phosposites/)
 
-Detect and localize phosphorylation sites in proteins using mass spectrometry data and OpenMS workflows. Learn phosphoproteomics from data processing through site assignment.
+Detect and localise phosphorylation sites in proteins using mass spectrometry data and OpenMS workflows. Learn phosphoproteomics from data processing through site assignment.
 
 ### Foundations
 
@@ -171,7 +171,7 @@ Comparative sequence analysis of Ebola virus glycoprotein (GP) between Zaire and
 Automated pipeline for downloading hantavirus genome sequences (S, M, and L segments) from NCBI GenBank using accession numbers. Features:
 
 - Automatic Excel parsing for accession numbers
-- Organized directory structure by segment type
+- Organised directory structure by segment type
 - Rate limiting respecting NCBI API limits
 - Error handling with retry mechanisms
 - Resume capability for interrupted downloads
@@ -180,10 +180,10 @@ Automated pipeline for downloading hantavirus genome sequences (S, M, and L segm
 
 ## Key Features
 
-- **3D Structure Integration** — Visualize evolutionary sites in protein structures
+- **3D Structure Integration** — Visualise evolutionary sites in protein structures
 - **Evolutionary Analysis** — dN/dS ratios, positive selection detection, ancestral reconstruction
 - **Mutation Prediction** — Predict stability and functional effects of mutations
-- **Protein Design** — De novo design, sequence optimization, affinity improvement
+- **Protein Design** — De novo design, sequence optimisation, affinity improvement
 - **Molecular Simulation** — Molecular dynamics with OpenMM
 - **Systems Biology** — Multi-omics integration and network analysis
 - **AI-Powered Tools** — Leverage Claude Code for interactive target validation and analysis
@@ -237,7 +237,7 @@ If you use EvoSite3D in your research, please cite:
 
 **Romain A. Studer**
 
-- Bioinformatics Data Scientist
+- Senior Bioinformatics Data Scientist
 - Previously affiliated with BenevolentAI, EMBL-EBI, UCL, and UNIL
 - Focus: Protein and nucleotide analysis, computational biology, machine learning
 - LinkedIn: [romainstuder](https://linkedin.com/in/romainstuder)
@@ -245,7 +245,7 @@ If you use EvoSite3D in your research, please cite:
 
 ---
 
-## Acknowledgments
+## Acknowledgements
 
 - Computational biology community for feedback and testing
 - Built with BioPython, PAML, PyMOL, OpenMM, ESM-2, RFdiffusion, and other excellent open-source tools
