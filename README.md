@@ -72,10 +72,6 @@ Reconstruct ancestral sequences at internal nodes of phylogenetic trees using ma
 
 Learn to compute free energy changes (ΔG, ΔΔG) for protein mutations. Covers both FoldX 3 and FoldX 4 approaches. Suitable for understanding stability–activity trade-offs and mutation effects.
 
-#### [Assessing Protein Structure Quality](./tutorials/assess_protein_structure_quality/)
-
-Tools and workflows for validating predicted and experimental protein structures.
-
 ### Protein Design
 
 #### [Computational Protein Design: Structure → Sequence → Atoms](./tutorials/generative-protein-design-workshop/)
@@ -91,10 +87,6 @@ Learn the full pipeline from backbone generation through atomic-level detail.
 #### [Improving Protein-Protein Affinity](./tutorials/protein_design/improve_protein_protein_affinity/)
 
 Design mutations to enhance protein-protein binding affinity using computational methods.
-
-#### [Protein Design with RFdiffusion](./tutorials/generation_protein_rfdiffusion/)
-
-Introduction to structure-based protein design using RFdiffusion for backbone generation.
 
 ### Mutation & Function Prediction
 
