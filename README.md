@@ -164,18 +164,6 @@ Working with NCBI taxonomy for phylogenetic and evolutionary studies.
 
 Comparative sequence analysis of Ebola virus glycoprotein (GP) between Zaire and Bundibugyo strains. Identifies 8 sequence differences at 21 antibody-contacting positions in the 3CSY crystal structure. Reveals regional clustering at the GP1-GP2 junction and conserved structural elements (disulfide bonds). Candidates for further experimental investigation.
 
-### Hantavirus Genome Downloader
-
-**Location:** [`./research/hantavirus/`](./research/hantavirus/)
-
-Automated pipeline for downloading hantavirus genome sequences (S, M, and L segments) from NCBI GenBank using accession numbers. Features:
-
-- Automatic Excel parsing for accession numbers
-- Organised directory structure by segment type
-- Rate limiting respecting NCBI API limits
-- Error handling with retry mechanisms
-- Resume capability for interrupted downloads
-
 ---
 
 ## Key Features
