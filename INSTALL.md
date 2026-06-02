@@ -103,6 +103,54 @@ uvx pre-commit install
 
 - Biopython: <http://biopython.org/wiki/Main_Page>
 
+## Specialised tools for individual tutorials
+
+The dependencies above cover the core evolution, structure, machine-learning, and
+molecular-dynamics tutorials. A few tutorials rely on heavier or external tools that are not
+installed by `uv sync` — install these only if you intend to run the corresponding tutorial.
+
+### Claude Code (software/target_ai)
+
+The Target AI drug-target validation tool runs through Claude Code, Anthropic's official CLI:
+
+```shell
+npm install -g @anthropic-ai/claude-code
+```
+
+You will need an Anthropic API key or a Claude Pro/Max subscription. See
+<https://docs.anthropic.com/en/docs/claude-code/overview>.
+
+### OpenMS (tutorials/identification_phosposites)
+
+Phosphosite identification uses the OpenMS mass-spectrometry suite. Install the command-line tools
+and the Python bindings:
+
+```shell
+brew install openms      # command-line tools
+uv pip install pyopenms  # Python bindings (into the managed .venv)
+```
+
+See <https://openms.de/>.
+
+### Neo4j (tutorials/omics/graph_queries_with_neo4j)
+
+Graph queries require a running Neo4j database. Install Neo4j Desktop or the community server from
+<https://neo4j.com/download/>
+
+### Protein design workshop (tutorials/generative-protein-design-workshop, tutorials/generation_protein_rfdiffusion)
+
+The de novo design tutorials use GPU-based deep-learning tools with their own (conda/git) install
+procedures. Follow the upstream instructions and the per-tutorial READMEs:
+
+- RFdiffusion: <https://github.com/RosettaCommons/RFdiffusion>
+- ProteinMPNN: <https://github.com/dauparas/ProteinMPNN>
+- MODELLER: <https://salilab.org/modeller/> (academic licence required)
+
+### FoldX (tutorials/stability_impact)
+
+FoldX is not available through Homebrew. Download the binary after registering for a free academic
+licence at <https://foldxsuite.crg.eu/>.
+
 ## Scripts
 
 The Python scripts are in [./scripts/](./scripts/).
