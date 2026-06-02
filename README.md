@@ -126,10 +126,6 @@ Detect and localise phosphorylation sites in proteins using mass spectrometry da
 
 ### Foundations
 
-#### [Learning PyTorch](./tutorials/learn_pytorch/)
-
-Introduction to PyTorch for machine learning in computational biology, with practical examples.
-
 #### [FDR & Q-Values](./tutorials/fdr_qvalue.md)
 
 Statistical foundations for multiple testing correction and false discovery rates.
@@ -159,7 +155,7 @@ Comparative sequence analysis of Ebola virus glycoprotein (GP) between Zaire and
 - **Molecular Simulation** — Molecular dynamics with OpenMM
 - **Systems Biology** — Multi-omics integration and network analysis
 - **AI-Powered Tools** — Leverage Claude Code for interactive target validation and analysis
-- **Production Software** — Specialized tools for common computational biology tasks
+- **Production Software** — Specialised tools for common computational biology tasks
 
 ## Working with Claude Code
 
