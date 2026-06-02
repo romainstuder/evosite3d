@@ -48,18 +48,6 @@ claude
 
 Claude Code reads the embedded `CLAUDE.md` file and becomes your target validation assistant. No additional API keys needed—Open Targets Platform is free and open.
 
-### Positive Selection Detector
-
-A pipeline for detecting and analyzing pervasive positive selection in protein sequences using PAML site models.
-
-**Features:**
-
-- Identifies sites under positive selection (dN/dS > 1)
-- Compares multiple PAML site models (M0, M1a, M2a, M7, M8)
-- Includes example analyses for HLA_DQB1 and TRIM5
-
-**Location:** [`./software/positive_selection_detector/`](./software/positive_selection_detector/)
-
 ---
 
 ## 📚 Tutorials
