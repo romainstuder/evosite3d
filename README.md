@@ -114,10 +114,6 @@ Run production-ready molecular dynamics simulations of Ubiquitin using OpenMM. I
 
 ### Omics & Systems Biology
 
-#### [Multi-Omics Integration with MOFA2](./tutorials/omics/multiomics_integration_with_mofa2/)
-
-Integrate multi-modal omics data (genomics, transcriptomics, proteomics, etc.) using factor analysis to discover coordinated variation across data types.
-
 #### [Graph Queries with Neo4j](./tutorials/omics/graph_queries_with_neo4j/)
 
 Leverage graph databases to query and analyse biological networks and relationships.
