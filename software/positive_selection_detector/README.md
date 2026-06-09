@@ -61,38 +61,38 @@ parallelism.
 uv run python prepare_data.py --gene-symbol HLA-DQB1
 
 # Step 2: run both CodeML models, LRT, BEB extraction
-python run_codeml_site_models.py --gene-symbol HLA-DQB1
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1
 
 # Step 2-bis: run HyPhy FUBAR (default) on the same alignment
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1
 
 # Step 3: plots, Jalview annotation, PyMOL script
-python analyse_site_models.py --gene-symbol HLA-DQB1
+uv run python analyse_site_models.py --gene-symbol HLA-DQB1
 ```
 
 ### Common options
 
 ```bash
 # Use a different taxon (default 9347 = Boreoeutheria; 7742 = Vertebrata)
-python prepare_data.py --gene-symbol TP53 --taxon 7742
+uv run python prepare_data.py --gene-symbol TP53 --taxon 7742
 
 # Override UniProt accession
-python prepare_data.py --gene-symbol HLA-DQB1 --uniprot P01920
+uv run python prepare_data.py --gene-symbol HLA-DQB1 --uniprot P01920
 
 # Use an experimental PDB instead of AlphaFold
-python prepare_data.py     --gene-symbol HLA-DQB1 --pdb 1UVQ
-python analyse_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
+uv run python prepare_data.py     --gene-symbol HLA-DQB1 --pdb 1UVQ
+uv run python analyse_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
     --chain B --resi-offset 32
 
 # Run a single CodeML model (designed for parallel execution)
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8a
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --extract-only
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8a
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --extract-only
 
 # HyPhy: choose method
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method FUBAR
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BUSTED
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BOTH
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method FUBAR
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BUSTED
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BOTH
 ```
 
 ### Branch-site model A (lineage to the target)
@@ -107,13 +107,13 @@ significant.
 
 ```bash
 # Preview the lineage branches (no codeml)
-python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --list-branches
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --list-branches
 
 # Run model A on every branch from the root to the target
-python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1
 
 # Run a single branch by index (1 = nearest the root); good for parallelism
-python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --branch 3
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --branch 3
 ```
 
 Outputs (per branch `bNN`, numbered from the root towards the target):
