@@ -35,7 +35,8 @@ params.taxon           = 1437010       // NCBI taxon ID (default Boreoeutheria)
 params.plot_threshold  = 0.50       // BEB probability threshold for dN/dS plot
 params.outdir          = "results"
 // Top-level output directory
-params.codeml_method   = "M8"       // CODEML MODEL (set "" to skip)
+params.codeml_method   = "M8"       // CODEML MODEL
+params.skip_codeml     = false      // Skip CodeML entirely (M8/M8a + extract + analyse)
 params.skip_codeml_run = false      // Skip 2b1/2b2; reuse existing .mlc in silver
 params.hyphy_method    = ""    // FUBAR, BUSTED, or BOTH (set "" to skip)
 params.branch_site     = false      // Run branch-site model A along the target lineage
@@ -333,7 +334,8 @@ process RUN_HYPHY {
     tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset), path(silver)
 
     output:
-    tuple val(gene_symbol), path(silver), emit: silver
+    tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset), path(silver),
+    emit: silver
 
     script:
     def uniprot_arg = uniprot ? "--uniprot ${uniprot}" : ''
@@ -343,6 +345,33 @@ process RUN_HYPHY {
         --outdir 2_silver \\
         --method ${params.hyphy_method} \\
         ${uniprot_arg}
+    """
+}
+
+
+// ---------------------------------------------------------------------------
+//  Merge CodeML + HyPhy silver dirs so the analyse step sees both
+//  (BEB sites/tables and FUBAR sites/JSON) when both branches run.
+// ---------------------------------------------------------------------------
+
+process MERGE_SELECTION_RESULTS {
+    tag "${gene_symbol}"
+
+    input:
+    tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset),
+        path("codeml_silver"), path("hyphy_silver")
+
+    output:
+    tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset),
+    path("2_silver"), emit: silver
+
+    script:
+    """
+    mkdir -p 2_silver
+    # HyPhy first, then CodeML on top: both carry the shared Silver base files;
+    # this keeps CodeML's copies and adds the FUBAR outputs alongside.
+    cp -a hyphy_silver/. 2_silver/
+    cp -a codeml_silver/. 2_silver/
     """
 }
 
@@ -432,9 +461,18 @@ workflow {
     TRANSFORM_ALIGNMENT_SILVER(FETCH_ALIGNMENT.out.bronze)
 
     ch_silver = TRANSFORM_ALIGNMENT_SILVER.out.silver
+    ch_silver_struct = RENUMBER_STRUCTURES.out.silver_struct
+
+    def run_codeml = params.codeml_method && !params.skip_codeml
+    def run_hyphy  = params.hyphy_method as boolean
+
+    // Step 2c: HyPhy site models (parallel cross-check of CodeML M8)
+    if (run_hyphy) {
+        RUN_HYPHY(ch_silver)
+    }
 
     // Step 2b: run CodeML M8 + M8a in parallel, then extract BEB
-    if (params.codeml_method) {
+    if (run_codeml) {
         if (params.skip_codeml_run) {
             // Reuse silver as both m8 and m8a workdirs (expects pre-existing .mlc)
             ch_codeml_joined = ch_silver.map {
@@ -456,22 +494,37 @@ workflow {
         }
 
         EXTRACT_RESULTS(ch_codeml_joined)
+    }
 
-        // Step 3: analyse — join the per-gene silver_struct directory (always
-        // present; may be empty) by gene_symbol.
-        ch_silver_struct = RENUMBER_STRUCTURES.out.silver_struct
-        ch_analyze_input = EXTRACT_RESULTS.out.silver
+    // Step 3: analyse — pick the silver dir(s) feeding the visualisation.
+    // CodeML and HyPhy each produce a silver dir; when both run, merge them so
+    // analyse sees BEB and FUBAR together.
+    if (run_codeml && run_hyphy) {
+        ch_merge = EXTRACT_RESULTS.out.silver
+            .join(RUN_HYPHY.out.silver.map { it -> tuple(it[0], it[5]) }, by: 0)
+            .map { gene_symbol, uniprot, pdb, chain, resi_offset, codeml_silver, hyphy_silver ->
+                tuple(gene_symbol, uniprot, pdb, chain, resi_offset, codeml_silver, hyphy_silver)
+            }
+        MERGE_SELECTION_RESULTS(ch_merge)
+        ch_analyze_silver = MERGE_SELECTION_RESULTS.out.silver
+    } else if (run_codeml) {
+        ch_analyze_silver = EXTRACT_RESULTS.out.silver
+    } else if (run_hyphy) {
+        ch_analyze_silver = RUN_HYPHY.out.silver
+    } else {
+        ch_analyze_silver = Channel.empty()
+    }
+
+    if (run_codeml || run_hyphy) {
+        // Join the per-gene silver_struct directory (always present; may be
+        // empty) by gene_symbol.
+        ch_analyze_input = ch_analyze_silver
             .join(ch_silver_struct, by: 0)
             .map { gene_symbol, uniprot, pdb, chain, resi_offset, silver_dir, struct_dir ->
                 tuple(gene_symbol, uniprot, pdb, chain, resi_offset, silver_dir, struct_dir)
             }
 
         ANALYZE_RESULTS(ch_analyze_input)
-    }
-
-    // Step 2c: HyPhy site models (parallel cross-check of CodeML M8)
-    if (params.hyphy_method) {
-        RUN_HYPHY(ch_silver)
     }
 
     // Step 2d: CodeML branch-site model A along the target lineage

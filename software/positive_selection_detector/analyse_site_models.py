@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
-"""Step 3 — Analyse CodeML site-model results.
+"""Step 3 — Analyse site-model results.
 
-Reads the BEB outputs produced by Step 2 (``run_codeml_site_models.py``)
-and generates visualisation files:
+Reads the per-site selection outputs produced by Step 2
+(``run_codeml_site_models.py``) and/or Step 2-bis
+(``run_hyphy_site_models.py``) and generates visualisation files:
 
-    - ``{prefix}_beb.png``       — per-site dN/dS Manhattan plot
-    - ``{prefix}_beb.jlv``       — Jalview annotation (BEB + dN/dS tracks)
-    - ``{prefix}_sites.pml``     — PyMOL script highlighting BEB sites
+    - ``{prefix}_beb.png``       — per-site dN/dS Manhattan plot (CodeML)
+    - ``{prefix}_beb.jlv``       — Jalview annotation (CodeML BEB + dN/dS)
+    - ``{prefix}_fubar.jlv``     — Jalview annotation (HyPhy FUBAR)
+    - ``{prefix}_*.pml``         — PyMOL script highlighting selected sites
 
-Assumes that Step 1 (``prepare_data.py``) has fetched the 3D structure
-and Step 2 has produced ``{prefix}_beb.txt`` and
-``{prefix}_beb_sites.tsv``.
+CodeML BEB and HyPhy FUBAR are handled independently: whichever inputs
+are present drive the corresponding outputs. A HyPhy-only run (no CodeML)
+still produces ``{prefix}_fubar.jlv`` and a FUBAR-only PyMOL script.
+
+Assumes Step 1 (``prepare_data.py``) has fetched the 3D structure, and
+that Step 2 produced ``{prefix}_beb.txt`` / ``{prefix}_beb_sites.tsv``
+and/or Step 2-bis produced ``{prefix}_fubar.json`` /
+``{prefix}_fubar_sites.tsv``.
 
 Example:
     python analyse_site_models.py --gene-symbol HLA-DQB1
@@ -78,6 +85,22 @@ def _load_trimal_aa_columns(trimal_file_path: Path) -> list[int]:
     return list(dict.fromkeys(trimal_aa_cols))
 
 
+def _track_over_columns(trimal_cols: list[int], value_by_trimpos: dict[int, float]) -> list[float]:
+    """Spread per-trimmed-column values over the full alignment columns.
+
+    ``trimal_cols`` is the ordered list of original alignment AA columns
+    kept by TrimAl; its position in that list (1-based) is the trimmed
+    column index used as the key in ``value_by_trimpos``. Returns a value
+    for every alignment column up to the last kept one (0 elsewhere).
+    """
+    corr_site_dict = {aln_col: i + 1 for i, aln_col in enumerate(trimal_cols)}
+    out: list[float] = []
+    for site in range(1, trimal_cols[-1] + 1):
+        trim_pos = corr_site_dict.get(site)
+        out.append(value_by_trimpos.get(trim_pos, 0.0) if trim_pos is not None else 0.0)
+    return out
+
+
 def write_jalview_annotation(
     path: Path,
     trimal_file_path: Path,
@@ -105,23 +128,8 @@ def write_jalview_annotation(
         beb_probs_dict[aln_pos] = float(cols[12])
         mean_omegas_dict[aln_pos] = float(cols[14])
 
-    beb_probs: list[float] = []
-    mean_omegas: list[float] = []
-    corr_site_dict = {aln_pos: i + 1 for i, aln_pos in enumerate(trimal_cols)}
-
-    for i in range(trimal_cols[-1]):
-        site = i + 1
-        if site in corr_site_dict:
-            aln_pos = corr_site_dict[site]
-            if aln_pos in beb_probs_dict:
-                beb_probs.append(beb_probs_dict[aln_pos])
-                mean_omegas.append(mean_omegas_dict[aln_pos])
-            else:
-                beb_probs.append(0)
-                mean_omegas.append(0)
-        else:
-            beb_probs.append(0)
-            mean_omegas.append(0)
+    beb_probs = _track_over_columns(trimal_cols, beb_probs_dict)
+    mean_omegas = _track_over_columns(trimal_cols, mean_omegas_dict)
 
     beb_vals: list[str] = []
     for p in beb_probs:
@@ -144,6 +152,76 @@ def write_jalview_annotation(
     ]
     path.write_text("\n".join(lines) + "\n")
     log.info("Wrote Jalview annotation (%d sites) → %s", len(beb_probs), path)
+
+
+def _load_fubar_table(json_path: Path) -> list[tuple[int, float, float, float]]:
+    """Return ``[(trimal_pos, alpha, beta, prob_pos), …]`` from a FUBAR JSON.
+
+    ``trimal_pos`` is the 1-based codon position in the trimmed alignment,
+    matching the ``trimal_pos`` column of ``{prefix}_fubar_sites.tsv``.
+    """
+    data = json.loads(json_path.read_text())
+    mle = data.get("MLE", {})
+    headers = [h[0] for h in mle.get("headers", [])]
+    content = mle.get("content", {}).get("0", [])
+    if not headers or not content or "Prob[alpha<beta]" not in headers:
+        log.warning("Could not parse FUBAR result table from %s", json_path)
+        return []
+    i_a = headers.index("alpha")
+    i_b = headers.index("beta")
+    i_p = headers.index("Prob[alpha<beta]")
+    return [(site, row[i_a], row[i_b], row[i_p]) for site, row in enumerate(content, 1)]
+
+
+def write_fubar_jalview_annotation(
+    path: Path,
+    trimal_file_path: Path,
+    fubar_json: Path,
+    threshold: float = 0.90,
+) -> None:
+    """Write a Jalview annotation file from HyPhy FUBAR results.
+
+    Mirrors :func:`write_jalview_annotation` but for FUBAR, producing:
+        - **FUBAR Pr(beta>alpha)** — bar graph of posterior probability,
+          teal above ``threshold``.
+        - **dN/dS (beta/alpha)** — line graph with ω = 1 reference
+          (capped at 99 to keep the line graph finite when alpha ≈ 0).
+    """
+    rows = _load_fubar_table(fubar_json)
+    if not rows:
+        log.warning("Empty FUBAR table — skipping FUBAR Jalview annotation.")
+        return
+
+    trimal_cols = _load_trimal_aa_columns(trimal_file_path)
+
+    prob_dict: dict[int, float] = {}
+    omega_dict: dict[int, float] = {}
+    for trimal_pos, alpha, beta, prob in rows:
+        prob_dict[trimal_pos] = prob
+        omega_dict[trimal_pos] = min(beta / max(alpha, 1e-3), 99.0)
+
+    probs = _track_over_columns(trimal_cols, prob_dict)
+    omegas = _track_over_columns(trimal_cols, omega_dict)
+
+    prob_vals: list[str] = []
+    for p in probs:
+        colour = "00808a" if p > threshold else "000000"  # teal above threshold
+        prob_vals.append(f"{p:.4f},{p:.4f},{colour}")
+
+    omega_vals = [f"{w:.4f}" for w in omegas]
+
+    lines = [
+        "JALVIEW_ANNOTATION",
+        f"BAR_GRAPH\tFUBAR Pr(beta>alpha)\t"
+        f"FUBAR posterior probability of positive selection (beta > alpha)"
+        f"\t{'|'.join(prob_vals)}",
+        f"LINE_GRAPH\tdN/dS (beta/alpha)\t"
+        f"FUBAR posterior beta/alpha per site"
+        f"\t{'|'.join(omega_vals)}",
+        "GRAPHLINE\tdN/dS (beta/alpha)\t1.0\tneutral\t000000",
+    ]
+    path.write_text("\n".join(lines) + "\n")
+    log.info("Wrote FUBAR Jalview annotation (%d sites) → %s", len(probs), path)
 
 
 # =====================================================================
@@ -171,7 +249,7 @@ def _parse_sites_tsv(tsv_path: Path, prob_col: int) -> list[tuple[int | None, fl
 def write_pymol_script(
     pml: Path,
     pdb_path: Path,
-    sites_tsv: Path,
+    sites_tsv: Path | None,
     chain: str = "A",
     resi_offset: int = 0,
     threshold_high: float = 0.95,
@@ -179,9 +257,9 @@ def write_pymol_script(
     fubar_sites_tsv: Path | None = None,
     fubar_threshold: float = 0.90,
 ) -> None:
-    """Write a PyMOL ``.pml`` that highlights BEB-positive sites.
+    """Write a PyMOL ``.pml`` that highlights positively-selected sites.
 
-    CodeML BEB layers:
+    CodeML BEB layers (when ``sites_tsv`` is given):
         - yellow spheres for ``Pr(w > 1) >= threshold_high``
         - orange sticks for ``threshold_low <= Pr(w > 1) < threshold_high``
 
@@ -189,17 +267,19 @@ def write_pymol_script(
     sticks is drawn first for FUBAR sites with
     ``Pr(beta > alpha) >= fubar_threshold``. CodeML layers are drawn
     after, so overlapping sites display the higher-confidence colour.
-    """
-    parsed = _parse_sites_tsv(sites_tsv, prob_col=3)
 
+    ``sites_tsv`` may be ``None`` (HyPhy-only run), in which case only the
+    FUBAR layer is drawn.
+    """
     high, low = [], []
-    for protein_pos, prob in parsed:
-        if protein_pos is None:
-            continue
-        if prob >= threshold_high:
-            high.append(protein_pos)
-        elif prob >= threshold_low:
-            low.append(protein_pos)
+    if sites_tsv is not None:
+        for protein_pos, prob in _parse_sites_tsv(sites_tsv, prob_col=3):
+            if protein_pos is None:
+                continue
+            if prob >= threshold_high:
+                high.append(protein_pos)
+            elif prob >= threshold_low:
+                low.append(protein_pos)
 
     fubar: list[int] = []
     if fubar_sites_tsv is not None and fubar_sites_tsv.exists():
@@ -334,12 +414,14 @@ def run_analysis(
 
     beb_txt = workdir / f"{prefix}_beb.txt"
     beb_sites_tsv = workdir / f"{prefix}_beb_sites.tsv"
+    fubar_json = workdir / f"{prefix}_fubar.json"
+    fubar_sites_tsv = workdir / f"{prefix}_fubar_sites.tsv"
+    trimal_cols = workdir / f"{prefix}_subset.cds.mafft.trimal.cols"
 
-    # dN/dS plot + Jalview annotation (require beb.txt from Step 2)
+    # CodeML BEB: dN/dS plot + Jalview annotation (require beb.txt from Step 2)
     if beb_txt.exists():
         beb_png = workdir / f"{prefix}_beb.png"
         jlv = workdir / f"{prefix}_beb.jlv"
-        trimal_cols = workdir / f"{prefix}_subset.cds.mafft.trimal.cols"
         try:
             plot_beb_per_site(beb_txt, beb_png, threshold=plot_threshold)
             write_jalview_annotation(jlv, trimal_cols, beb_txt, threshold=plot_threshold)
@@ -347,16 +429,25 @@ def run_analysis(
             log.warning("Per-site dN/dS plot failed: %s", e)
     else:
         log.warning(
-            "%s missing — skipping dN/dS plot and Jalview annotation. "
+            "%s missing — skipping dN/dS plot and CodeML Jalview annotation. "
             "Run run_codeml_site_models.py (Step 2) first.",
             beb_txt,
         )
 
-    # PyMOL script (requires beb_sites.tsv from Step 2 + structure from Step 1)
-    if not beb_sites_tsv.exists():
+    # HyPhy FUBAR: Jalview annotation (requires fubar.json from Step 2-bis)
+    if fubar_json.exists() and trimal_cols.exists():
+        write_fubar_jalview_annotation(workdir / f"{prefix}_fubar.jlv", trimal_cols, fubar_json)
+
+    # PyMOL script: needs a structure plus at least one of BEB / FUBAR sites.
+    beb_arg = beb_sites_tsv if beb_sites_tsv.exists() else None
+    fubar_arg = fubar_sites_tsv if fubar_sites_tsv.exists() else None
+    if beb_arg is None and fubar_arg is None:
         log.warning(
-            "%s missing — skipping PyMOL script. Run run_codeml_site_models.py (Step 2) first.",
+            "Neither %s nor %s present — skipping PyMOL script. Run "
+            "run_codeml_site_models.py (Step 2) or run_hyphy_site_models.py "
+            "(Step 2-bis) first.",
             beb_sites_tsv,
+            fubar_sites_tsv,
         )
         return
 
@@ -372,8 +463,6 @@ def run_analysis(
         )
         return
 
-    fubar_sites_tsv = workdir / f"{prefix}_fubar_sites.tsv"
-    fubar_arg = fubar_sites_tsv if fubar_sites_tsv.exists() else None
     taxon_tag = f"_{taxon}" if taxon is not None else ""
 
     for s in structures:
@@ -384,7 +473,7 @@ def run_analysis(
         write_pymol_script(
             workdir / pml_name,
             s["path"],
-            beb_sites_tsv,
+            beb_arg,
             chain=struct_chain,
             resi_offset=resi_offset,
             fubar_sites_tsv=fubar_arg,
