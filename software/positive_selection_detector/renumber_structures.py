@@ -25,7 +25,7 @@ from pathlib import Path
 # ``sifts`` (lib/) is importable because importing ``_common`` puts that
 # directory on sys.path.
 from _common import add_common_args, log, resolve_gene  # type: ignore
-from sifts import (  # type: ignore
+from sifts import (
     build_residue_map,
     renumber_pdb_chain,
 )

@@ -68,3 +68,9 @@ ignore = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["scripts/tests", "software/tests", "tutorials/tests"]
+
+[tool.ty.environment]
+# Several scripts run standalone and inject `lib/` onto sys.path at runtime to
+# import `api_utils` as a top-level module. ty can't follow that, so add lib/
+# to the static module search path.
+extra-paths = ["lib"]

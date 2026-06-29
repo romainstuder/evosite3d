@@ -29,7 +29,7 @@ from _common import (  # type: ignore
     resolve_gene,
     write_seq_fasta,
 )
-from ensembl import (  # type: ignore
+from ensembl import (
     extract_protein_ids_from_newick,
     fetch_cds_sequences,
     fetch_compara_protein_msa,

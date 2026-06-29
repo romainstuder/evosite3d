@@ -37,7 +37,7 @@ from _common import (  # type: ignore
     log,
     resolve_gene,
 )
-from sifts import get_sifts_mappings, pick_best_structures  # type: ignore
+from sifts import get_sifts_mappings, pick_best_structures
 
 
 def fetch_alphafold_pdb(uniprot: str, out_path: Path) -> bool:
