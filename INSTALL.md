@@ -21,7 +21,7 @@ brew tap brewsci/bio
 brew install clustal-omega \
              dssp \
              fasttree \
-             figtree \
+             hyphy \
              jalview \
              mafft \
              newick-utils \
@@ -31,7 +31,9 @@ brew install clustal-omega \
              trimal
 ```
 
-### Bioinformatics tool links
+(Note: figtree has been removed from brewsci/bio)
+
+### Links:
 
 #### Package for ancestral sequence reconstruction (and many other things)
 

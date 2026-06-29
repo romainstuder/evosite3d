@@ -24,7 +24,10 @@ def load_trimal_columns(trimal_file_path):
             if line.startswith("#"):
                 cleaned_line = line.replace(",", "")
                 column_str_list = cleaned_line.split()[1:]
-    return [int(x) for x in column_str_list]
+
+    column_int_list = [int(x) for x in column_str_list]
+    trimal_aa_cols = [(pos // 3) + 1 for pos in column_int_list]
+    return list(dict.fromkeys(trimal_aa_cols))
 
 
 def build_position_mapping(sequences):
@@ -40,6 +43,15 @@ def build_position_mapping(sequences):
     return position_mappings
 
 
+def parse_site_indices(site_indices_raw):
+    # Split by comma or whitespace
+    if "," in site_indices_raw:
+        tokens = site_indices_raw.split(",")
+    else:
+        tokens = site_indices_raw.split()
+    return [int(x) for x in tokens]
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Map Trimal output columns to CDS positions.")
     parser.add_argument("full_alignment", help="Path to the full (untrimmed) alignment FASTA file")
@@ -53,15 +65,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def parse_site_indices(site_indices_raw):
-    # Split by comma or whitespace
-    if "," in site_indices_raw:
-        tokens = site_indices_raw.split(",")
-    else:
-        tokens = site_indices_raw.split()
-    return [int(x) for x in tokens]
-
-
 def main():
     args = parse_args()
 
@@ -73,16 +76,25 @@ def main():
         raise KeyError(f"Reference gene '{args.reference_gene}' not found in sequences.")
 
     site_indices = parse_site_indices(args.site_indices)
-    max_site_index = len(column_list) // 3 - 1
+
+    print("site_indices", len(site_indices))
+
+    print("column_list", len(column_list))
+
+    max_site_index = len(column_list) + 1
+
+    print("site_indices", site_indices)
+    print("max_site_index", max_site_index)
 
     for site_index in site_indices:
-        if not (0 <= site_index <= max_site_index):
-            print(f"Warning: site_index {site_index} out of range (0 to {max_site_index})")
+        print(site_index)
+        if not (0 <= site_index - 1 <= max_site_index):
+            print(f"Warning: site_index {site_index} out of range (0 to {max_site_index + 1})")
             continue
 
-        raw_col = column_list[site_index * 3]
-        column_in_full = raw_col // 3
-
+        raw_col = column_list[(site_index - 1)]
+        column_in_full = raw_col
+        print(position_mappings[args.reference_gene])
         cds_pos = position_mappings[args.reference_gene].get(column_in_full)
         if cds_pos is None:
             print(

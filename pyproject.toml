@@ -6,6 +6,7 @@ dependencies = [
     "accelerate>=0.30",
     "biopython>=1.87",
     "chembl-webresource-client>=0.10.9",
+    "claude-agent-sdk>=0.2.87",
     "datasets>=2.18",
     "jupyter>=1.0",
     "jupyterlab>=1.0",
@@ -32,16 +33,28 @@ dependencies = [
     "transformers>=4.40",
 ]
 
-
 [dependency-groups]
 dev = [
-    "mypy>=1.5.0",
+    "mypy>=2.1.0",
     "pre-commit>=3.0.0",
     "pylint>=3.0.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "ruff>=0.11.0",
-    "ty>=0.0.32",
+    "ruff>=0.15.16",
+    "scipy-stubs>=1.17.1",
+    "ty>=0.0.46",
+]
+
+[tool.setuptools.packages.find]
+include = ["lib*"]
+exclude = [
+    "outputs*",
+    "tutorials*",
+    "ncbi_data*",
+    "test_outputs*",
+    "scripts*",
+    "software*",
+    "build*",
 ]
 
 [tool.ruff]
@@ -55,3 +68,9 @@ ignore = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["scripts/tests", "software/tests", "tutorials/tests"]
+
+[tool.ty.environment]
+# Several scripts run standalone and inject `lib/` onto sys.path at runtime to
+# import `api_utils` as a top-level module. ty can't follow that, so add lib/
+# to the static module search path.
+extra-paths = ["lib"]
