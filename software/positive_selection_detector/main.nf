@@ -31,7 +31,7 @@ nextflow.enable.dsl=2
 
 params.gene_symbols    = null       // Comma-separated gene symbols
 params.input           = null       // CSV: gene_symbol[,uniprot,pdb,chain,resi_offset]
-params.taxon           = 1437010       // NCBI taxon ID (default Boreoeutheria)
+params.taxon           = 9347       // NCBI taxon ID (default 9347 = Eutheria, placental mammals)
 params.plot_threshold  = 0.50       // BEB probability threshold for dN/dS plot
 params.outdir          = "results"
 // Top-level output directory
@@ -205,28 +205,6 @@ process TRANSFORM_ALIGNMENT_SILVER {
 
 
 // ---------------------------------------------------------------------------
-//  Merge Step 1 outputs
-// ---------------------------------------------------------------------------
-
-// process MERGE_PREPARE {
-//     tag "${gene_symbol}"
-//
-//     input:
-//     tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset), path("silver"), path("struct_workdir")
-//
-//     output:
-//     tuple val(gene_symbol), val(uniprot), val(pdb), val(chain), val(resi_offset), path("silver"), emit: workdir
-//
-//     script:
-//     """
-//     mkdir -p workdir
-//     cp -a silver/* workdir/ 2>/dev/null || true
-//     cp -a struct_workdir/* workdir/ 2>/dev/null || true
-//     """
-//}
-
-
-// ---------------------------------------------------------------------------
 //  Step 2b1: Silver — Run CodeML M8 (alternative model)
 // ---------------------------------------------------------------------------
 
@@ -342,7 +320,7 @@ process RUN_HYPHY {
     """
     uv run python ${params.script_dir}/run_hyphy_site_models.py \\
         --gene-symbol '${gene_symbol}' \\
-        --outdir 2_silver \\
+        --outdir ${silver} \\
         --method ${params.hyphy_method} \\
         ${uniprot_arg}
     """
@@ -397,7 +375,7 @@ process RUN_CODEML_BRANCH_SITE {
     """
     uv run python ${params.script_dir}/run_codeml_branch_site_models.py \\
         --gene-symbol '${gene_symbol}' \\
-        --outdir 2_silver \\
+        --outdir ${silver} \\
         ${uniprot_arg}
     """
 }

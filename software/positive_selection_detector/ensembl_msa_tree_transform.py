@@ -46,7 +46,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from _common import (  # type: ignore
+from _common import (
     add_common_args,
     check_tool,
     read_fasta_dict,
@@ -59,7 +59,7 @@ from Bio.SeqRecord import SeqRecord
 
 # ``reference_species`` (scripts/) is importable because importing
 # ``_common`` puts that directory on sys.path.
-from reference_species import is_reference_species  # type: ignore
+from reference_species import is_reference_species
 
 # ── Repository layout ─────────────────────────────────────────────────
 _REPO = Path(__file__).resolve().parent.parent.parent

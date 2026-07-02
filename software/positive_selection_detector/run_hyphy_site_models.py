@@ -38,7 +38,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from _common import (  # type: ignore
+from _common import (
     add_common_args,
     check_tool,
     log,

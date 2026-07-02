@@ -24,7 +24,7 @@ from pathlib import Path
 
 # ``ensembl`` (lib/) and ``reference_species`` (scripts/) are importable
 # because importing ``_common`` puts those directories on sys.path.
-from _common import (  # type: ignore
+from _common import (
     add_common_args,
     resolve_gene,
     write_seq_fasta,
@@ -35,7 +35,7 @@ from ensembl import (
     fetch_compara_protein_msa,
     fetch_gene_tree_newick,
 )
-from reference_species import is_reference_species  # type: ignore
+from reference_species import is_reference_species
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ def run_extract(
         prefix: Filename stem, e.g. ``"HLA_DQB1"``.
         outdir: Destination directory for the four outputs.
         taxon: NCBI taxon ID used to prune the Compara gene tree
-            (default 9347 = Boreoeutheria).
+            (default 9347 = Eutheria, placental mammals).
     """
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -156,7 +156,7 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=9347,
         help="NCBI taxon ID to prune the Compara gene tree "
-        "(default 9347 = Boreoeutheria; 9443 = Primates, "
+        "(default 9347 = Eutheria; 9443 = Primates, "
         "40674 = Mammalia, 7742 = Vertebrata).",
     )
     return ap.parse_args()

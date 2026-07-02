@@ -39,7 +39,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from _common import (  # type: ignore
+from _common import (
     BebSite,
     LnL,
     add_common_args,

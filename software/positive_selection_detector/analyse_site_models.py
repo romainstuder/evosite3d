@@ -32,7 +32,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from _common import (  # type: ignore
+from _common import (
     PLOT_SCRIPT,
     add_common_args,
     log,
@@ -93,6 +93,8 @@ def _track_over_columns(trimal_cols: list[int], value_by_trimpos: dict[int, floa
     column index used as the key in ``value_by_trimpos``. Returns a value
     for every alignment column up to the last kept one (0 elsewhere).
     """
+    if not trimal_cols:
+        return []
     corr_site_dict = {aln_col: i + 1 for i, aln_col in enumerate(trimal_cols)}
     out: list[float] = []
     for site in range(1, trimal_cols[-1] + 1):

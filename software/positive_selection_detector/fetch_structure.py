@@ -28,7 +28,7 @@ from pathlib import Path
 
 # ``sifts`` (lib/) is importable because importing ``_common`` puts that
 # directory on sys.path.
-from _common import (  # type: ignore
+from _common import (
     ALPHAFOLD_API,
     ALPHAFOLD_FILES,
     RCSB_FILES,

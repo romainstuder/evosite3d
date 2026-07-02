@@ -28,15 +28,15 @@ Given a gene symbol the pipeline:
 The pipeline is split into focused steps so each can run in parallel
 under Nextflow:
 
-| Step | Script                             | Role                                              |
-| ---- | ---------------------------------- | ------------------------------------------------- |
-| 1    | `prepare_data.py`                  | Fetch CDS alignment + tree + 3D structure         |
-| 2    | `run_codeml_site_models.py`        | Run CodeML M8 and M8a; LRT and BEB extraction     |
-| 2b   | `run_hyphy_site_models.py`         | Run HyPhy FUBAR (default) and/or BUSTED           |
-| 2c   | `run_codeml_branch_site_models.py` | Branch-site model A (MA vs MA0) along the lineage |
-| 3    | `analyse_site_models.py`           | dN/dS plot, Jalview annotation, PyMOL script      |
+| Step | Script                             | Role                                                                                             |
+| ---- | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1    | `prepare_data.py`                  | Fetch CDS alignment + tree + 3D structure, then build the CodeML-ready (TrimAl/PHYLIP) alignment |
+| 2    | `run_codeml_site_models.py`        | Run CodeML M8 and M8a; LRT and BEB extraction                                                    |
+| 2b   | `run_hyphy_site_models.py`         | Run HyPhy FUBAR (default) and/or BUSTED                                                          |
+| 2c   | `run_codeml_branch_site_models.py` | Branch-site model A (MA vs MA0) along the lineage                                                |
+| 3    | `analyse_site_models.py`           | dN/dS plot, Jalview annotation, PyMOL script                                                     |
 
-`main.nf` orchestrates all four under Nextflow with the obvious
+`main.nf` orchestrates these steps under Nextflow with the obvious
 parallelism.
 
 ## Requirements
@@ -57,7 +57,8 @@ parallelism.
 ### Standalone (sequential)
 
 ```bash
-# Step 1: fetch alignment, tree, and structure
+# Step 1: fetch alignment + tree + structure and build the CodeML-ready
+# (TrimAl-cleaned, PHYLIP) alignment — all into ./HLA_DQB1/
 uv run python prepare_data.py --gene-symbol HLA-DQB1
 
 # Step 2: run both CodeML models, LRT, BEB extraction
@@ -73,7 +74,7 @@ uv run python analyse_site_models.py --gene-symbol HLA-DQB1
 ### Common options
 
 ```bash
-# Use a different taxon (default 9347 = Boreoeutheria; 7742 = Vertebrata)
+# Use a different taxon (default 9347 = Eutheria, placental mammals; 7742 = Vertebrata)
 uv run python prepare_data.py --gene-symbol TP53 --taxon 7742
 
 # Override UniProt accession

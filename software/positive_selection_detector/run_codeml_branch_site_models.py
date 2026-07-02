@@ -52,7 +52,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from _common import (  # type: ignore
+from _common import (
     add_common_args,
     log,
     map_sites_to_cds,
@@ -61,7 +61,7 @@ from _common import (  # type: ignore
     resolve_gene,
 )
 from Bio import Phylo
-from run_codeml_site_models import run_codeml, write_beb_sites_tsv  # type: ignore
+from run_codeml_site_models import run_codeml, write_beb_sites_tsv
 from scipy.stats import chi2
 
 BRANCH_SITE_OMEGA = 1.5
@@ -385,12 +385,13 @@ def run_branch_site_pipeline(
     tree = load_tree(tree_file_in)
     n_leaves = tree.count_terminals()
     branches = lineage_branches(tree, target_name)
-    log.info("Lineage to %s has %d branches from the root.", target_name, len(branches))
+    n_branches = len(branches)
+    log.info("Lineage to %s has %d branches from the root.", target_name, n_branches)
 
     if only_branch is not None:
         branches = [b for b in branches if b.index == only_branch]
         if not branches:
-            raise RuntimeError(f"--branch {only_branch} is out of range (1..{n_leaves}).")
+            raise RuntimeError(f"--branch {only_branch} is out of range (1..{n_branches}).")
 
     results: list[BranchResult] = []
     for branch in branches:

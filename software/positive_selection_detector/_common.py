@@ -37,7 +37,7 @@ sys.path.insert(0, str(_REPO / "bin"))
 sys.path.insert(0, str(_REPO / "lib"))
 sys.path.insert(0, str(_REPO / "scripts"))
 
-from resolve_ids import resolve as resolve_identifier  # noqa: E402  # type: ignore
+from resolve_ids import resolve as resolve_identifier  # noqa: E402
 
 # ── URLs ──────────────────────────────────────────────────────────────
 ALPHAFOLD_FILES = "https://alphafold.ebi.ac.uk/files"

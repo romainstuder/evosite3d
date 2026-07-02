@@ -70,7 +70,11 @@ ignore = ["E501"]
 testpaths = ["scripts/tests", "software/tests", "tutorials/tests"]
 
 [tool.ty.environment]
-# Several scripts run standalone and inject `lib/` onto sys.path at runtime to
-# import `api_utils` as a top-level module. ty can't follow that, so add lib/
-# to the static module search path.
-extra-paths = ["lib"]
+# Several scripts run standalone and inject sibling directories onto sys.path at
+# runtime (see `_common.py`) to import helpers as top-level modules. ty can't
+# follow that, so add those directories to the static module search path. The
+# package dir comes first so its `_common` wins over the stale `scripts/_common`:
+#   software/positive_selection_detector/ -> _common and the sibling step modules
+#   lib/                              -> api_utils, ensembl, sifts
+#   scripts/                          -> resolve_ids, reference_species
+extra-paths = ["software/positive_selection_detector", "lib", "scripts"]
