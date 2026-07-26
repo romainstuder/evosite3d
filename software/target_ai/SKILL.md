@@ -19,9 +19,13 @@ Given `$ARGUMENTS`:
 
 1. **Parse.** Extract one target and one or more diseases from the input.
 
-2. **Resolve.** Map to Ensembl and EFO IDs via the Open Targets search API.
+2. **Resolve.** Use the `open-targets-platform` MCP tool `search_entities` to map to
+   canonical Ensembl Gene IDs and EFO Disease IDs.
 
-3. **Deep data collection.** Go beyond the standard queries — also fetch:
+3. **Deep data collection.** Go beyond what `open_targets_client.py` fetches — use the
+   MCP tools `get_open_targets_graphql_schema`/`get_type_dependencies` to find the right
+   fields, then `query_open_targets_graphql` (or `batch_query_open_targets_graphql` for
+   multiple diseases at once) to also fetch:
    - Genetic constraint (pLI, LOEUF from gnomAD via Open Targets)
    - Mouse phenotypes (IMPC data from Open Targets)
    - Tissue expression (baseline expression from Open Targets)

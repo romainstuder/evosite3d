@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "open-targets-platform": {
+      "type": "http",
+      "url": "https://mcp.platform.opentargets.org/mcp"
+    }
+  }
+}

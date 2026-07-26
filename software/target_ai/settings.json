@@ -5,6 +5,7 @@
       "Write",
       "Edit",
       "Bash(python3 open_targets_client.py *)",
+      "mcp__open-targets-platform__*",
       "Bash(cat *)",
       "Bash(ls *)",
       "Bash(mkdir *)",
