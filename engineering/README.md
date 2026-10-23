@@ -24,6 +24,8 @@ enforced, and which MCP connectors are useful for life-science work.
   for models; Matplotlib and seaborn for plotting; JupyterLab for notebooks.
 - **Dev tools**: Ruff, ty, mypy, pylint, pytest, pytest-cov and pre-commit. See
   [dev-dependencies.md](dev-dependencies.md).
+- **[Astral](https://astral.sh/) tools**: uv, Ruff and ty all come from Astral, whose tools for Python are written in
+  Rust and are extremely fast. That speed is why ty can run on every commit.
 
 ## Code quality
 
