@@ -12,45 +12,56 @@ target–disease pair across three evidence dimensions:
 | **Druggability**      | 35%    | Small-molecule tractability, antibody accessibility, other modalities, structural data           |
 | **Pathway / Biology** | 25%    | Pathway relevance, expression in disease tissue, animal-model phenotypes, literature co-mentions |
 
-Data comes from the **Open Targets Platform** (free, no API key). All queries are handled
-by `open_targets_client.py` — you never need to write curl commands or raw GraphQL.
+Data comes from the **Open Targets Platform** (free, no API key), reachable two ways —
+never via curl or hand-rolled HTTP:
+
+1. **`open-targets-platform` MCP server** (configured in `.mcp.json`) — for search, ID
+   resolution, and any one-off lookup.
+2. **`open_targets_client.py`** — for the two commands that must produce deterministic,
+   reproducible, file-based output.
 
 ## CRITICAL: How to Execute
 
-**ALWAYS use the Python script for ALL data fetching and scoring. NEVER use curl, raw
-GraphQL queries, or inline python3 -c commands. The script handles everything: ID
-resolution, API calls, scoring, and HTML generation.**
+**NEVER use `curl`. NEVER run `python3 -c "..."` inline code. NEVER hand-write an HTTP
+request.** If you need Open Targets data, use one of the two paths below.
 
-**NEVER run `python3 -c "..."` with inline code. NEVER run `curl`. NEVER write GraphQL
-queries manually. If you need data, call the script. If the script doesn't support
-what you need, tell the user — don't improvise.**
+### Path 1 — MCP tools, for lookups and exploration
 
-### For any validation task, run:
+Call the `open-targets-platform` MCP tools directly:
+
+- `search_entities` — resolve a gene symbol or disease name to its canonical Ensembl
+  Gene ID / EFO ID, or search across targets, diseases, drugs, variants, studies.
+- `get_open_targets_graphql_schema` / `get_type_dependencies` — look up available fields
+  and types before writing a query. Use this instead of guessing field names.
+- `query_open_targets_graphql` — run a single GraphQL query (target info, known drugs,
+  association scores, pathways, tractability, safety liabilities, tissue expression,
+  mouse phenotypes — anything in the schema, including fields the script doesn't expose).
+- `batch_query_open_targets_graphql` — run the same query across many variable sets at
+  once, e.g. one target against several diseases, or several targets against one disease.
+
+Use this path for: resolving IDs, answering a quick question, one-target/one-field
+lookups, or fetching supplementary fields the script doesn't cover (constraint scores,
+IMPC phenotypes, baseline expression, pharmacogenomics, etc. — see `SKILL.md` for the
+deep-dive use case).
+
+### Path 2 — `open_targets_client.py`, for scored & saved output
 
 ```bash
 python3 open_targets_client.py validate "TARGET1,TARGET2" "DISEASE1,DISEASE2"
-```
-
-### For individual lookups (if needed for supplementary info):
-
-```bash
-python3 open_targets_client.py search-target BRAF
-python3 open_targets_client.py search-disease "breast cancer"
-python3 open_targets_client.py target-info ENSG00000157764
-python3 open_targets_client.py known-drugs ENSG00000157764
-python3 open_targets_client.py association ENSG00000157764 EFO_0000305
-```
-
-### For pathway visualization:
-
-```bash
 python3 open_targets_client.py pathways "PCSK9,HMGCR,ANGPTL3"
 ```
 
-This generates `results/pathways.html` — an interactive map showing all Reactome
-pathways for each target, with shared pathways highlighted. Open in browser.
+`validate` resolves every target/disease, fetches evidence, applies the fixed 0–5 rubric
+below to each pair, computes the weighted composite, and writes all four files to
+`results/`. `pathways` builds the interactive Reactome pathway map at
+`results/pathways.html`. Both commands do their own resolution and fetching
+internally — call them directly, don't pre-fetch their inputs via MCP first.
 
-All commands are single-line. No curl. No multiline bash. No manual GraphQL.
+**Rule of thumb:** the user wants a scored/ranked/saved deliverable → run the script.
+The user wants to explore, ask a one-off question, or needs a field the script doesn't
+expose → use the MCP tools. Either way, all bash invocations of the script stay
+single-line — no multiline bash, no manual GraphQL outside the MCP tools' own `query`
+argument.
 
 ## Workflow
 
@@ -153,12 +164,12 @@ Every validation run produces four files in `results/`:
 
 ## Important Guidelines
 
-- **Use ONLY `python3 open_targets_client.py` commands.** No curl. No `python3 -c`. No inline scripts. No multiline bash.
-- **If the script returns zeros or errors**, tell the user what happened — don't try to debug the API yourself with introspection queries.
-- **Be transparent about missing data.** If the script returns no association, say so — don't inflate scores.
-- **Use web search** only for supplementary data the API cannot provide.
+- **Only two data paths:** the `open-targets-platform` MCP tools, or `python3 open_targets_client.py validate` / `pathways`. No curl. No `python3 -c`. No inline scripts. No multiline bash.
+- **If the script returns zeros or errors**, tell the user what happened — don't try to debug the API yourself with introspection queries (use the MCP schema tools for that instead, in front of the user).
+- **Be transparent about missing data.** If a query returns no association, say so — don't inflate scores.
+- **Use web search** only for information neither the API nor MCP tools can provide (very recent trial results, patents, competitive intelligence).
 - **Never fabricate evidence.** If unsure about a score, assign the lower value and flag it.
-- **ALL bash commands must be single-line** calls to `python3 open_targets_client.py`.
+- **All script invocations must be single-line** calls to `python3 open_targets_client.py`.
 
 ## Quick-Start Examples
 

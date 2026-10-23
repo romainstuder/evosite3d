@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-open_targets_client.py — Lightweight client for the Open Targets Platform GraphQL API.
+open_targets_client.py — Scoring pipeline for the Open Targets Platform.
+
+For one-off lookups (search, target info, known drugs, associations, top
+targets for a disease), call the `open-targets-platform` MCP server directly
+instead of this script. This script only covers the two commands that need
+deterministic, reproducible scoring and produce files on disk:
 
 Usage:
-    python3 open_targets_client.py search-target BRAF
-    python3 open_targets_client.py search-disease "breast cancer"
-    python3 open_targets_client.py target-info ENSG00000157764
-    python3 open_targets_client.py known-drugs ENSG00000157764
-    python3 open_targets_client.py association ENSG00000157764 EFO_0000305
     python3 open_targets_client.py validate "BRAF,KRAS" "melanoma"
-    python3 open_targets_client.py find-targets "Alzheimer disease" [top_n]
+    python3 open_targets_client.py pathways "PCSK9,HMGCR,ANGPTL3"
 """
 
 import csv
@@ -96,26 +96,6 @@ def get_known_drugs(ensembl_id: str) -> dict:
       }
     }"""
     return graphql_query(q, {"ensemblId": ensembl_id})
-
-
-# ── Find Targets for Disease ──────────────────────────────────────────────
-
-
-def find_targets_for_disease(efo_id: str, top_n: int = 10) -> dict:
-    q = """query($efoId: String!, $size: Int!) {
-      disease(efoId: $efoId) {
-        name
-        associatedTargets(page: {size: $size, index: 0}) {
-          count
-          rows {
-            target { id approvedSymbol approvedName }
-            score
-            datatypeScores { id score }
-          }
-        }
-      }
-    }"""
-    return graphql_query(q, {"efoId": efo_id, "size": top_n})
 
 
 # ── Association (target-disease) ───────────────────────────────────────────
@@ -844,52 +824,7 @@ def main():
 
     cmd = sys.argv[1]
 
-    if cmd == "search-target" and len(sys.argv) >= 3:
-        print(json.dumps(search_target(sys.argv[2]), indent=2))
-    elif cmd == "search-disease" and len(sys.argv) >= 3:
-        print(json.dumps(search_disease(" ".join(sys.argv[2:])), indent=2))
-    elif cmd == "association" and len(sys.argv) >= 4:
-        print(json.dumps(get_association(sys.argv[2], sys.argv[3]), indent=2))
-    elif cmd == "target-info" and len(sys.argv) >= 3:
-        print(json.dumps(get_target_info(sys.argv[2]), indent=2))
-    elif cmd == "known-drugs" and len(sys.argv) >= 3:
-        print(json.dumps(get_known_drugs(sys.argv[2]), indent=2))
-    elif cmd == "find-targets" and len(sys.argv) >= 3:
-        disease_query = " ".join(sys.argv[2:])
-        top_n = 10
-        # Check if last arg is a number (top_n)
-        if sys.argv[-1].isdigit():
-            top_n = int(sys.argv[-1])
-            disease_query = " ".join(sys.argv[2:-1])
-        # Resolve disease
-        efo_id = disease_query
-        if not any(disease_query.startswith(p) for p in ["EFO_", "MONDO_", "HP_", "Orphanet_"]):
-            r = search_disease(disease_query)
-            hits = r.get("data", {}).get("search", {}).get("hits", [])
-            if hits:
-                efo_id = hits[0]["id"]
-                print(f"  {disease_query} → {efo_id}")
-            else:
-                print(f"  WARN: disease '{disease_query}' not found")
-                sys.exit(1)
-        result = find_targets_for_disease(efo_id, top_n)
-        disease_data = result.get("data", {}).get("disease")
-        if not disease_data:
-            print("  No data returned for this disease.")
-            sys.exit(1)
-        rows = disease_data["associatedTargets"]["rows"]
-        total = disease_data["associatedTargets"]["count"]
-        print(f"  {disease_data['name']}: {total} associated targets (showing top {len(rows)})\n")
-        print("| Rank | Symbol | Name | Score | Top datatype |")
-        print("|------|--------|------|:-----:|--------------|")
-        for i, row in enumerate(rows, 1):
-            t = row["target"]
-            score = row["score"]
-            dts = sorted(row.get("datatypeScores", []), key=lambda d: d["score"], reverse=True)
-            top_dt = f"{dts[0]['id']} ({dts[0]['score']:.2f})" if dts else "—"
-            name = (t.get("approvedName") or "")[:40]
-            print(f"| {i} | **{t['approvedSymbol']}** | {name} | {score:.3f} | {top_dt} |")
-    elif cmd == "validate" and len(sys.argv) >= 4:
+    if cmd == "validate" and len(sys.argv) >= 4:
         targets = [t.strip() for t in sys.argv[2].split(",")]
         diseases = [d.strip() for d in sys.argv[3].split(",")]
         print(f"Validating {len(targets)} target(s) × {len(diseases)} disease(s)...\n")

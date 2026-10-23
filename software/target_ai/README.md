@@ -73,28 +73,24 @@ You can also just talk to Claude naturally:
 > Score these oncology targets for pancreatic cancer: KRAS, TP53, CDKN2A, SMAD4
 ```
 
-### Usage — Python Script (standalone)
+### Usage — Data access
 
-The included Python script can also be run independently:
+Two ways to reach Open Targets data, no API key needed either way:
+
+**MCP server** (`open-targets-platform`, registered in `.mcp.json`) — for search, ID
+resolution, and any one-off lookup. Claude calls its tools directly during a
+conversation: `search_entities`, `get_open_targets_graphql_schema`,
+`get_type_dependencies`, `query_open_targets_graphql`, `batch_query_open_targets_graphql`.
+No script needed for these.
+
+**Python script** (`open_targets_client.py`) — for the two commands that must produce
+deterministic, reproducible, file-based output:
 
 ```bash
-# Search for a target or disease
-python3 open_targets_client.py search-target BRAF
-python3 open_targets_client.py search-disease "breast cancer"
-
-# Find top targets for a disease
-python3 open_targets_client.py find-targets "Alzheimer disease"
-python3 open_targets_client.py find-targets "Alzheimer disease" 20
-
-# Full validation
+# Full validation — scores every target × disease pair and writes results/
 python3 open_targets_client.py validate "BRAF,KRAS" "cutaneous melanoma,non-small cell lung carcinoma"
 
-# Individual lookups
-python3 open_targets_client.py target-info ENSG00000157764
-python3 open_targets_client.py known-drugs ENSG00000157764
-python3 open_targets_client.py association ENSG00000157764 EFO_0000389
-
-# Pathway visualization
+# Pathway visualization — interactive Reactome map
 python3 open_targets_client.py pathways "PCSK9,HMGCR,ANGPTL3"
 ```
 

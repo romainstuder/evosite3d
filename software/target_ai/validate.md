@@ -24,17 +24,13 @@ Given the user's input in `$ARGUMENTS`:
 
 1. **Parse inputs.** Split on the separator to extract target list and disease list. Trim whitespace. Handle both gene symbols and Ensembl IDs.
 
-2. **Resolve identifiers.** For each target and disease, query the Open Targets Platform search API to get canonical Ensembl Gene IDs and EFO Disease IDs. Confirm with the user if any resolution is ambiguous (multiple hits with similar scores).
+2. **(Optional) Sanity-check identifiers.** If a target or disease name looks ambiguous, use the `open-targets-platform` MCP tool `search_entities` to confirm the canonical Ensembl/EFO ID with the user before running the script — `validate` (step 6) will resolve them anyway, but this catches ambiguity early.
 
-3. **Fetch data.** For every (target, disease) pair, run the GraphQL queries defined in CLAUDE.md:
-   - Association scores (overall + per datatype + per datasource)
-   - Target tractability and safety liabilities
-   - Known drugs for the target–disease pair
-   - Pathway annotations, GO terms, tissue expression
+3. **Run the script.** Skip manual data fetching — `open_targets_client.py validate` (step 6) does resolution, fetching, and scoring internally in one deterministic pass. Only reach for the MCP tools (`query_open_targets_graphql`, `batch_query_open_targets_graphql`) if the user wants a field the script doesn't cover.
 
-4. **Score.** Apply the 0–5 rubrics from CLAUDE.md for Clinical, Druggability, and Pathway dimensions. Compute the weighted Composite score.
+4. **Score.** The script applies the 0–5 rubrics from CLAUDE.md for Clinical, Druggability, and Pathway dimensions and computes the weighted Composite score — don't recompute this by hand.
 
-5. **Rank and present.** Sort by Composite score descending. Output the full results table in Markdown. Follow with a narrative analysis for each pair.
+5. **Rank and present.** The script already sorts by Composite score descending and prints the results table plus narrative. Print that output directly; don't recompute or reformat it.
 
 6. **Generate outputs.** Run the Python script to produce all files:
 
