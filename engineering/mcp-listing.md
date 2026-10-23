@@ -1,6 +1,6 @@
 # Life-Science MCP Connectors
 
-A reference list of (Model Context Protocol (MCP) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
+A reference list of Model Context Protocol (MCP) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
 
 > Compiled 22 October 2026 from the Claude connectors directory. Tool lists and availability may change, so check the directory for the latest details.
 
