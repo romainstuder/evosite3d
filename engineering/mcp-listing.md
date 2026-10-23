@@ -38,6 +38,7 @@ A reference list of MCP (Model Context Protocol) connectors for biology, pharma,
 | Connector         | Area                        | Endpoint URL                                      | Access  |
 | ----------------- | --------------------------- | ------------------------------------------------- | ------- |
 | ChEMBL            | Cheminformatics             | `https://hcls.mcp.claude.com/chembl/mcp`          | Open    |
+| RCSB PDB (beta)   | Structure archive           | `https://mcp-beta.rcsb.org/mcp`                   | Open    |
 | Boltz API         | Structure / binding         | `https://mcp.boltz.bio/mcp`                       | Sign-in |
 | Inductive Bio     | ADMET prediction            | `https://api.inductive.bio/mcp`                   | Sign-in |
 | Open Targets      | Target discovery            | `https://mcp.platform.opentargets.org/mcp`        | Open    |
@@ -70,6 +71,22 @@ Access to EMBL-EBI's database of bioactive molecules.
 - **Example prompts:**
   - "Find ChEMBL compounds with IC50 < 100 nM against EGFR and list their SMILES."
   - "What is the mechanism of action of imatinib according to ChEMBL?"
+
+### RCSB PDB (beta)
+
+Search and retrieve experimentally determined 3D structures from the Protein Data Bank. Open source: [rcsb/rcsb-mcp](https://github.com/rcsb/rcsb-mcp).
+
+- **URL:** `https://mcp-beta.rcsb.org/mcp`
+- **Access:** Open (the announcement mentions no sign-in)
+- **Capabilities:** the announcement groups them by API rather than listing tool names.
+  - Search API: find structures by keyword, attributes, sequence similarity, chemical structure, 3D shape, or sequence and structural motifs, combined with Boolean logic and summarised with counts and facets.
+  - Data API: details on entries, entities, assemblies, chains, ligands and interfaces, with linked UniProt and PubMed records.
+  - Sequence Coordinates API: map sequences and positional features between PDB, UniProt and NCBI.
+  - Helper tools: convert free text into identifiers for Gene Ontology, InterPro/Pfam, EC numbers, MONDO disease terms and NCBI Taxonomy.
+- **Example prompts:**
+  - "Is there any protein interacting with uranium compounds?"
+  - "List the residue binding sites for those results and the most frequent amino acid types."
+- **Note:** this is a beta release. Tools and behaviour may change, so check key results on RCSB.org. Feedback goes to the [issue tracker](https://github.com/rcsb/rcsb-mcp/issues). Source: [RCSB announcement](https://www.rcsb.org/news/6acfa3d74ec37840b7ddf62e).
 
 ### Boltz API
 
@@ -233,7 +250,7 @@ Electronic lab notebook and registry, with Benchling's scientific AI.
 
 ## Gaps and workarounds
 
-There is currently no dedicated connector for **UniProt**, **RCSB PDB**, **Ensembl** or **PubChem**. You have two options:
+There is currently no dedicated connector for **UniProt**, **Ensembl** or **PubChem**. RCSB PDB has a beta connector (see above). You have two options:
 
 - Ask Claude to fetch the public files or API results directly (for example, PDB `1WDD`, rice RubisCO) and analyse them in Python with Biopython, RDKit or similar libraries.
 - Use **Amass** or **Open Targets** for gene and protein annotation, and **ChEMBL** for compound data.

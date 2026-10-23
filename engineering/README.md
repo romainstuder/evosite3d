@@ -36,7 +36,7 @@ Run everything through `uv run`, so the project's virtual environment is always 
 | Install the environment | `uv sync`                                       |
 | Lint and auto-fix       | `uv run ruff check --fix .`                     |
 | Format                  | `uv run ruff format .`                          |
-| Type check              | `uv run ty check` (or `uv run mypy .`)          |
+| Type check              | `uv run ty check` (or `uv run mypy .`, slower)  |
 | Test                    | `uv run pytest`                                 |
 | Coverage                | `uv run pytest --cov --cov-report=term-missing` |
 | Install commit hooks    | `uvx pre-commit install`                        |
@@ -48,8 +48,8 @@ caught before a commit. Tests are collected from `scripts/tests`, `software/test
 ## MCP
 
 [mcp-listing.md](mcp-listing.md) lists remote MCP servers that Claude and other AI tools can call for literature search (PubMed, bioRxiv),
-compounds and targets (ChEMBL, Open Targets), structure prediction (Boltz) and clinical data (ClinicalTrials.gov). It
-also describes gaps, such as UniProt and RCSB PDB, which have no connector, and example multi-step workflows.
+compounds and targets (ChEMBL, Open Targets), structures (RCSB PDB, beta), structure prediction (Boltz) and clinical data (ClinicalTrials.gov). It
+also describes gaps, such as UniProt, which has no connector, and example multi-step workflows.
 
 ## Adding to this folder
 

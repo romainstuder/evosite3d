@@ -78,7 +78,8 @@ uv run ty check
 
 ## mypy
 
-The established type checker, kept as a second opinion where ty (still in beta) does not yet cover a feature.
+The established type checker, kept as a second opinion where ty (still in beta) does not yet cover a feature. It is
+noticeably slower than ty, which is why it is not run on every commit.
 
 ```bash
 uv run mypy .
