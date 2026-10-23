@@ -1,6 +1,6 @@
 # Life-Science MCP Connectors
 
-A reference list of (Model Context Protocol (MCP) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
+A reference list of Model Context Protocol (MCP) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
 
 > Compiled 22 October 2026 from the Claude connectors directory. Tool lists and availability may change, so check the directory for the latest details.
 
@@ -256,7 +256,7 @@ Data from ClinicalTrials.gov.
 - **Endpoint URL:** `https://hcls.mcp.claude.com/clinical_trials/mcp`
 - **Access:** Open. No account needed.
 - **Tools:** `search_trials`, `get_trial_details`, `search_by_eligibility`, `search_by_sponsor`, `search_investigators`, `analyze_endpoints`
-- **Example prompt:** "Phase 3 trials currently recruiting for NASH. Summarise their primary endpoints."
+- **Example prompt:** "Phase 3 trials currently recruiting for MASH (formerly NASH). Search both terms and summarise their primary endpoints. Summarise their primary endpoints."
 
 ### AdisInsight (Springer Nature)
 
