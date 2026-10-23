@@ -13,6 +13,9 @@ enforced, and which MCP connectors are useful for life-science work.
 ## Stack at a glance
 
 - **Python 3.12** (`requires-python = ">=3.12,<3.13"`, pinned locally in `.python-version`).
+  The project only targets Python releases in **security** maintenance status: not end-of-life, not
+  still receiving bug-fix releases, and not pre-release. Check the
+  [Python status of versions](https://devguide.python.org/versions/) before changing the pin.
 - **[uv](https://docs.astral.sh/uv/)** for packages and environments. Never use `pip`, `poetry` or `conda`, and never
   create `requirements.txt` or `setup.py`. Dependencies live in [`pyproject.toml`](../pyproject.toml) and are locked in
   [`uv.lock`](../uv.lock).
@@ -42,7 +45,7 @@ caught before a commit. Tests are collected from `scripts/tests`, `software/test
 
 ## MCP
 
-[mcp-listing.md](mcp-listing.md) lists remote MCP servers that Claude can call for literature search (PubMed, bioRxiv),
+[mcp-listing.md](mcp-listing.md) lists remote MCP servers that Claude and other AI tools can call for literature search (PubMed, bioRxiv),
 compounds and targets (ChEMBL, Open Targets), structure prediction (Boltz) and clinical data (ClinicalTrials.gov). It
 also describes gaps, such as UniProt and RCSB PDB, which have no connector, and example multi-step workflows.
 
