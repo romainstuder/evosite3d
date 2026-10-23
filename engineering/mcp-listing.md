@@ -111,7 +111,8 @@ Biomolecular structure and binding prediction, virtual screening and binder desi
 ADMET property prediction models for drug discovery.
 
 - **Website URL:** <https://www.inductive.bio>
-- **Documentation URL:** <https://claude.com/marketplace/connectors/inductive-bio>
+- **Documentation URL:** none. Inductive Bio has no documentation page for its MCP server. The
+  [Claude connector listing](https://claude.com/marketplace/connectors/inductive-bio) is the closest reference.
 - **Endpoint URL:** `https://api.inductive.bio/mcp`
 - **Access:** Sign-in
 - **Tools:** `list_available_models`, `predict_properties`
