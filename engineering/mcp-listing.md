@@ -14,8 +14,9 @@ A reference list of (Model Context Protocol (MCP) connectors for biology, pharma
 4. [Targets, genomics and bioinformatics](#targets-genomics-and-bioinformatics)
 5. [Literature](#literature)
 6. [Pharma and clinical](#pharma-and-clinical)
-7. [Gaps and workarounds](#gaps-and-workarounds)
-8. [Example workflows](#example-workflows)
+7. [Other directories](#other-directories)
+8. [Gaps and workarounds](#gaps-and-workarounds)
+9. [Example workflows](#example-workflows)
 
 ---
 
@@ -303,12 +304,25 @@ Electronic lab notebook and registry, with Benchling's scientific AI.
 
 ---
 
+## Other directories
+
+This list is a short, curated set of connectors. Larger directories exist, and they also list community-built servers for databases without an official connector, such as UniProt, Ensembl and PubChem.
+
+- [mcp.so, bioinformatics tag](https://mcp.so/tags/bioinformatics): a general MCP directory. The bioinformatics tag lists about 20 servers and clients (for example BioMCP, ENCODE, UniProt and Seqera). It does not mark which are official, and most look like community projects.
+- [Glama, Biology & Medicine](https://glama.ai/mcp/categories/biology-and-medicine): Glama's category for life-science and medical servers (genomics, protein structure, clinical vocabularies, health records). Many entries carry an "official" tag, which the page does not define.
+- [IntuitionLabs, Top MCP Servers for Biotech](https://intuitionlabs.ai/pdfs/top-mcp-servers-for-biotech-connecting-ai-to-research-data.pdf): a PDF report from August 2026 covering literature, genomics and proteins (NCBI Datasets, Ensembl, UniProt, AlphaFold), pathways (Reactome, STRING), chemistry and drugs (ChEMBL, PubChem, OpenFDA) and ClinicalTrials.gov.
+
+Servers in these directories are not vetted here. Check who maintains a server, what data it sends where, and its licence before connecting it.
+
+---
+
 ## Gaps and workarounds
 
-There is currently no dedicated connector for **UniProt**, **Ensembl** or **PubChem**. RCSB PDB has a beta connector (see above). You have two options:
+There is currently no dedicated connector in the Claude directory for **UniProt**, **Ensembl** or **PubChem**. RCSB PDB has a beta connector (see above), and the [other directories](#other-directories) list community servers for some of these databases. You have these options:
 
 - Ask Claude to fetch the public files or API results directly (for example, PDB `1WDD`, rice RubisCO) and analyse them in Python with Biopython, RDKit or similar libraries.
 - Use **Amass** or **Open Targets** for gene and protein annotation, and **ChEMBL** for compound data.
+- Try a community server from the other directories, after checking who maintains it.
 
 ---
 
