@@ -14,9 +14,10 @@ A reference list of Model Context Protocol (MCP) connectors for biology, pharma,
 4. [Targets, genomics and bioinformatics](#targets-genomics-and-bioinformatics)
 5. [Literature](#literature)
 6. [Pharma and clinical](#pharma-and-clinical)
-7. [Other directories](#other-directories)
-8. [Gaps and workarounds](#gaps-and-workarounds)
-9. [Example workflows](#example-workflows)
+7. [Figures and illustration](#figures-and-illustration)
+8. [Other directories](#other-directories)
+9. [Gaps and workarounds](#gaps-and-workarounds)
+10. [Example workflows](#example-workflows)
 
 ---
 
@@ -38,7 +39,7 @@ A reference list of Model Context Protocol (MCP) connectors for biology, pharma,
 
 ### Open connectors
 
-No account needed.
+No account needed. Add each one by its endpoint URL, or find it in the Claude connectors directory.
 
 | Connector         | Area               | Endpoint URL                                      |
 | ----------------- | ------------------ | ------------------------------------------------- |
@@ -49,29 +50,45 @@ No account needed.
 | bioRxiv / medRxiv | Preprints          | `https://hcls.mcp.claude.com/biorxiv/mcp`         |
 | Clinical Trials   | ClinicalTrials.gov | `https://hcls.mcp.claude.com/clinical_trials/mcp` |
 
+### Built into Claude Science
+
+Featured connectors that are on by default in Claude Science. They are read-only, need no account or key, and have no public endpoint listed. Claude Science also includes many more database connectors, such as Ensembl, UniProt and PubChem. See the [Claude Science connectors page](https://claude.com/docs/claude-science/connectors-and-skills) for the full list.
+
+| Connector | Area                  |
+| --------- | --------------------- |
+| BioMart   | Gene annotation       |
+| CellGuide | Cell types            |
+| ZINC      | Purchasable chemistry |
+
 ### Connectors that need an account
 
-| Connector        | Area                        | Endpoint URL                               | Access                   |
-| ---------------- | --------------------------- | ------------------------------------------ | ------------------------ |
-| Boltz API        | Structure / binding         | `https://mcp.boltz.bio/mcp`                | Pay-per-use              |
-| Inductive Bio    | ADMET prediction            | `https://api.inductive.bio/mcp`            | Account, pricing unclear |
-| LatchBio         | Bioinformatics workflows    | `https://mcp.latch.bio/mcp`                | Pay-per-use              |
-| Synthesize Bio   | Gene expression             | `https://app.synthesize.bio/api/mcp`       | Account, pricing unclear |
-| Helix GenoSphere | Human genomics              | `https://mcp.hrn-production.helix.com/mcp` | Partners only            |
-| Owkin            | AI agents for biology       | `https://mcp.k.owkin.com/mcp`              | Account, pricing unclear |
-| Scite            | Citation evidence           | `https://api.scite.ai/mcp`                 | Account, pricing unclear |
-| AdisInsight      | Drug and trial intelligence | `https://adisinsight-mcp.springer.com/mcp` | Subscription             |
-| Amass            | Unified life-science data   | `https://mcp.amass.tech/mcp`               | Account, pricing unclear |
-| Medidata         | Trial site ranking          | Directory only                             | Customers only           |
-| Benchling        | ELN / registry              | Directory only                             | Customers only           |
+| Connector        | Area                             | Endpoint URL                               | Access                   |
+| ---------------- | -------------------------------- | ------------------------------------------ | ------------------------ |
+| Boltz API        | Structure / binding              | `https://mcp.boltz.bio/mcp`                | Pay-per-use              |
+| Inductive Bio    | ADMET prediction                 | `https://api.inductive.bio/mcp`            | Account, pricing unclear |
+| LatchBio         | Bioinformatics workflows         | `https://mcp.latch.bio/mcp`                | Pay-per-use              |
+| Synthesize Bio   | Gene expression                  | `https://app.synthesize.bio/api/mcp`       | Account, pricing unclear |
+| Helix GenoSphere | Human genomics                   | `https://mcp.hrn-production.helix.com/mcp` | Partners only            |
+| Owkin            | AI agents for biology            | `https://mcp.k.owkin.com/mcp`              | Account, pricing unclear |
+| Scite            | Citation evidence                | `https://api.scite.ai/mcp`                 | Account, pricing unclear |
+| AdisInsight      | Drug and trial intelligence      | `https://adisinsight-mcp.springer.com/mcp` | Subscription             |
+| Amass            | Unified life-science data        | `https://mcp.amass.tech/mcp`               | Account, pricing unclear |
+| Medidata         | Trial site ranking               | Directory only                             | Customers only           |
+| Benchling        | ELN / registry                   | Directory only                             | Customers only           |
+| BioRender        | Scientific figures               | `https://mcp.services.biorender.com/mcp`   | Pay-per-use              |
+| 10x Genomics     | Single-cell and spatial analysis | Desktop extension                          | Account, pricing unclear |
+| Synapse.org      | Research data repository         | `https://mcp.synapse.org/mcp`              | Account, pricing unclear |
+| Scholar Gateway  | Wiley literature                 | `https://connector.scholargateway.ai/mcp`  | Account, pricing unclear |
+| Consensus        | Literature search                | `https://mcp.consensus.app/mcp`            | Free tier, paid extras   |
 
-"Directory only" means no public endpoint is listed, so connect through the Claude connectors directory.
+"Directory only" means no public endpoint is listed, so connect through the Claude connectors directory. "Desktop extension" means the connector is installed as a Claude Desktop extension, not added by URL.
 
 **Access labels** (for connectors that need an account)
 
 - **Pay-per-use:** needs an account, and usage is billed.
 - **Subscription:** needs a paid subscription with the provider.
 - **Customers only / Partners only:** limited to the provider's customers or approved partners.
+- **Free tier, paid extras:** usable without paying, with higher limits on paid plans.
 - **Account, pricing unclear:** needs an account with the provider. No pricing or eligibility information was found, so check with the provider.
 
 These labels come from the providers' pages and third-party listings, not from the providers' pricing pages. Confirm costs before relying on a connector.
@@ -139,6 +156,16 @@ ADMET property prediction models for drug discovery.
   - "Which ADMET models are available?"
   - "Predict solubility, permeability and hERG liability for these SMILES."
 
+### ZINC
+
+Purchasable chemical space, for finding compounds that can be bought. A Featured connector in Claude Science.
+
+- **Website URL:** <https://zinc.docking.org>
+- **Documentation URL:** <https://claude.com/docs/claude-science/connectors-and-skills>
+- **Endpoint URL:** Built into Claude Science (no public endpoint listed)
+- **Access:** Open. Featured connectors are read-only and need no account or key. Some underlying databases have non-commercial or attribution terms, so check each source's licence.
+- **Tools:** not listed in the documentation.
+
 ---
 
 ## Targets, genomics and bioinformatics
@@ -204,6 +231,50 @@ AI agents for biology, focused on histopathology and cohort analysis.
 - **Tools:** `list_cohorts`, `list_cell_types`, `filter_slides`, `get_histomics`, `display_slide_thumbnail`, `survival_analysis`, `features_description`, `histoplus_help`
 - **Example prompt:** "Run a survival analysis on the cohort, stratified by tumour-infiltrating lymphocyte density."
 
+### 10x Genomics
+
+Run single-cell and spatial analyses on 10x Cloud Analysis from a prompt.
+
+- **Website URL:** <https://www.10xgenomics.com>
+- **Documentation URL:** <https://support.claude.com/en/articles/12614803-using-the-10x-genomics-extension-in-claude>
+- **Endpoint URL:** none. This is a Claude Desktop extension, not a remote URL.
+- **Access:** Account, pricing unclear. Needs a 10x Cloud Analysis account and a 10x Cloud access token (Account Settings, Security).
+- **Capabilities:** set up runs, launch pipelines, monitor status and download results, covering alignment, Feature Barcode matrix generation and clustering. Exact tool names were not found.
+- **Example prompt:** "Align these FASTQs, generate the feature barcode matrix and cluster the cells."
+
+### Synapse.org
+
+Sage Bionetworks' research data repository, for finding and reading datasets and their annotations.
+
+- **Website URL:** <https://www.synapse.org>
+- **Documentation URL:** <https://github.com/Sage-Bionetworks/synapse-mcp>
+- **Endpoint URL:** `https://mcp.synapse.org/mcp`
+- **Access:** Account, pricing unclear. Sign in with a Synapse account (OAuth).
+- **Tools:** `get_entity`, `get_entity_annotations`, `get_entity_provenance`, `get_entity_children`, `search_synapse`
+- **Example prompt:** "Search Synapse for Alzheimer's RNA-seq datasets and show the provenance of the first result."
+- **Note:** the directory lists these five read-only tools. The repository describes a different default, with `get_entity` and `search_synapse` always visible and other tools reached through search, so the toolset may vary by client or version. Not to be confused with SynapseNetwork, an unrelated product.
+
+### BioMart
+
+Query BioMart marts for gene, transcript and variant annotation. A Featured connector in Claude Science.
+
+- **Website URL:** <https://www.biomart.org>
+- **Documentation URL:** <https://claude.com/docs/claude-science/connectors-and-skills>
+- **Endpoint URL:** Built into Claude Science (no public endpoint listed)
+- **Access:** Open. Featured connectors are read-only and need no account or key.
+- **Tools:** not listed in the documentation.
+- **Note:** a community server, [jzinno/biomart-mcp](https://github.com/jzinno/biomart-mcp), runs locally for other clients.
+
+### CellGuide
+
+Cell-type information from CZ CELLxGENE CellGuide. A Featured connector in Claude Science.
+
+- **Website URL:** <https://cellxgene.cziscience.com/cellguide>
+- **Documentation URL:** <https://claude.com/docs/claude-science/connectors-and-skills>
+- **Endpoint URL:** Built into Claude Science (no public endpoint listed)
+- **Access:** Open. Featured connectors are read-only and need no account or key.
+- **Tools:** not listed in the documentation.
+
 ---
 
 ## Literature
@@ -242,6 +313,30 @@ Literature search that shows whether citing papers support or contradict a claim
 - **Access:** Account, pricing unclear. Sign in to a Scite account; sources disagree on whether a paid plan or free trial is required.
 - **Tools:** `search_literature`
 - **Example prompt:** "Is there evidence supporting or contradicting the claim that M309I is a C4 catalytic switch in RubisCO?"
+
+### Scholar Gateway
+
+Semantic search over Wiley's scholarly content, returning passages with citation metadata.
+
+- **Website URL:** <https://www.wiley.com/en-us/research/products/wiley-scholar-gateway>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-scholar-gateway-connector-in-claude>
+- **Endpoint URL:** `https://connector.scholargateway.ai/mcp`
+- **Access:** Account, pricing unclear. Sign in with a Wiley account. Wiley's page advertises a free tier of 30 queries a month, while the Claude Academy guide says existing Wiley journal subscribers will need to upgrade after a trial period.
+- **Tools:** a single semantic search tool (community-reported name: `semanticSearch`)
+- **Example prompt:** "Find Wiley papers on thermostable RubisCO variants and quote the relevant passages."
+- **Note:** covers Wiley content only.
+
+### Consensus
+
+Search for scientific papers, with answers grounded in the literature.
+
+- **Website URL:** <https://consensus.app>
+- **Documentation URL:** <https://docs.consensus.app/docs/mcp>
+- **Endpoint URL:** `https://mcp.consensus.app/mcp`
+- **Access:** Free tier, paid extras. It works without signing in at reduced limits. Paid plans can enable extra usage at about $0.05 per call, according to the docs.
+- **Tools:** search. The docs mention five tools, but a fetch tool is currently available for ChatGPT only, so Claude users may see only search.
+- **Example prompt:** "What does the evidence say about ancestral sequence reconstruction improving enzyme thermostability?"
+- **Note:** the URL must end in `/mcp`. A call covers up to 100 papers, and the rate limit is one request per second.
 
 ---
 
@@ -304,6 +399,22 @@ Electronic lab notebook and registry, with Benchling's scientific AI.
 
 ---
 
+## Figures and illustration
+
+### BioRender
+
+Search BioRender's template library and your own files, and create scientific figures from a text description.
+
+- **Website URL:** <https://www.biorender.com>
+- **Documentation URL:** <https://support.claude.com/en/articles/12614795-using-the-biorender-connector-in-claude>
+- **Endpoint URL:** `https://mcp.services.biorender.com/mcp`
+- **Access:** Pay-per-use. Sign in with a BioRender account (OAuth). Generating custom figure previews uses BioRender AI credits.
+- **Capabilities:** search templates, search your own and shared files, and generate custom figures from a description, optionally with a reference image or template. Exact tool names were not found.
+- **Example prompt:** "Create a figure of the RubisCO holoenzyme showing the large and small subunits."
+- **Note:** searches, prompts and generated figures are shared with the AI assistant you connect.
+
+---
+
 ## Other directories
 
 This list is a short, curated set of connectors. Larger directories exist, and they also list community-built servers for databases without an official connector, such as UniProt, Ensembl and PubChem.
@@ -318,7 +429,7 @@ Servers in these directories are not vetted here. Check who maintains a server, 
 
 ## Gaps and workarounds
 
-There is currently no dedicated connector in the Claude directory for **UniProt**, **Ensembl** or **PubChem**. RCSB PDB has a beta connector (see above), and the [other directories](#other-directories) list community servers for some of these databases. You have these options:
+There is currently no dedicated connector in the Claude connectors directory for **UniProt**, **Ensembl** or **PubChem**. In Claude Science they are built-in Featured connectors, along with GO, Reactome, ClinVar, gnomAD, AlphaFold and others, listed on the [Claude Science connectors page](https://claude.com/docs/claude-science/connectors-and-skills). RCSB PDB has a beta connector (see above), and the [other directories](#other-directories) list community servers for some of these databases. Outside Claude Science you have these options:
 
 - Ask Claude to fetch the public files or API results directly (for example, PDB `1WDD`, rice RubisCO) and analyse them in Python with Biopython, RDKit or similar libraries.
 - Use **Amass** or **Open Targets** for gene and protein annotation, and **ChEMBL** for compound data.
