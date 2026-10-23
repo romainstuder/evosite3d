@@ -1,6 +1,6 @@
 # Life-Science MCP Connectors
 
-A reference list of MCP (Model Context Protocol) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
+A reference list of (Model Context Protocol (MCP) connectors for biology, pharma, biotech and cheminformatics work. It covers what each connector does, its endpoint URL, its main tools and example prompts.
 
 > Compiled 22 October 2026 from the Claude connectors directory. Tool lists and availability may change, so check the directory for the latest details.
 
@@ -65,7 +65,9 @@ A reference list of MCP (Model Context Protocol) connectors for biology, pharma,
 
 Access to EMBL-EBI's database of bioactive molecules.
 
-- **URL:** `https://hcls.mcp.claude.com/chembl/mcp`
+- **Website URL:** <https://www.ebi.ac.uk/chembl/>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-chembl-connector-in-claude>
+- **Endpoint URL:** `https://hcls.mcp.claude.com/chembl/mcp`
 - **Access:** Open
 - **Tools:** `compound_search`, `drug_search`, `target_search`, `get_bioactivity`, `get_mechanism`, `get_admet`
 - **Example prompts:**
@@ -76,7 +78,9 @@ Access to EMBL-EBI's database of bioactive molecules.
 
 Search and retrieve experimentally determined 3D structures from the Protein Data Bank. Open source: [rcsb/rcsb-mcp](https://github.com/rcsb/rcsb-mcp).
 
-- **URL:** `https://mcp-beta.rcsb.org/mcp`
+- **Website URL:** <https://www.rcsb.org>
+- **Documentation URL:** <https://github.com/rcsb/rcsb-mcp>
+- **Endpoint URL:** `https://mcp-beta.rcsb.org/mcp`
 - **Access:** Open (the announcement mentions no sign-in)
 - **Capabilities:** the announcement groups them by API rather than listing tool names.
   - Search API: find structures by keyword, attributes, sequence similarity, chemical structure, 3D shape, or sequence and structural motifs, combined with Boolean logic and summarised with counts and facets.
@@ -92,7 +96,9 @@ Search and retrieve experimentally determined 3D structures from the Protein Dat
 
 Biomolecular structure and binding prediction, virtual screening and binder design.
 
-- **URL:** `https://mcp.boltz.bio/mcp`
+- **Website URL:** <https://boltz.bio>
+- **Documentation URL:** <https://claude.com/marketplace/connectors/boltz-api>
+- **Endpoint URL:** `https://mcp.boltz.bio/mcp`
 - **Access:** Sign-in (compute jobs may be billed)
 - **Tools:** `boltz_estimate_structure_and_binding`, `boltz_get_structure_and_binding_prediction`, `boltz_estimate_protein_screen`, `boltz_start_protein_screen`, `boltz_estimate_small_molecule_screen`, `boltz_get_screen_results`, `boltz_get_job_status`, `boltz_get_guidance`
 - **Example prompts:**
@@ -104,7 +110,9 @@ Biomolecular structure and binding prediction, virtual screening and binder desi
 
 ADMET property prediction models for drug discovery.
 
-- **URL:** `https://api.inductive.bio/mcp`
+- **Website URL:** <https://www.inductive.bio>
+- **Documentation URL:** <https://claude.com/marketplace/connectors/inductive-bio>
+- **Endpoint URL:** `https://api.inductive.bio/mcp`
 - **Access:** Sign-in
 - **Tools:** `list_available_models`, `predict_properties`
 - **Example prompts:**
@@ -119,7 +127,9 @@ ADMET property prediction models for drug discovery.
 
 Evidence linking targets to diseases, used for target identification and prioritisation.
 
-- **URL:** `https://mcp.platform.opentargets.org/mcp`
+- **Website URL:** <https://platform.opentargets.org>
+- **Documentation URL:** <https://platform-docs.opentargets.org/data-access/model-context-protocol>
+- **Endpoint URL:** `https://mcp.platform.opentargets.org/mcp`
 - **Access:** Open
 - **Tools:** `search_entities`, `get_open_targets_graphql_schema`, `query_open_targets_graphql`, `batch_query_open_targets_graphql`
 - **Example prompts:**
@@ -130,7 +140,9 @@ Evidence linking targets to diseases, used for target identification and priorit
 
 Run bioinformatics workflows and manage data on the Latch platform.
 
-- **URL:** `https://mcp.latch.bio/mcp`
+- **Website URL:** <https://latch.bio>
+- **Documentation URL:** <https://wiki.latch.bio/agent/latch-mcp>
+- **Endpoint URL:** `https://mcp.latch.bio/mcp`
 - **Access:** Sign-in (Latch account)
 - **Tools:** `list_files`, `get_file`, `list_workflows`, `get_workflow_schema`, `launch_workflow`, `list_executions`, `get_execution`, `get_task_logs`
 - **Example prompts:**
@@ -141,7 +153,9 @@ Run bioinformatics workflows and manage data on the Latch platform.
 
 Generates and analyses gene expression from a "virtual human" model.
 
-- **URL:** `https://app.synthesize.bio/api/mcp`
+- **Website URL:** <https://www.synthesize.bio>
+- **Documentation URL:** <https://docs.synthesize.bio/platform>
+- **Endpoint URL:** `https://app.synthesize.bio/api/mcp`
 - **Access:** Sign-in
 - **Tools:** `resolve_sample_metadata`, `analyze_gene_expression`, `get_analysis_results`, `get_saved_analysis_report`, `annotate_genes`, `get_counts_data_url`
 - **Example prompt:** "Simulate expression in lung tissue with and without the KRAS G12C condition and run a differential expression analysis."
@@ -150,7 +164,9 @@ Generates and analyses gene expression from a "virtual human" model.
 
 Human genomic data linked to longitudinal clinical records.
 
-- **URL:** `https://mcp.hrn-production.helix.com/mcp`
+- **Website URL:** <https://www.helix.com>
+- **Documentation URL:** <https://www.helix.com/press-releases/helix-genosphere-mcp-connector-human-genetics>
+- **Endpoint URL:** `https://mcp.hrn-production.helix.com/mcp`
 - **Access:** Sign-in (Helix access required)
 - **Tools:** `get_dataset_overview`, `check_gene_availability`, `get_variant_frequency`, `search_concepts`, `get_patient_count`
 - **Example prompt:** "What is the frequency of this PCSK9 variant, and how many carriers have a hypercholesterolaemia diagnosis?"
@@ -159,7 +175,9 @@ Human genomic data linked to longitudinal clinical records.
 
 AI agents for biology, focused on histopathology and cohort analysis.
 
-- **URL:** `https://mcp.k.owkin.com/mcp`
+- **Website URL:** <https://www.owkin.com>
+- **Documentation URL:** <https://docs.owkin.com/connect-and-integrate/mcp-and-agent-tools>
+- **Endpoint URL:** `https://mcp.k.owkin.com/mcp`
 - **Access:** Sign-in
 - **Tools:** `list_cohorts`, `list_cell_types`, `filter_slides`, `get_histomics`, `display_slide_thumbnail`, `survival_analysis`, `features_description`, `histoplus_help`
 - **Example prompt:** "Run a survival analysis on the cohort, stratified by tumour-infiltrating lymphocyte density."
@@ -172,7 +190,9 @@ AI agents for biology, focused on histopathology and cohort analysis.
 
 Search and retrieve biomedical literature.
 
-- **URL:** `https://pubmed.mcp.claude.com/mcp`
+- **Website URL:** <https://pubmed.ncbi.nlm.nih.gov>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-pubmed-connector-in-claude>
+- **Endpoint URL:** `https://pubmed.mcp.claude.com/mcp`
 - **Access:** Open
 - **Tools:** `search_articles`, `get_article_metadata`, `find_related_articles`, `lookup_article_by_citation`, `convert_article_ids`, `get_full_text_article`, `get_copyright_status`
 - **Example prompts:**
@@ -183,7 +203,9 @@ Search and retrieve biomedical literature.
 
 Preprint search and metadata.
 
-- **URL:** `https://hcls.mcp.claude.com/biorxiv/mcp`
+- **Website URL:** <https://www.biorxiv.org>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-biorxiv-and-medrxiv-connector-in-claude>
+- **Endpoint URL:** `https://hcls.mcp.claude.com/biorxiv/mcp`
 - **Access:** Open
 - **Tools:** `search_preprints`, `search_biorxiv_publications`, `get_preprint`, `get_categories`, `search_by_funder`, `search_published_articles`, `search_publisher_articles`, `get_content_statistics`
 - **Example prompt:** "Recent bioRxiv preprints on ancestral sequence reconstruction of enzymes."
@@ -192,7 +214,9 @@ Preprint search and metadata.
 
 Literature search that shows whether citing papers support or contradict a claim.
 
-- **URL:** `https://api.scite.ai/mcp`
+- **Website URL:** <https://scite.ai>
+- **Documentation URL:** <https://docs.scite.ai/mcp/overview>
+- **Endpoint URL:** `https://api.scite.ai/mcp`
 - **Access:** Sign-in
 - **Tools:** `search_literature`
 - **Example prompt:** "Is there evidence supporting or contradicting the claim that M309I is a C4 catalytic switch in RubisCO?"
@@ -205,7 +229,9 @@ Literature search that shows whether citing papers support or contradict a claim
 
 Data from ClinicalTrials.gov.
 
-- **URL:** `https://hcls.mcp.claude.com/clinical_trials/mcp`
+- **Website URL:** <https://clinicaltrials.gov>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-clinicaltrials-gov-connector-in-claude>
+- **Endpoint URL:** `https://hcls.mcp.claude.com/clinical_trials/mcp`
 - **Access:** Open
 - **Tools:** `search_trials`, `get_trial_details`, `search_by_eligibility`, `search_by_sponsor`, `search_investigators`, `analyze_endpoints`
 - **Example prompt:** "Phase 3 trials currently recruiting for NASH. Summarise their primary endpoints."
@@ -214,7 +240,9 @@ Data from ClinicalTrials.gov.
 
 Drug development pipeline and clinical trial intelligence.
 
-- **URL:** `https://adisinsight-mcp.springer.com/mcp`
+- **Website URL:** <https://adisinsight.springer.com>
+- **Documentation URL:** <https://adisinsight-mcp.springer.com/>
+- **Endpoint URL:** `https://adisinsight-mcp.springer.com/mcp`
 - **Access:** Sign-in (subscription)
 - **Tools:** `search_drugs`, `get_drug`, `search_trials`, `get_trial`, `search_drug_companies`, `search_trial_companies`, `generate_chart`
 - **Example prompt:** "Pipeline of GLP-1 agonists by development phase, with a chart."
@@ -223,7 +251,9 @@ Drug development pipeline and clinical trial intelligence.
 
 A single cross-linked source covering publications, trials, drugs, genes, regulatory approvals and patents.
 
-- **URL:** `https://mcp.amass.tech/mcp`
+- **Website URL:** <https://amass.tech>
+- **Documentation URL:** <https://amass.tech/mcp>
+- **Endpoint URL:** `https://mcp.amass.tech/mcp`
 - **Access:** Sign-in
 - **Tools:** `search_amass_biomedcore_records`, `get_amass_biomedcore_record`, `get_amass_drugcore_record`, `get_amass_genecore_record`, `get_amass_trialcore_record`, `get_amass_patentcore_record`, `get_amass_regulatorycore_record`, `get_amass_regulatorycore_document_section`, and others
 - **Example prompt:** "For tirzepatide, link the key trials, regulatory approvals and core patents."
@@ -232,7 +262,9 @@ A single cross-linked source covering publications, trials, drugs, genes, regula
 
 Clinical trial software and site-ranking tools.
 
-- **URL:** Directory only
+- **Website URL:** <https://www.medidata.com>
+- **Documentation URL:** <https://academy.claude.com/tutorials/using-the-medidata-connector-in-claude>
+- **Endpoint URL:** Directory only
 - **Access:** Sign-in (Medidata account)
 - **Tools:** `get_ranked_sites`, `get_supported_disease_areas`, `search_support_documentation`
 - **Example prompt:** "Rank sites for a phase 2 oncology trial in non-small cell lung cancer."
@@ -241,7 +273,9 @@ Clinical trial software and site-ranking tools.
 
 Electronic lab notebook and registry, with Benchling's scientific AI.
 
-- **URL:** Directory only
+- **Website URL:** <https://www.benchling.com>
+- **Documentation URL:** <https://help.benchling.com/hc/en-us/articles/40342713479437-Configure-Benchling-s-MCP-Server-for-other-MCP-clients>
+- **Endpoint URL:** Directory only
 - **Access:** Sign-in (Benchling tenant)
 - **Tools:** `benchling_agent`, `benchling_task_status`, `benchling_agent_edit_entry`
 - **Example prompt:** "Summarise last week's notebook entries for the RubisCO expression project."
