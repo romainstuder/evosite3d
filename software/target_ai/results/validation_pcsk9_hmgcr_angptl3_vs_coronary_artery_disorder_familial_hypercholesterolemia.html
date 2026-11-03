@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Target Validation — coronary artery disease, familial hypercholesterolemia</title>
+<title>Target Validation — coronary artery disorder, familial hypercholesterolemia</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,7 +95,7 @@
 <body>
 <div class="container">
   <h1>Target Validation Scoring Matrix</h1>
-  <p class="subtitle">3 target(s) (PCSK9, HMGCR, ANGPTL3) scored against 2 disease(s) (coronary artery disease, familial hypercholesterolemia) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
+  <p class="subtitle">3 target(s) (PCSK9, HMGCR, ANGPTL3) scored against 2 disease(s) (coronary artery disorder, familial hypercholesterolemia) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
 
   <div class="matrix-wrap">
     <table id="matrix">
@@ -128,12 +128,12 @@
     </div>
   </div>
 
-  <div class="generated">Generated 2026-03-29 21:59 · Data: Open Targets Platform GraphQL API</div>
+  <div class="generated">Generated 2026-11-03 09:58 · Data: Open Targets Platform GraphQL API</div>
 </div>
 
 <script>
 // ── DATA (injected by open_targets_client.py) ────────────────────────────
-const DISEASE_NAME = "coronary artery disease, familial hypercholesterolemia";
+const DISEASE_NAME = "coronary artery disorder, familial hypercholesterolemia";
 
 const DIMENSIONS = [
   { key: "genetic",           label: "Genetic Association",  group: "clinical",     weight: 0, isVeto: false, descriptions: ["No GWAS or rare-variant signal","Suggestive association","Significant GWAS hit (p<5e-8)","GWAS + rare-variant convergence","Strong colocalisation confirmed","Protective LoF + Mendelian evidence"] },
@@ -154,15 +154,15 @@ const TARGETS = [
     "name": "PCSK9",
     "fullName": "proprotein convertase subtilisin/kexin type 9",
     "ensemblId": "ENSG00000169174",
-    "disease": "coronary artery disease",
+    "disease": "coronary artery disorder",
     "context": "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -170,19 +170,19 @@ const TARGETS = [
       "safety": 5
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_association): 0.95",
-      "trials": "Genetic score (genetic_association): 0.95",
-      "clinical_total": "Genetic score (genetic_association): 0.95",
-      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
+      "genetic": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "trials": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "clinical_total": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: Genetic score (genetic_association): 0.95. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf. Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95."
+    "notes": "Clinical: 3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s). Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96."
   },
   {
     "name": "PCSK9",
@@ -191,12 +191,12 @@ const TARGETS = [
     "disease": "familial hypercholesterolemia",
     "context": "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -204,33 +204,33 @@ const TARGETS = [
       "safety": 5
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "trials": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "clinical_total": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
+      "genetic": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "trials": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "clinical_total": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf. Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26."
+    "notes": "Clinical: 8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s). Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78."
   },
   {
     "name": "HMGCR",
     "fullName": "3-hydroxy-3-methylglutaryl-CoA reductase",
     "ensemblId": "ENSG00000113161",
-    "disease": "coronary artery disease",
+    "disease": "coronary artery disorder",
     "context": "Catalyzes the conversion of (3S)-hydroxy-3-methylglutaryl-CoA (HMG-CoA) to meval",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -238,19 +238,19 @@ const TARGETS = [
       "safety": 1
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_association): 0.75",
-      "trials": "Genetic score (genetic_association): 0.75",
-      "clinical_total": "Genetic score (genetic_association): 0.75",
-      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "pathways": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.65",
-      "expression": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.65",
-      "literature": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.65",
-      "pathway_total": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.65",
+      "genetic": "9 drug(s) in this disease: ROSUVASTATIN CALCIUM (APPROVAL), ATORVASTATIN CALCIUM (APPROVAL), LOVASTATIN (APPROVAL); Genetic score (genetic_association): 0.69",
+      "trials": "9 drug(s) in this disease: ROSUVASTATIN CALCIUM (APPROVAL), ATORVASTATIN CALCIUM (APPROVAL), LOVASTATIN (APPROVAL); Genetic score (genetic_association): 0.69",
+      "clinical_total": "9 drug(s) in this disease: ROSUVASTATIN CALCIUM (APPROVAL), ATORVASTATIN CALCIUM (APPROVAL), LOVASTATIN (APPROVAL); Genetic score (genetic_association): 0.69",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "pathways": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.67",
+      "expression": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.67",
+      "literature": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.67",
+      "pathway_total": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.67",
       "safety": "High LoF intolerance (pLI-like score=1.00)"
     },
-    "notes": "Clinical: Genetic score (genetic_association): 0.75. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM. Pathway: 4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.65."
+    "notes": "Clinical: 9 drug(s) in this disease: ROSUVASTATIN CALCIUM (APPROVAL), ATORVASTATIN CALCIUM (APPROVAL), LOVASTATIN (APPROVAL); Genetic score (genetic_association): 0.69. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s). Pathway: 4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.67."
   },
   {
     "name": "HMGCR",
@@ -259,12 +259,12 @@ const TARGETS = [
     "disease": "familial hypercholesterolemia",
     "context": "Catalyzes the conversion of (3S)-hydroxy-3-methylglutaryl-CoA (HMG-CoA) to meval",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -272,19 +272,19 @@ const TARGETS = [
       "safety": 1
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_association): 0.66",
-      "trials": "Genetic score (genetic_association): 0.66",
-      "clinical_total": "Genetic score (genetic_association): 0.66",
-      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM",
-      "pathways": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.22",
-      "expression": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.22",
-      "literature": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.22",
-      "pathway_total": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.22",
+      "genetic": "9 drug(s) in this disease: FLUVASTATIN SODIUM (APPROVAL), PITAVASTATIN CALCIUM (APPROVAL), PRAVASTATIN SODIUM (APPROVAL); Genetic score (genetic_association): 0.64",
+      "trials": "9 drug(s) in this disease: FLUVASTATIN SODIUM (APPROVAL), PITAVASTATIN CALCIUM (APPROVAL), PRAVASTATIN SODIUM (APPROVAL); Genetic score (genetic_association): 0.64",
+      "clinical_total": "9 drug(s) in this disease: FLUVASTATIN SODIUM (APPROVAL), PITAVASTATIN CALCIUM (APPROVAL), PRAVASTATIN SODIUM (APPROVAL); Genetic score (genetic_association): 0.64",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s)",
+      "pathways": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.21",
+      "expression": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.21",
+      "literature": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.21",
+      "pathway_total": "4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.21",
       "safety": "High LoF intolerance (pLI-like score=1.00)"
     },
-    "notes": "Clinical: Genetic score (genetic_association): 0.66. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM. Pathway: 4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.22."
+    "notes": "Clinical: 9 drug(s) in this disease: FLUVASTATIN SODIUM (APPROVAL), PITAVASTATIN CALCIUM (APPROVAL), PRAVASTATIN SODIUM (APPROVAL); Genetic score (genetic_association): 0.64. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(1): UniProt SigP or TMHMM; 16 drug/clinical candidate(s). Pathway: 4 pw: Lanosterol biosynthesis; PPARA activates gene expression; Literature: 0.21."
   },
   {
     "name": "ANGPTL3",
@@ -293,12 +293,12 @@ const TARGETS = [
     "disease": "familial hypercholesterolemia",
     "context": "Acts in part as a hepatokine that is involved in regulation of lipid and glucose",
     "scores": {
-      "genetic": 2,
-      "trials": 2,
-      "clinical_total": 2,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 3,
       "expression": 2,
       "literature": 3,
@@ -306,33 +306,33 @@ const TARGETS = [
       "safety": 5
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_association): 0.30",
-      "trials": "Genetic score (genetic_association): 0.30",
-      "clinical_total": "Genetic score (genetic_association): 0.30",
-      "sm_tractability": "AB(4): Approved Drug, UniProt loc high conf",
-      "ab_tractability": "AB(4): Approved Drug, UniProt loc high conf",
-      "druggability_total": "AB(4): Approved Drug, UniProt loc high conf",
-      "pathways": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.17",
-      "expression": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.17",
-      "literature": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.17",
-      "pathway_total": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.17",
+      "genetic": "2 drug(s) in this disease: EVINACUMAB (APPROVAL), VUPANORSEN (PHASE_2); Genetic score (genetic_association): 0.30",
+      "trials": "2 drug(s) in this disease: EVINACUMAB (APPROVAL), VUPANORSEN (PHASE_2); Genetic score (genetic_association): 0.30",
+      "clinical_total": "2 drug(s) in this disease: EVINACUMAB (APPROVAL), VUPANORSEN (PHASE_2); Genetic score (genetic_association): 0.30",
+      "sm_tractability": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "ab_tractability": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "druggability_total": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "pathways": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.19",
+      "expression": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.19",
+      "literature": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.19",
+      "pathway_total": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.19",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: Genetic score (genetic_association): 0.30. Druggability: AB(4): Approved Drug, UniProt loc high conf. Pathway: 2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.17."
+    "notes": "Clinical: 2 drug(s) in this disease: EVINACUMAB (APPROVAL), VUPANORSEN (PHASE_2); Genetic score (genetic_association): 0.30. Druggability: AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s). Pathway: 2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.19."
   },
   {
     "name": "ANGPTL3",
     "fullName": "angiopoietin like 3",
     "ensemblId": "ENSG00000132855",
-    "disease": "coronary artery disease",
+    "disease": "coronary artery disorder",
     "context": "Acts in part as a hepatokine that is involved in regulation of lipid and glucose",
     "scores": {
       "genetic": 0,
       "trials": 0,
       "clinical_total": 0,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -343,16 +343,16 @@ const TARGETS = [
       "genetic": "No clinical or genetic evidence found",
       "trials": "No clinical or genetic evidence found",
       "clinical_total": "No clinical or genetic evidence found",
-      "sm_tractability": "AB(4): Approved Drug, UniProt loc high conf",
-      "ab_tractability": "AB(4): Approved Drug, UniProt loc high conf",
-      "druggability_total": "AB(4): Approved Drug, UniProt loc high conf",
-      "pathways": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.93",
-      "expression": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.93",
-      "literature": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.93",
-      "pathway_total": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.93",
+      "sm_tractability": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "ab_tractability": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "druggability_total": "AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s)",
+      "pathways": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.94",
+      "expression": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.94",
+      "literature": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.94",
+      "pathway_total": "2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.94",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: No clinical or genetic evidence found. Druggability: AB(4): Approved Drug, UniProt loc high conf. Pathway: 2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.93."
+    "notes": "Clinical: No clinical or genetic evidence found. Druggability: AB(4): Approved Drug, UniProt loc high conf; 3 drug/clinical candidate(s). Pathway: 2 pw: NR1H2 & NR1H3 regulate gene expression l; Assembly of active LPL and LIPC lipase c; Literature: 0.94."
   }
 ];
 

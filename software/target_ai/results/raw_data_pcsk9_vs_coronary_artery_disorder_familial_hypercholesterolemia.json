@@ -1,0 +1,2799 @@
+{
+  "PCSK9|coronary artery disease": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "coronary artery disorder",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000169174",
+                  "approvedSymbol": "PCSK9"
+                },
+                "score": 0.7372044215577419,
+                "datatypeScores": [
+                  {
+                    "id": "literature",
+                    "score": 0.9640741392745887
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.35845119654175206
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.9525687827374701
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9366880111529101
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.9525687827374701
+                  },
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9366880111529101
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.9640741392745887
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.35845119654175206
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000169174",
+          "approvedSymbol": "PCSK9",
+          "approvedName": "proprotein convertase subtilisin/kexin type 9",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low-density lipid receptor family members: low density lipoprotein receptor (LDLR), very low density lipoprotein receptor (VLDLR), apolipoprotein E receptor (LRP1/APOER) and apolipoprotein receptor 2 (LRP8/APOER2), and promotes their degradation in intracellular acidic compartments (PubMed:18039658). Acts via a non- proteolytic mechanism to enhance the degradation of the hepatic LDLR through a clathrin LDLRAP1/ARH-mediated pathway. May prevent the recycling of LDLR from endosomes to the cell surface or direct it to lysosomes for degradation. Can induce ubiquitination of LDLR leading to its subsequent degradation (PubMed:17461796, PubMed:18197702, PubMed:18799458, PubMed:22074827). Inhibits intracellular degradation of APOB via the autophagosome/lysosome pathway in a LDLR-independent manner. Involved in the disposal of non-acetylated intermediates of BACE1 in the early secretory pathway (PubMed:18660751). Inhibits epithelial Na(+) channel (ENaC)-mediated Na(+) absorption by reducing ENaC surface expression primarily by increasing its proteasomal degradation. Regulates neuronal apoptosis via modulation of LRP8/APOER2 levels and related anti-apoptotic signaling pathways. {ECO:0000269|PubMed:17461796, ECO:0000269|PubMed:18039658, ECO:0000269|PubMed:18197702, ECO:0000269|PubMed:18660751, ECO:0000269|PubMed:18799458, ECO:0000269|PubMed:22074827, ECO:0000269|PubMed:22493497, ECO:0000269|PubMed:22580899}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Secreted"
+            },
+            {
+              "location": "Endosome"
+            },
+            {
+              "location": "Lysosome"
+            },
+            {
+              "location": "Cell surface"
+            },
+            {
+              "location": "Endoplasmic reticulum"
+            },
+            {
+              "location": "Golgi apparatus"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": true
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.660319983959198,
+              "oe": 0.9452999830245972,
+              "oeLower": 0.8700199723243713,
+              "oeUpper": 1.0283000469207764
+            },
+            {
+              "constraintType": "mis",
+              "score": 1.2359999418258667,
+              "oe": 0.9064499735832214,
+              "oeLower": 0.857509970664978,
+              "oeUpper": 0.9586600065231323
+            },
+            {
+              "constraintType": "lof",
+              "score": 2.7652000608818392e-18,
+              "oe": 0.917639970779419,
+              "oeLower": 0.7416300177574158,
+              "oeUpper": 1.1440999507904053
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "VLDLR internalisation and degradation"
+            },
+            {
+              "pathway": "LDL clearance"
+            },
+            {
+              "pathway": "Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)"
+            },
+            {
+              "pathway": "Post-translational protein phosphorylation"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "data": {
+        "target": {
+          "approvedSymbol": "PCSK9",
+          "drugAndClinicalCandidates": {
+            "count": 10,
+            "rows": [
+              {
+                "id": "05ef54baa58d0a9331d8c1215f93e002c98b304c74c6ac60bcab1bfc6f8afbab",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL3137349",
+                  "name": "BOCOCIZUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": {
+                      "id": "MONDO_0005002",
+                      "name": "chronic obstructive pulmonary disease"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "16be3939ab2811940ed9ebc00edb9d878db57d42e18e9d6c961678fcfd874805",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4650405",
+                  "name": "LERODALCIBEP",
+                  "drugType": "Protein"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "1cb2f33598ad357b5ed72a27365ee116d45f8d331a915f3523217607d19fc75a",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4594566",
+                  "name": "ONGERICIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005575",
+                      "name": "colorectal cancer"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "30e5be4f90d39a4a39a13e412fddad843ab31303b90438b673036acc9b5ae495",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4594554",
+                  "name": "TAFOLECIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006519",
+                      "name": "rectal cancer"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0008433",
+                      "name": "small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005264",
+                      "name": "transient ischemic attack"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_1060198",
+                      "name": "ischemic stroke"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "6d32d51c271ede33e15608b8236c7ef0cf145455360aa8abffe9b6943833d4d7",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL5095052",
+                  "name": "INCLISIRAN SODIUM",
+                  "drugType": "Oligonucleotide"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_1001483",
+                      "name": "non-obstructive coronary artery disease"
+                    }
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "7010ebd5d382923abe316c6812c10603f474ff9fd478e15a3eaa72a515d86004",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL2109540",
+                  "name": "ALIROCUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005147",
+                      "name": "type 1 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004781",
+                      "name": "acute myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0100806",
+                      "name": "Sepsis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0006834",
+                      "name": "septic shock"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_1060198",
+                      "name": "ischemic stroke"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005098",
+                      "name": "stroke disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005264",
+                      "name": "transient ischemic attack"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "7608151e06bbce32841c69d03c5691eafc0c8475ac05a3f8f0e5e6691fe05684",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL3990033",
+                  "name": "INCLISIRAN",
+                  "drugType": "Oligonucleotide"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005015",
+                      "name": "diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008585",
+                      "name": "ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008586",
+                      "name": "Non-ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005240",
+                      "name": "kidney disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "843a81990ea09811263ec5b49dc9c9bebf5f36ee6083c21c58d60232eb33e2e2",
+                "maxClinicalStage": "PHASE_1",
+                "drug": {
+                  "id": "CHEMBL3137352",
+                  "name": "RALPANCIZUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "c820644286e222e1f9508a0e68dab4104866099a1bb8640180af6d561bba37fb",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL2364655",
+                  "name": "EVOLOCUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005098",
+                      "name": "stroke disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0100096",
+                      "name": "COVID-19"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008586",
+                      "name": "Non-ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005252",
+                      "name": "heart failure"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0100806",
+                      "name": "Sepsis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004781",
+                      "name": "acute myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008585",
+                      "name": "ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005086",
+                      "name": "renal cell carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021661",
+                      "name": "coronary atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006047",
+                      "name": "pancreatic adenocarcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005350",
+                      "name": "abdominal aortic aneurysm"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005386",
+                      "name": "peripheral arterial disease"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0020925",
+                      "name": "angina unstable"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006515",
+                      "name": "acute pancreatitis"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "e28281a246dc5af4bab179dacc0bbb6b15f6bd241615c7645d720e82136f20e3",
+                "maxClinicalStage": "PHASE_2",
+                "drug": {
+                  "id": "CHEMBL4298016",
+                  "name": "FROVOCIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_drugs_in_disease": [
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL2364655",
+          "name": "EVOLOCUMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL2109540",
+          "name": "ALIROCUMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "PHASE_2",
+        "drug": {
+          "id": "CHEMBL3990033",
+          "name": "INCLISIRAN"
+        }
+      }
+    ]
+  },
+  "PCSK9|familial hypercholesterolemia": {
+    "association": {
+      "data": {
+        "disease": {
+          "name": "familial hypercholesterolemia",
+          "associatedTargets": {
+            "rows": [
+              {
+                "target": {
+                  "id": "ENSG00000169174",
+                  "approvedSymbol": "PCSK9"
+                },
+                "score": 0.8933766593524655,
+                "datatypeScores": [
+                  {
+                    "id": "genetic_literature",
+                    "score": 0.8950955971203699
+                  },
+                  {
+                    "id": "clinical",
+                    "score": 0.9748751444508189
+                  },
+                  {
+                    "id": "literature",
+                    "score": 0.7753899941606883
+                  },
+                  {
+                    "id": "genetic_association",
+                    "score": 0.918928952530303
+                  },
+                  {
+                    "id": "somatic_mutation",
+                    "score": 0.030396539880581056
+                  },
+                  {
+                    "id": "animal_model",
+                    "score": 0.6433446199311985
+                  }
+                ],
+                "datasourceScores": [
+                  {
+                    "id": "clinical_precedence",
+                    "score": 0.9748751444508189
+                  },
+                  {
+                    "id": "genomics_england",
+                    "score": 0.9607983220922475
+                  },
+                  {
+                    "id": "uniprot_variants",
+                    "score": 0.9421515329208274
+                  },
+                  {
+                    "id": "eva",
+                    "score": 0.9407940406747727
+                  },
+                  {
+                    "id": "gwas_credible_sets",
+                    "score": 0.874743220135704
+                  },
+                  {
+                    "id": "clingen",
+                    "score": 0.7599134970145264
+                  },
+                  {
+                    "id": "gene_burden",
+                    "score": 0.737498545997946
+                  },
+                  {
+                    "id": "uniprot_literature",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "orphanet",
+                    "score": 0.607930797611621
+                  },
+                  {
+                    "id": "europepmc",
+                    "score": 0.7753899941606883
+                  },
+                  {
+                    "id": "impc",
+                    "score": 0.6433446199311985
+                  },
+                  {
+                    "id": "eva_somatic",
+                    "score": 0.030396539880581056
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_info": {
+      "data": {
+        "target": {
+          "id": "ENSG00000169174",
+          "approvedSymbol": "PCSK9",
+          "approvedName": "proprotein convertase subtilisin/kexin type 9",
+          "biotype": "protein_coding",
+          "functionDescriptions": [
+            "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low-density lipid receptor family members: low density lipoprotein receptor (LDLR), very low density lipoprotein receptor (VLDLR), apolipoprotein E receptor (LRP1/APOER) and apolipoprotein receptor 2 (LRP8/APOER2), and promotes their degradation in intracellular acidic compartments (PubMed:18039658). Acts via a non- proteolytic mechanism to enhance the degradation of the hepatic LDLR through a clathrin LDLRAP1/ARH-mediated pathway. May prevent the recycling of LDLR from endosomes to the cell surface or direct it to lysosomes for degradation. Can induce ubiquitination of LDLR leading to its subsequent degradation (PubMed:17461796, PubMed:18197702, PubMed:18799458, PubMed:22074827). Inhibits intracellular degradation of APOB via the autophagosome/lysosome pathway in a LDLR-independent manner. Involved in the disposal of non-acetylated intermediates of BACE1 in the early secretory pathway (PubMed:18660751). Inhibits epithelial Na(+) channel (ENaC)-mediated Na(+) absorption by reducing ENaC surface expression primarily by increasing its proteasomal degradation. Regulates neuronal apoptosis via modulation of LRP8/APOER2 levels and related anti-apoptotic signaling pathways. {ECO:0000269|PubMed:17461796, ECO:0000269|PubMed:18039658, ECO:0000269|PubMed:18197702, ECO:0000269|PubMed:18660751, ECO:0000269|PubMed:18799458, ECO:0000269|PubMed:22074827, ECO:0000269|PubMed:22493497, ECO:0000269|PubMed:22580899}."
+          ],
+          "subcellularLocations": [
+            {
+              "location": "Cytoplasm"
+            },
+            {
+              "location": "Secreted"
+            },
+            {
+              "location": "Endosome"
+            },
+            {
+              "location": "Lysosome"
+            },
+            {
+              "location": "Cell surface"
+            },
+            {
+              "location": "Endoplasmic reticulum"
+            },
+            {
+              "location": "Golgi apparatus"
+            }
+          ],
+          "tractability": [
+            {
+              "label": "Approved Drug",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Structure with Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Ligand",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "High-Quality Pocket",
+              "modality": "SM",
+              "value": true
+            },
+            {
+              "label": "Med-Quality Pocket",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Druggable Family",
+              "modality": "SM",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "UniProt loc high conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "GO CC high conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt loc med conf",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "UniProt SigP or TMHMM",
+              "modality": "AB",
+              "value": true
+            },
+            {
+              "label": "GO CC med conf",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Human Protein Atlas loc",
+              "modality": "AB",
+              "value": false
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Literature",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "UniProt Ubiquitination",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Database Ubiquitination",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Half-life Data",
+              "modality": "PR",
+              "value": false
+            },
+            {
+              "label": "Small Molecule Binder",
+              "modality": "PR",
+              "value": true
+            },
+            {
+              "label": "Approved Drug",
+              "modality": "OC",
+              "value": false
+            },
+            {
+              "label": "Advanced Clinical",
+              "modality": "OC",
+              "value": true
+            },
+            {
+              "label": "Phase 1 Clinical",
+              "modality": "OC",
+              "value": false
+            }
+          ],
+          "geneticConstraint": [
+            {
+              "constraintType": "syn",
+              "score": 0.660319983959198,
+              "oe": 0.9452999830245972,
+              "oeLower": 0.8700199723243713,
+              "oeUpper": 1.0283000469207764
+            },
+            {
+              "constraintType": "mis",
+              "score": 1.2359999418258667,
+              "oe": 0.9064499735832214,
+              "oeLower": 0.857509970664978,
+              "oeUpper": 0.9586600065231323
+            },
+            {
+              "constraintType": "lof",
+              "score": 2.7652000608818392e-18,
+              "oe": 0.917639970779419,
+              "oeLower": 0.7416300177574158,
+              "oeUpper": 1.1440999507904053
+            }
+          ],
+          "pathways": [
+            {
+              "pathway": "VLDLR internalisation and degradation"
+            },
+            {
+              "pathway": "LDL clearance"
+            },
+            {
+              "pathway": "Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)"
+            },
+            {
+              "pathway": "Post-translational protein phosphorylation"
+            }
+          ]
+        }
+      }
+    },
+    "known_drugs": {
+      "data": {
+        "target": {
+          "approvedSymbol": "PCSK9",
+          "drugAndClinicalCandidates": {
+            "count": 10,
+            "rows": [
+              {
+                "id": "05ef54baa58d0a9331d8c1215f93e002c98b304c74c6ac60bcab1bfc6f8afbab",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL3137349",
+                  "name": "BOCOCIZUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": {
+                      "id": "MONDO_0005002",
+                      "name": "chronic obstructive pulmonary disease"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "16be3939ab2811940ed9ebc00edb9d878db57d42e18e9d6c961678fcfd874805",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4650405",
+                  "name": "LERODALCIBEP",
+                  "drugType": "Protein"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "1cb2f33598ad357b5ed72a27365ee116d45f8d331a915f3523217607d19fc75a",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4594566",
+                  "name": "ONGERICIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005575",
+                      "name": "colorectal cancer"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "30e5be4f90d39a4a39a13e412fddad843ab31303b90438b673036acc9b5ae495",
+                "maxClinicalStage": "PHASE_3",
+                "drug": {
+                  "id": "CHEMBL4594554",
+                  "name": "TAFOLECIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006519",
+                      "name": "rectal cancer"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0008433",
+                      "name": "small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005264",
+                      "name": "transient ischemic attack"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_1060198",
+                      "name": "ischemic stroke"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "6d32d51c271ede33e15608b8236c7ef0cf145455360aa8abffe9b6943833d4d7",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL5095052",
+                  "name": "INCLISIRAN SODIUM",
+                  "drugType": "Oligonucleotide"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_1001483",
+                      "name": "non-obstructive coronary artery disease"
+                    }
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "7010ebd5d382923abe316c6812c10603f474ff9fd478e15a3eaa72a515d86004",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL2109540",
+                  "name": "ALIROCUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005147",
+                      "name": "type 1 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004781",
+                      "name": "acute myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0100806",
+                      "name": "Sepsis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0006834",
+                      "name": "septic shock"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_1060198",
+                      "name": "ischemic stroke"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005098",
+                      "name": "stroke disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005264",
+                      "name": "transient ischemic attack"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "7608151e06bbce32841c69d03c5691eafc0c8475ac05a3f8f0e5e6691fe05684",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL3990033",
+                  "name": "INCLISIRAN",
+                  "drugType": "Oligonucleotide"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005015",
+                      "name": "diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008585",
+                      "name": "ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008586",
+                      "name": "Non-ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005240",
+                      "name": "kidney disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              },
+              {
+                "id": "843a81990ea09811263ec5b49dc9c9bebf5f36ee6083c21c58d60232eb33e2e2",
+                "maxClinicalStage": "PHASE_1",
+                "drug": {
+                  "id": "CHEMBL3137352",
+                  "name": "RALPANCIZUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "c820644286e222e1f9508a0e68dab4104866099a1bb8640180af6d561bba37fb",
+                "maxClinicalStage": "PHASE_4",
+                "drug": {
+                  "id": "CHEMBL2364655",
+                  "name": "EVOLOCUMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005010",
+                      "name": "coronary artery disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005098",
+                      "name": "stroke disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005068",
+                      "name": "myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0018328",
+                      "name": "homozygous familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021187",
+                      "name": "hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "Orphanet_79211",
+                      "name": "Combined hyperlipidemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005439",
+                      "name": "familial hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005542",
+                      "name": "acute coronary syndrome"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0100096",
+                      "name": "COVID-19"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008586",
+                      "name": "Non-ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005252",
+                      "name": "heart failure"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0100806",
+                      "name": "Sepsis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0004781",
+                      "name": "acute myocardial infarction"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0008585",
+                      "name": "ST Elevation Myocardial Infarction"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005233",
+                      "name": "non-small cell lung carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005086",
+                      "name": "renal cell carcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0002525",
+                      "name": "inherited lipid metabolism disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0021661",
+                      "name": "coronary atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006047",
+                      "name": "pancreatic adenocarcinoma"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005350",
+                      "name": "abdominal aortic aneurysm"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005386",
+                      "name": "peripheral arterial disease"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005311",
+                      "name": "atherosclerosis"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0005148",
+                      "name": "type 2 diabetes mellitus"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "EFO_0020925",
+                      "name": "angina unstable"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": {
+                      "id": "MONDO_0006515",
+                      "name": "acute pancreatitis"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "e28281a246dc5af4bab179dacc0bbb6b15f6bd241615c7645d720e82136f20e3",
+                "maxClinicalStage": "PHASE_2",
+                "drug": {
+                  "id": "CHEMBL4298016",
+                  "name": "FROVOCIMAB",
+                  "drugType": "Antibody"
+                },
+                "diseases": [
+                  {
+                    "disease": {
+                      "id": "MONDO_0004995",
+                      "name": "cardiovascular disorder"
+                    }
+                  },
+                  {
+                    "disease": {
+                      "id": "HP_0003124",
+                      "name": "Hypercholesterolemia"
+                    }
+                  },
+                  {
+                    "disease": null
+                  },
+                  {
+                    "disease": null
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "target_drugs_in_disease": [
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL2109540",
+          "name": "ALIROCUMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL2364655",
+          "name": "EVOLOCUMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL3990033",
+          "name": "INCLISIRAN"
+        }
+      },
+      {
+        "maxClinicalStage": "APPROVAL",
+        "drug": {
+          "id": "CHEMBL5095052",
+          "name": "INCLISIRAN SODIUM"
+        }
+      },
+      {
+        "maxClinicalStage": "PHASE_3",
+        "drug": {
+          "id": "CHEMBL4594566",
+          "name": "ONGERICIMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "PHASE_3",
+        "drug": {
+          "id": "CHEMBL4594554",
+          "name": "TAFOLECIMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "PHASE_3",
+        "drug": {
+          "id": "CHEMBL3137349",
+          "name": "BOCOCIZUMAB"
+        }
+      },
+      {
+        "maxClinicalStage": "PHASE_3",
+        "drug": {
+          "id": "CHEMBL4650405",
+          "name": "LERODALCIBEP"
+        }
+      }
+    ]
+  }
+}
