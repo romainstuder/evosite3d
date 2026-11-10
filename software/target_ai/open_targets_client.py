@@ -211,27 +211,34 @@ def score_clinical(assoc_data: dict, drugs_data: dict, disease_drugs: dict) -> t
         top = ", ".join(f"{r['drug']['name']} ({r['maxClinicalStage']})" for r in rows[:3])
         reasons.append(f"{len(rows)} drug(s) in this disease: {top}")
 
-    # Check genetic association from association data
+    # Germline genetics (GWAS, rare variants) and somatic mutation evidence are scored
+    # separately. The rubric's tiers 3-4 refer to germline evidence; a somatic driver
+    # signal alone is supporting evidence only, so it can lift a pair to 2 at most.
     genetic_score = 0
+    somatic_score = 0
     if assoc_data.get("data", {}).get("disease"):
-        rows = assoc_data["data"]["disease"]["associatedTargets"]["rows"]
-        if rows:
-            for ds in rows[0].get("datatypeScores", []):
+        assoc_rows = assoc_data["data"]["disease"]["associatedTargets"]["rows"]
+        if assoc_rows:
+            for ds in assoc_rows[0].get("datatypeScores", []):
                 cid = ds["id"].lower()
-                if "genetic" in cid or "somatic" in cid:
+                if "somatic" in cid:
+                    somatic_score = max(somatic_score, ds["score"])
+                    reasons.append(f"Somatic score ({ds['id']}): {ds['score']:.2f}")
+                elif "genetic" in cid:
                     genetic_score = max(genetic_score, ds["score"])
                     reasons.append(f"Genetic score ({ds['id']}): {ds['score']:.2f}")
 
+    reason = "; ".join(reasons)
     if max_phase >= 4:
-        return 5, "; ".join(reasons) or "Approved drug"
+        return 5, reason or "Approved drug"
     elif max_phase == 3 or genetic_score > 0.5:
-        return 4, "; ".join(reasons)
+        return 4, reason
     elif max_phase >= 1 or genetic_score > 0.3:
-        return 3, "; ".join(reasons)
-    elif genetic_score > 0.1:
-        return 2, "; ".join(reasons)
-    elif genetic_score > 0 or reasons:
-        return 1, "; ".join(reasons)
+        return 3, reason
+    elif genetic_score > 0.1 or somatic_score > 0.5:
+        return 2, reason
+    elif genetic_score > 0 or somatic_score > 0 or reasons:
+        return 1, reason
     return 0, "No clinical or genetic evidence found"
 
 
