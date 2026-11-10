@@ -50,7 +50,7 @@ def parsed_tree(tree):
             elif char == " ":
                 tab_tree.append(word)
                 word = ""
-            elif (char == "." or "_") and (char != ";"):  # Any alphabetical character
+            elif (char in [".", "_"]) and (char != ";"):  # Any alphabetical character
                 word = word + char
             elif char == ";":
                 if word != "":

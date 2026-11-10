@@ -24,7 +24,7 @@ repos:
 
   # Markdown specific
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: v3.8.3
+    rev: v3.9.10
     hooks:
       - id: prettier
         types: [markdown]
@@ -32,7 +32,7 @@ repos:
 
   # Python-specific hooks
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.16
+    rev: v0.17.4
     hooks:
       - id: ruff
         args: [--fix]
@@ -50,7 +50,7 @@ repos:
 
 # Global configuration
 default_language_version:
-  python: python3.12
+  python: python3.14
 
 
 # Exclude files/directories
