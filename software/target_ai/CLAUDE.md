@@ -114,6 +114,20 @@ Use web search ONLY for information the API cannot provide:
 
 Do NOT use web search or curl to replicate what the Python script already does.
 
+### Multi-Agent Mode — `/validate-team`
+
+For a deeper, evidence-cited second opinion, follow
+`.claude/skills/validate-team/SKILL.md`. The main session acts as orchestrator. It
+resolves IDs with `ot-resolver`, then runs the script **and** four subagents in
+parallel (`clinical-evidence`, `druggability-evidence`, `biology-evidence`,
+`landscape-scout`, defined in `.claude/agents/`). Last, `evidence-synthesizer`
+reconciles everything into `results/agents/{run_id}/consensus.md`. Dossiers follow
+`dossier_schema.md`. The script's scores stay the record of truth, and the agents flag
+where the evidence disagrees with them.
+
+Use it when the user asks for a team / multi-agent / second-opinion validation. Plain
+"validate X for Y" requests still go straight to the script.
+
 ## Scoring Rubrics (reference — the Python script implements these)
 
 ### Clinical Evidence Score (0–5)
