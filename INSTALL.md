@@ -74,7 +74,7 @@ virtual environment automatically — do not create or activate `.venv` yourself
 
 ```shell
 # Pin the interpreter the project expects (one-time)
-uv python install 3.12
+uv python install 3.14
 
 # Install runtime dependencies into a managed .venv
 uv sync
