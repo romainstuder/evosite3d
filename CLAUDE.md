@@ -61,12 +61,12 @@ Always use `uv run` to execute Python code and tools. Never call `python`, `pyte
 - Import sorting is handled by ruff (`isort` rules enabled via `select = ["I"]`)
 - Do not add `# type: ignore` comments without an error code
 
-## Pre-commit hooks
+## Git hooks (prek)
 
-- Tool: prek (preferred) or pre-commit
-- Install prek hooks: `uvx prek install`
-- Install pre-commit hooks: `uvx pre-commit install`
-- Do not install pre-commit or prek with pip. Use `uvx`.
+- Tool: prek (reads `.pre-commit-config.yaml`)
+- Install hooks: `uvx prek install`
+- Run on all files: `uvx prek run --all-files`
+- Do not install prek with pip. Use `uvx`.
 
 ## What NOT to do
 
