@@ -111,17 +111,6 @@ The dependencies above cover the core evolution, structure, machine-learning, an
 molecular-dynamics tutorials. A few tutorials rely on heavier or external tools that are not
 installed by `uv sync` — install these only if you intend to run the corresponding tutorial.
 
-### Claude Code (software/target_ai)
-
-The Target AI drug-target validation tool runs through Claude Code, Anthropic's official CLI:
-
-```shell
-npm install -g @anthropic-ai/claude-code
-```
-
-You will need an Anthropic API key or a Claude Pro/Max subscription. See
-<https://docs.anthropic.com/en/docs/claude-code/overview>.
-
 ### OpenMS (tutorials/identification_phosposites)
 
 Phosphosite identification uses the OpenMS mass-spectrometry suite. Install the command-line tools

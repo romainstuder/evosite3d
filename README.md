@@ -6,11 +6,11 @@ A comprehensive repository of scripts, software, and tutorials for molecular evo
 
 EvoSite3D integrates evolutionary sequence analysis, structural bioinformatics, and deep learning approaches to understand protein function, evolution, and design. This repository contains:
 
-- **Production-ready tools** for evolutionary analysis and drug target validation
+- **Production-ready tools** for evolutionary analysis
 - **In-depth tutorials** covering sequence analysis, protein structure prediction and design, molecular dynamics, and computational biology
 - **Research applications** analyzing viral evolution and genome datasets
 
-Whether you're detecting positive selection, designing novel proteins, predicting mutation effects, or validating drug targets—this repository provides code, workflows, and educational materials to support your research.
+Whether you're detecting positive selection, designing novel proteins, or predicting mutation effects—this repository provides code, workflows, and educational materials to support your research.
 
 ## Quick Start
 
@@ -24,29 +24,7 @@ All Python scripts and tools can be run using `uv run` (see [CLAUDE.md](CLAUDE.m
 
 ### Target AI: AI-Powered Drug Target Validation
 
-A Claude Code-powered assistant that validates therapeutic targets against diseases using real-time data from Open Targets Platform.
-
-**Features:**
-
-- Resolves gene symbols → Ensembl IDs and disease names → EFO IDs
-- Fetches evidence from Open Targets (genetics, tractability, pathways, safety)
-- Scores targets on Clinical Evidence, Druggability, and Pathway/Biology (0–5 scale each)
-- Generates interactive HTML matrices and Markdown reports
-
-**Location:** [`./software/target_ai/`](./software/target_ai/)
-
-**Getting Started:**
-
-```bash
-# Install Claude Code
-npm install -g @anthropic-ai/claude-code
-
-# Navigate to the tool
-cd ./software/target_ai
-claude
-```
-
-Claude Code reads the embedded `CLAUDE.md` file and becomes your target validation assistant. No additional API keys needed—Open Targets Platform is free and open.
+Target AI has moved to its own repository: <https://github.com/romainstuder/target-ai>
 
 ---
 
@@ -146,15 +124,14 @@ Comparative sequence analysis of Ebola virus glycoprotein (GP) between Zaire and
 - **Protein Design** — De novo design, sequence optimisation, affinity improvement
 - **Molecular Simulation** — Molecular dynamics with OpenMM
 - **Systems Biology** — Multi-omics integration and network analysis
-- **AI-Powered Tools** — Leverage Claude Code for interactive target validation and analysis
+- **AI-Powered Tools** — Leverage Claude Code for interactive analysis
 - **Production Software** — Specialised tools for common computational biology tasks
 
 ## Working with Claude Code
 
-Several tools in this repository are designed to work with **Claude Code**, Anthropic's official CLI for Claude:
+This repository is designed to work with **Claude Code**, Anthropic's official CLI for Claude:
 
-1. **Target AI** (`./software/target_ai/`) — Start Claude Code in the directory; it reads `CLAUDE.md` and becomes your target validation assistant
-2. **Interactive workflows** — Use Claude Code to explore data, refine analyses, and iterate on research questions
+1. **Interactive workflows** — Use Claude Code to explore data, refine analyses, and iterate on research questions
 
 To get started with Claude Code:
 
