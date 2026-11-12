@@ -23,7 +23,8 @@ from pathlib import Path
 from typing import List, Tuple
 
 import pandas as pd
-from utils import extract_sequence_from_pdb
+
+from .utils import extract_sequence_from_pdb
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -203,7 +204,8 @@ def main() -> None:
             logger.info(
                 f"Filtered from {len(sequence)} to {len(filtered_sequence)} interface residues"
             )
-            logger.info(f"Interface positions: {', '.join(sorted(interface_positions, key=int))}")
+            sorted_positions = sorted(interface_positions, key=lambda p: int(p))
+            logger.info(f"Interface positions: {', '.join(sorted_positions)}")
             sequence = filtered_sequence
         else:
             logger.info(f"Using all {len(sequence)} residues in chain {target_chain}")

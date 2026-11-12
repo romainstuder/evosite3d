@@ -20,32 +20,22 @@ from __future__ import annotations
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 
+# ``ensembl`` (lib/) and ``reference_species`` (scripts/) are importable
+# because importing ``_common`` puts those directories on sys.path.
 from _common import (
     add_common_args,
     resolve_gene,
+    write_seq_fasta,
 )
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-
-# ── Repository layout ─────────────────────────────────────────────────
-_REPO = Path(__file__).resolve().parent.parent.parent
-
-# Ensembl API helpers (from lib/)
-sys.path.insert(0, str(_REPO / "lib"))
-
-# Make the helper scripts importable for ``reference_species``.
-sys.path.insert(0, str(_REPO / "scripts"))
-from ensembl import (  # noqa: E402
+from ensembl import (
     extract_protein_ids_from_newick,
     fetch_cds_sequences,
     fetch_compara_protein_msa,
     fetch_gene_tree_newick,
 )
-from reference_species import is_reference_species  # noqa: E402
+from reference_species import is_reference_species
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -57,12 +47,6 @@ _DEFAULT_ROOT = Path("results/1_bronze")
 # =====================================================================
 #  Helpers
 # =====================================================================
-
-
-def write_seq_fasta(seqs: dict[str, str], out_fasta: Path) -> None:
-    """Write a ``{id: sequence}`` mapping as multi-FASTA."""
-    records = [SeqRecord(Seq(seq), id=sid, description="") for sid, seq in seqs.items()]
-    SeqIO.write(records, out_fasta, "fasta")
 
 
 def write_leaf_names(newick: str, out_path: Path) -> list[str]:
@@ -90,7 +74,7 @@ def run_extract(
         prefix: Filename stem, e.g. ``"HLA_DQB1"``.
         outdir: Destination directory for the four outputs.
         taxon: NCBI taxon ID used to prune the Compara gene tree
-            (default 9347 = Boreoeutheria).
+            (default 9347 = Eutheria, placental mammals).
     """
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -119,16 +103,12 @@ def run_extract(
     aa_aligned = fetch_compara_protein_msa(ensembl_gene, prune_taxon=taxon)
     if not aa_aligned:
         raise RuntimeError(f"Failed to download protein MSA for {ensembl_gene}")
-    log.info("aa_aligned {aa_aligned}")
     aa_aligned = {pid: aa_aligned[pid] for pid in aa_aligned if is_reference_species(pid)}
-    log.info("aa_aligned {aa_aligned}")
     log.info("Protein MSA has %d sequences", len(aa_aligned))
     write_seq_fasta(aa_aligned, aa_fasta)
 
     # ── 4. Fetch CDS for every protein in the MSA ────────────────
     aa_ids = list(aa_aligned.keys())
-    # aa_ids = {pid for pid in aa_ids if is_reference_species(pid)}
-    log.info("Protein MSA has %d sequences", len(aa_ids))
     cds_map = fetch_cds_sequences(ensembl_gene, aa_ids)
     if not cds_map:
         raise RuntimeError("No CDS sequences could be fetched from Ensembl.")
@@ -176,7 +156,7 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=9347,
         help="NCBI taxon ID to prune the Compara gene tree "
-        "(default 9347 = Boreoeutheria; 9443 = Primates, "
+        "(default 9347 = Eutheria; 9443 = Primates, "
         "40674 = Mammalia, 7742 = Vertebrata).",
     )
     return ap.parse_args()

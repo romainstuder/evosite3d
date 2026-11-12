@@ -28,19 +28,20 @@ Given a gene symbol the pipeline:
 The pipeline is split into focused steps so each can run in parallel
 under Nextflow:
 
-| Step | Script                      | Role                                          |
-| ---- | --------------------------- | --------------------------------------------- |
-| 1    | `prepare_data.py`           | Fetch CDS alignment + tree + 3D structure     |
-| 2    | `run_codeml_site_models.py` | Run CodeML M8 and M8a; LRT and BEB extraction |
-| 2b   | `run_hyphy_site_models.py`  | Run HyPhy FUBAR (default) and/or BUSTED       |
-| 3    | `analyze_site_models.py`    | dN/dS plot, Jalview annotation, PyMOL script  |
+| Step | Script                             | Role                                                                                             |
+| ---- | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1    | `prepare_data.py`                  | Fetch CDS alignment + tree + 3D structure, then build the CodeML-ready (TrimAl/PHYLIP) alignment |
+| 2    | `run_codeml_site_models.py`        | Run CodeML M8 and M8a; LRT and BEB extraction                                                    |
+| 2b   | `run_hyphy_site_models.py`         | Run HyPhy FUBAR (default) and/or BUSTED                                                          |
+| 2c   | `run_codeml_branch_site_models.py` | Branch-site model A (MA vs MA0) along the lineage                                                |
+| 3    | `analyse_site_models.py`           | dN/dS plot, Jalview annotation, PyMOL script                                                     |
 
-`main.nf` orchestrates all four under Nextflow with the obvious
+`main.nf` orchestrates these steps under Nextflow with the obvious
 parallelism.
 
 ## Requirements
 
-- Python >= 3.11
+- Python >= 3.12
 - [PAML](http://abacus.gene.ucl.ac.uk/software/paml.html) (`codeml` on PATH)
 - [HyPhy](http://www.hyphy.org/) >= 2.5 (`hyphy` on PATH)
 - [Newick Utilities](https://github.com/tjunier/newick_utils) (`nw_prune` on PATH)
@@ -56,43 +57,91 @@ parallelism.
 ### Standalone (sequential)
 
 ```bash
-# Step 1: fetch alignment, tree, and structure
-python prepare_data.py --gene-symbol HLA-DQB1
+# Step 1: fetch alignment + tree + structure and build the CodeML-ready
+# (TrimAl-cleaned, PHYLIP) alignment — all into ./HLA_DQB1/
+uv run python prepare_data.py --gene-symbol HLA-DQB1
 
 # Step 2: run both CodeML models, LRT, BEB extraction
-python run_codeml_site_models.py --gene-symbol HLA-DQB1
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1
 
 # Step 2-bis: run HyPhy FUBAR (default) on the same alignment
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1
 
 # Step 3: plots, Jalview annotation, PyMOL script
-python analyze_site_models.py --gene-symbol HLA-DQB1
+uv run python analyse_site_models.py --gene-symbol HLA-DQB1
 ```
 
 ### Common options
 
 ```bash
-# Use a different taxon (default 9347 = Boreoeutheria; 7742 = Vertebrata)
-python prepare_data.py --gene-symbol TP53 --taxon 7742
+# Use a different taxon (default 9347 = Eutheria, placental mammals; 7742 = Vertebrata)
+uv run python prepare_data.py --gene-symbol TP53 --taxon 7742
 
 # Override UniProt accession
-python prepare_data.py --gene-symbol HLA-DQB1 --uniprot P01920
+uv run python prepare_data.py --gene-symbol HLA-DQB1 --uniprot P01920
 
 # Use an experimental PDB instead of AlphaFold
-python prepare_data.py     --gene-symbol HLA-DQB1 --pdb 1UVQ
-python analyze_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
+uv run python prepare_data.py     --gene-symbol HLA-DQB1 --pdb 1UVQ
+uv run python analyse_site_models.py --gene-symbol HLA-DQB1 --pdb 1UVQ \
     --chain B --resi-offset 32
 
 # Run a single CodeML model (designed for parallel execution)
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8a
-python run_codeml_site_models.py --gene-symbol HLA-DQB1 --extract-only
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --model M8a
+uv run python run_codeml_site_models.py --gene-symbol HLA-DQB1 --extract-only
 
 # HyPhy: choose method
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method FUBAR
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BUSTED
-python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BOTH
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method FUBAR
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BUSTED
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1 --method BOTH
 ```
+
+### HyPhy only
+
+To run HyPhy without CodeML, first prepare the alignment (step 1), then
+run the HyPhy step on its own:
+
+```bash
+# Step 1 (prerequisite): fetch the alignment HyPhy reads
+uv run python prepare_data.py --gene-symbol HLA-DQB1
+
+# HyPhy only (FUBAR by default; use --method to choose)
+uv run python run_hyphy_site_models.py --gene-symbol HLA-DQB1
+```
+
+If step 1 has already been run for this gene, skip it and run
+`run_hyphy_site_models.py` directly.
+
+### Branch-site model A (lineage to the target)
+
+`run_codeml_branch_site_models.py` runs CodeML branch-site **model A**
+(`model = 2`, `NSsites = 2`) on every branch of the path from the root to
+the target protein's leaf, testing each as the foreground (`#1`) branch.
+For each branch it runs the alternative (MA) and null (MA0, `fix_omega = 1`,
+`omega = 1`) models and reports the LRT (2ΔlnL vs a 50:50 mixture of a point
+mass at 0 and χ²₁); BEB sites are extracted for branches that test
+significant.
+
+```bash
+# Preview the lineage branches (no codeml)
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --list-branches
+
+# Run model A on every branch from the root to the target
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1
+
+# Run a single branch by index (1 = nearest the root); good for parallelism
+uv run python run_codeml_branch_site_models.py --gene-symbol HLA-DQB1 --branch 3
+```
+
+Outputs (per branch `bNN`, numbered from the root towards the target):
+
+| File                              | Description                                        |
+| --------------------------------- | -------------------------------------------------- |
+| `{prefix}_bNN.tree`               | Pruned tree with branch `bNN` marked `#1`          |
+| `{prefix}_bsMA_bNN.mlc`           | CodeML output for the alternative model A          |
+| `{prefix}_bsMA0_bNN.mlc`          | CodeML output for the null model A0                |
+| `{prefix}_bsMA_bNN_beb_sites.tsv` | BEB sites with protein positions (significant)     |
+| `{prefix}_branch_site_lrt.tsv`    | Per-branch LRT summary (2ΔlnL, p-value, BEB count) |
 
 ### Nextflow
 
@@ -106,8 +155,14 @@ nextflow run main.nf --gene_symbols "HLA-DQB1,TRIM5,FOXP2"
 # Per-gene overrides via CSV
 nextflow run main.nf --input genes.csv
 
-# Skip HyPhy
-nextflow run main.nf --gene_symbols "HLA-DQB1" --hyphy_method ""
+# Skip HyPhy (HyPhy is off by default; just omit --hyphy_method)
+nextflow run main.nf --gene_symbols "HLA-DQB1"
+
+# HyPhy only: skip CodeML (and the downstream analyse step) with the --skip_codeml flag
+nextflow run main.nf --gene_symbols "HLA-DQB1" --skip_codeml --hyphy_method FUBAR
+
+# Also run branch-site model A along the target lineage (off by default; slow)
+nextflow run main.nf --gene_symbols "HLA-DQB1" --branch_site true
 ```
 
 ## Outputs
@@ -134,17 +189,26 @@ HyPhy:
 | `{prefix}_fubar.json`      | Raw FUBAR result (JSON)                             |
 | `{prefix}_fubar.log`       | HyPhy stdout for the FUBAR run                      |
 | `{prefix}_fubar_sites.tsv` | FUBAR positive sites (Pr ≥ 0.90), with protein pos. |
+| `{prefix}_fubar.jlv`       | Jalview annotation (FUBAR Pr + beta/alpha tracks)   |
 | `{prefix}_busted.json`     | Raw BUSTED result (JSON)                            |
 | `{prefix}_busted.log`      | HyPhy stdout for the BUSTED run                     |
+
+`analyse_site_models.py` writes `_fubar.jlv` and adds FUBAR sites (cyan
+sticks) to the PyMOL script. CodeML and HyPhy are handled independently,
+so a HyPhy-only run still produces `_fubar.jlv` and a FUBAR-only `.pml`.
 
 ### Visualise the results
 
 ```bash
-# Jalview: open the protein MSA with the BEB / dN/dS annotation track
+# Jalview: open the protein MSA with the CodeML BEB / dN/dS annotation track
 jalview -open HLA_DQB1/HLA_DQB1_subset.aa.mafft.fasta \
         -annotations HLA_DQB1/HLA_DQB1_beb.jlv
 
-# PyMOL: load the structure and colour BEB-positive sites
+# Jalview with the HyPhy FUBAR annotation track (HyPhy-only runs)
+jalview -open HLA_DQB1/HLA_DQB1_subset.aa.mafft.fasta \
+        -annotations HLA_DQB1/HLA_DQB1_fubar.jlv
+
+# PyMOL: load the structure and colour positively-selected sites
 pymol HLA_DQB1/HLA_DQB1_sites.pml
 ```
 
