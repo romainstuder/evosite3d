@@ -80,7 +80,7 @@ def main():
     """Main function to analyze all designs"""
     parser = argparse.ArgumentParser(description="Analyze protein structure designs")
     parser.add_argument(
-        "--prefix", help="File prefix for PDB files (e.g., " "'output/designs/design')"
+        "--prefix", help="File prefix for PDB files (e.g., 'output/designs/design')"
     )
     parser.add_argument(
         "-n",

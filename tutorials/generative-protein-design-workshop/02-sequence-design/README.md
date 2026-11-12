@@ -149,13 +149,11 @@ python $EVOSITE3D_SCRIPTS/validate_design.py \
 ### Key Parameters:
 
 1. **sampling_temp**: Controls sequence diversity
-
    - 0.05-0.1: Conservative, high confidence
    - 0.2-0.3: More diverse, exploratory
    - 1.0: Maximum diversity (rarely used)
 
 2. **num_seq_per_target**: Number of sequences to generate
-
    - More sequences = better chance of success
    - Typical: 50-200 sequences
 

@@ -25,13 +25,11 @@ discuss next steps.
 ### Key Achievements
 
 1. **Structure Generation (Tutorial 1)**
-
    - Generated 10 diverse two-helix bundle scaffolds
    - Applied secondary structure constraints
    - Selected optimal backbone geometry
 
 2. **Sequence Design (Tutorial 2)**
-
    - Designed 100 sequences for the scaffold
    - Analysed sequence properties (hydrophobicity, charge, helix propensity)
    - Selected sequences optimised for stability
@@ -138,14 +136,12 @@ for iteration in range(5):
 Before considering your design complete, verify:
 
 - [ ] **Structure Quality**
-
   - [ ] No chain breaks
   - [ ] Good Ramachandran statistics
   - [ ] Low clash score
   - [ ] Reasonable B-factors
 
 - [ ] **Sequence Properties**
-
   - [ ] No excessive charged patches
   - [ ] Hydrophobic core present
   - [ ] Reasonable amino acid composition

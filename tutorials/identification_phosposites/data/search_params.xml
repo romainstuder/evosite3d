@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PARAMETERS version="1.8.0">
+    <!-- Use MS-GF+ for phospho searches -->
+    <NODE name="MSGFPlusAdapter" description="MS/MS database search using MS-GF+.">
+        <ITEM name="version" value="3.4.1-pre-exported-20250519" type="string"/>
+        <NODE name="1" description="Instance &apos;1&apos; section for &apos;MSGFPlusAdapter&apos;">
+
+        <ITEM name="instrument" value="Q_Exactive" type="string"/>
+        <ITEM name="enzyme" value="Trypsin/P" type="string"/>
+        <ITEM name="protocol" value="phospho" type="string"/>
+        <ITEM name="max_missed_cleavages" value="2" type="int"/>
+        <ITEM name="precursor_mass_tolerance" value="20.0" type="double"/>
+        <ITEM name="precursor_error_units" value="ppm" type="string"/>
+        <ITEM name="max_mods" value="2" type="int"/>
+        <!-- Fixed modifications -->
+        <ITEMLIST name="fixed_modifications" type="string"
+                  description="Fixed modifications, specified using Unimod (www.unimod.org) terms">
+            <LISTITEM value="Carbamidomethyl (C)"/>
+        </ITEMLIST>
+        <!-- Variable modifications for phosphorylation -->
+        <ITEMLIST name="variable_modifications" type="string"
+                  description="Variable modifications, specified using Unimod (www.unimod.org) terms">
+            <LISTITEM value="Oxidation (M)"/>
+            <LISTITEM value="Phospho (S)"/>
+            <LISTITEM value="Phospho (T)"/>
+            <LISTITEM value="Phospho (Y)"/>
+        </ITEMLIST>
+        </NODE>
+    </NODE>
+
+    <!-- Use COMET for phospho searches -->
+    <NODE name="COMETAdapter" description="MS/MS database search using COMET">
+        <ITEM name="version" value="3.4.1-pre-exported-20250519" type="string"/>
+        <NODE name="1" description="Instance &apos;1&apos; section for &apos;MSGFPlusAdapter&apos;">
+
+        <ITEM name="instrument" value="Q_Exactive" type="string"/>
+        <ITEM name="enzyme" value="Trypsin/P" type="string"/>
+        <ITEM name="phospho" value="phospho" type="string"/>
+        <ITEM name="max_missed_cleavages" value="2" type="int"/>
+        <ITEM name="precursor_mass_tolerance" value="20.0" type="double"/>
+        <ITEM name="precursor_error_units" value="ppm" type="string"/>
+        <ITEM name="max_mods" value="2" type="int"/>
+        <!-- Fixed modifications -->
+        <ITEMLIST name="fixed_modifications" type="string"
+                  description="Fixed modifications, specified using Unimod (www.unimod.org) terms">
+            <LISTITEM value="Carbamidomethyl (C)"/>
+        </ITEMLIST>
+        <!-- Variable modifications for phosphorylation -->
+        <ITEMLIST name="variable_modifications" type="string"
+                  description="Variable modifications, specified using Unimod (www.unimod.org) terms">
+            <LISTITEM value="Oxidation (M)"/>
+            <LISTITEM value="Phospho (S)"/>
+            <LISTITEM value="Phospho (T)"/>
+            <LISTITEM value="Phospho (Y)"/>
+        </ITEMLIST>
+        </NODE>
+    </NODE>
+
+</PARAMETERS>

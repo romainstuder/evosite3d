@@ -10,11 +10,10 @@ One I like is the QVALUE package, for R:
 Launch R and install QVALUE by typing:
 
 ```shell
-source("http://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 biocLite("qvalue")
 ```
 
-`
 and load it:
 
 ```shell
@@ -24,8 +23,7 @@ library(qvalue)
 We need to load the list of p-value into R. This is a single with only p-values. The order is really
 important, so we have in a separate file the ordered names of the branch and/or gene tested.
 
-```shell
-
+```
 0.00623359809654
 0.148525646364
 1.0
@@ -44,24 +42,31 @@ p <- scan("pvalues.list", na.strings=T)
 
 First, have a look at the distribution:
 
+```
 hist(p, breaks = 20, main = paste("Distribution of p-values"), xlab="Value")
+```
 
-which will display this histogram:
-￼
-The distribution is bimodal, as expected: when the test is negative, we will have a p-value = 1,
-and when the test is significant, the p-value is generally very low.
+which will display this histogram: The distribution is bimodal, as expected: when the test is
+negative, we will have a p-value = 1, and when the test is significant, the p-value is generally
+very low.
 
 Now, we can perform the qvalue correction:
+
+```
 qobj <- qvalue(p, pi0.meth="bootstrap", fdr.level=0.05)
+```
 
 Two comments:
 
 1. The option “bootstrap” is really important, as the distribution is bimodal (see page 11 of the
-QVALUE manual).
+   QVALUE manual).
 2. The fdr.level=0.05 is a threshold which estimates that 5% of our tests could be false-positive.
 
 Finally, we write the output into a file:
+
+```
 write.qvalue(qobj, file="qvalues.list")
+```
 
 The output file has five columns:
 

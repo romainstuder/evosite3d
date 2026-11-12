@@ -78,7 +78,7 @@ def main():
                 seq_record.seq.count(aa) for aa in args.hydrophobic_residues
             ) / len(seq_record.seq)
             print(f"  Sequence length: {len(seq_record.seq)}")
-            print(f"  Hydrophobic content: " f"{hydrophobic_content:.2%}")
+            print(f"  Hydrophobic content: {hydrophobic_content:.2%}")
 
 
 if __name__ == "__main__":
