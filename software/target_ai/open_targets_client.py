@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-open_targets_client.py — Lightweight client for the Open Targets Platform GraphQL API.
+open_targets_client.py — Scoring pipeline for the Open Targets Platform.
+
+For one-off lookups (search, target info, known drugs, associations, top
+targets for a disease), call the `open-targets-platform` MCP server directly
+instead of this script. This script only covers the two commands that need
+deterministic, reproducible scoring and produce files on disk:
 
 Usage:
-    python3 open_targets_client.py search-target BRAF
-    python3 open_targets_client.py search-disease "breast cancer"
-    python3 open_targets_client.py target-info ENSG00000157764
-    python3 open_targets_client.py known-drugs ENSG00000157764
-    python3 open_targets_client.py association ENSG00000157764 EFO_0000305
     python3 open_targets_client.py validate "BRAF,KRAS" "melanoma"
-    python3 open_targets_client.py find-targets "Alzheimer disease" [top_n]
+    python3 open_targets_client.py pathways "PCSK9,HMGCR,ANGPTL3"
 """
 
 import csv
@@ -17,23 +17,49 @@ import json
 import os
 import sys
 from datetime import datetime
+from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 API_URL = "https://api.platform.opentargets.org/api/v4/graphql"
 
+# maxClinicalStage values returned by the API, mapped to numeric phases.
+# WITHDRAWAL reached the market but is no longer approved, so it ranks below APPROVAL.
+STAGE_RANK = {
+    "APPROVAL": 4,
+    "PHASE_4": 4,
+    "WITHDRAWAL": 3,
+    "PHASE_3": 3,
+    "PHASE_2_3": 2.5,
+    "PHASE_2": 2,
+    "PHASE_1_2": 1.5,
+    "PHASE_1": 1,
+    "EARLY_PHASE_1": 0.5,
+}
+
+
+class OpenTargetsError(RuntimeError):
+    pass
+
 
 def graphql_query(query: str, variables: dict | None = None) -> dict:
+    """Run a query; raise OpenTargetsError on any HTTP or GraphQL error.
+
+    Failing loudly matters: a silently failed query scores as "no evidence".
+    """
     payload = json.dumps({"query": query, "variables": variables or {}}).encode()
     req = Request(API_URL, data=payload, headers={"Content-Type": "application/json"})
     try:
         with urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode())
-            if "errors" in data:
-                print(f"  GraphQL errors: {data['errors']}", file=sys.stderr)
-            return data
-    except (URLError, HTTPError) as e:
-        return {"error": str(e)}
+    except HTTPError as e:
+        body = e.read().decode(errors="replace")[:500]
+        raise OpenTargetsError(f"{e} — {body}") from e
+    except URLError as e:
+        raise OpenTargetsError(str(e)) from e
+    if "errors" in data:
+        raise OpenTargetsError(f"GraphQL errors: {data['errors']}")
+    return data
 
 
 # ── Search ─────────────────────────────────────────────────────────────────
@@ -90,7 +116,7 @@ def get_known_drugs(ensembl_id: str) -> dict:
             id
             maxClinicalStage
             drug { id name drugType }
-            diseases { id name }
+            diseases { disease { id name } }
           }
         }
       }
@@ -98,24 +124,20 @@ def get_known_drugs(ensembl_id: str) -> dict:
     return graphql_query(q, {"ensemblId": ensembl_id})
 
 
-# ── Find Targets for Disease ──────────────────────────────────────────────
-
-
-def find_targets_for_disease(efo_id: str, top_n: int = 10) -> dict:
-    q = """query($efoId: String!, $size: Int!) {
+def get_disease_drugs(efo_id: str) -> dict:
+    """Max clinical stage of every drug *in this disease* (exact ontology node)."""
+    q = """query($efoId: String!) {
       disease(efoId: $efoId) {
-        name
-        associatedTargets(page: {size: $size, index: 0}) {
+        drugAndClinicalCandidates {
           count
           rows {
-            target { id approvedSymbol approvedName }
-            score
-            datatypeScores { id score }
+            maxClinicalStage
+            drug { id name }
           }
         }
       }
     }"""
-    return graphql_query(q, {"efoId": efo_id, "size": top_n})
+    return graphql_query(q, {"efoId": efo_id})
 
 
 # ── Association (target-disease) ───────────────────────────────────────────
@@ -168,35 +190,26 @@ def get_association(ensembl_id: str, efo_id: str) -> dict:
 # ── Scoring Logic ──────────────────────────────────────────────────────────
 
 
-def score_clinical(assoc_data: dict, drugs_data: dict, efo_id: str) -> tuple[int, str]:
+def target_drugs_in_disease(drugs_data: dict, disease_drugs: dict) -> list[dict]:
+    """Rows of disease_drugs whose drug acts on the target, best stage first."""
+    tdacc = (drugs_data.get("data", {}).get("target") or {}).get("drugAndClinicalCandidates") or {}
+    target_drug_ids = {(r.get("drug") or {}).get("id") for r in tdacc.get("rows", [])}
+    ddacc = (disease_drugs.get("data", {}).get("disease") or {}).get(
+        "drugAndClinicalCandidates"
+    ) or {}
+    rows = [r for r in ddacc.get("rows", []) if (r.get("drug") or {}).get("id") in target_drug_ids]
+    return sorted(rows, key=lambda r: -STAGE_RANK.get(r["maxClinicalStage"], 0))
+
+
+def score_clinical(assoc_data: dict, drugs_data: dict, disease_drugs: dict) -> tuple[int, str]:
     reasons = []
 
-    # Map maxClinicalStage strings to numeric phases
-    stage_map = {
-        "Phase IV": 4,
-        "Approved": 4,
-        "Phase III": 3,
-        "Phase II": 2,
-        "Phase I": 1,
-        "Phase I (Early)": 0.5,
-    }
-
-    max_phase = 0
-    drug_names = []
-    dacc = drugs_data.get("data", {}).get("target", {}).get("drugAndClinicalCandidates")
-    if dacc:
-        for row in dacc.get("rows", []):
-            stage = row.get("maxClinicalStage", "")
-            ph = stage_map.get(stage, 0)
-            drug_obj = row.get("drug") or {}
-            drug_name = drug_obj.get("name", "unknown")
-            if ph > max_phase:
-                max_phase = ph
-            if drug_name not in drug_names and len(drug_names) < 5:
-                drug_names.append(drug_name)
-        n_total = dacc.get("count", len(drug_names))
-        if drug_names:
-            reasons.append(f"{n_total} drug(s), max phase {max_phase}")
+    # Only drugs that act on this target AND have been trialled in this disease count
+    rows = target_drugs_in_disease(drugs_data, disease_drugs)
+    max_phase = max((STAGE_RANK.get(r["maxClinicalStage"], 0) for r in rows), default=0)
+    if rows:
+        top = ", ".join(f"{r['drug']['name']} ({r['maxClinicalStage']})" for r in rows[:3])
+        reasons.append(f"{len(rows)} drug(s) in this disease: {top}")
 
     # Check genetic association from association data
     genetic_score = 0
@@ -244,14 +257,6 @@ def score_druggability(target_data: dict, drugs_data: dict) -> tuple[int, str]:
     if ab_labels:
         reasons.append(f"AB({len(ab_labels)}): {', '.join(ab_labels[:2])}")
 
-    stage_map = {
-        "Phase IV": 4,
-        "Approved": 4,
-        "Phase III": 3,
-        "Phase II": 2,
-        "Phase I": 1,
-        "Phase I (Early)": 0.5,
-    }
     has_approved = False
     has_clinical = False
     n_drugs = 0
@@ -260,7 +265,7 @@ def score_druggability(target_data: dict, drugs_data: dict) -> tuple[int, str]:
         n_drugs = dacc.get("count", 0)
         for row in dacc.get("rows", []):
             stage = row.get("maxClinicalStage", "")
-            ph = stage_map.get(stage, 0)
+            ph = STAGE_RANK.get(stage, 0)
             if ph >= 4:
                 has_approved = True
             elif ph >= 1:
@@ -336,7 +341,7 @@ def confidence_level(comp: float, n_sources: int) -> str:
 
 
 def validate(targets: list[str], diseases: list[str]) -> dict:
-    results = []
+    results: list[dict[str, Any]] = []
 
     # Resolve targets
     resolved_targets = {}
@@ -366,6 +371,8 @@ def validate(targets: list[str], diseases: list[str]) -> dict:
             else:
                 print(f"  WARN: disease '{d}' not found")
 
+    disease_drugs = {d_id: get_disease_drugs(d_id) for d_id in resolved_diseases.values()}
+
     raw_data = {}
     for t_name, t_id in resolved_targets.items():
         for d_name, d_id in resolved_diseases.items():
@@ -380,9 +387,10 @@ def validate(targets: list[str], diseases: list[str]) -> dict:
                 "association": assoc,
                 "target_info": target_info,
                 "known_drugs": drugs,
+                "target_drugs_in_disease": target_drugs_in_disease(drugs, disease_drugs[d_id]),
             }
 
-            clin_score, clin_reason = score_clinical(assoc, drugs, d_id)
+            clin_score, clin_reason = score_clinical(assoc, drugs, disease_drugs[d_id])
             drug_score, drug_reason = score_druggability(target_info, drugs)
             path_score, path_reason = score_pathway(target_info, assoc)
             comp = composite_score(clin_score, drug_score, path_score)
@@ -438,8 +446,10 @@ def validate(targets: list[str], diseases: list[str]) -> dict:
                 }
             )
 
+    # Slug from input order, before ranking, so re-runs overwrite the same files
+    slug = _make_slug(results) if results else "unknown"
     results.sort(key=lambda x: x["composite"], reverse=True)
-    return {"results": results, "raw_data": raw_data}
+    return {"results": results, "raw_data": raw_data, "slug": slug}
 
 
 # ── Output Formatters ──────────────────────────────────────────────────────
@@ -800,7 +810,7 @@ def _make_slug(results):
 def save_results(validation, output_dir="results"):
     os.makedirs(output_dir, exist_ok=True)
     results = validation["results"]
-    slug = _make_slug(results) if results else "unknown"
+    slug = validation["slug"]
 
     with open(f"{output_dir}/validation_{slug}.md", "w") as f:
         f.write(
@@ -815,7 +825,7 @@ def save_results(validation, output_dir="results"):
     if results:
         fieldnames = [k for k in results[0].keys() if k != "full_name" and k != "context"]
         with open(f"{output_dir}/scores_{slug}.csv", "w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+            w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore", lineterminator="\n")
             w.writeheader()
             w.writerows(results)
 
@@ -844,52 +854,7 @@ def main():
 
     cmd = sys.argv[1]
 
-    if cmd == "search-target" and len(sys.argv) >= 3:
-        print(json.dumps(search_target(sys.argv[2]), indent=2))
-    elif cmd == "search-disease" and len(sys.argv) >= 3:
-        print(json.dumps(search_disease(" ".join(sys.argv[2:])), indent=2))
-    elif cmd == "association" and len(sys.argv) >= 4:
-        print(json.dumps(get_association(sys.argv[2], sys.argv[3]), indent=2))
-    elif cmd == "target-info" and len(sys.argv) >= 3:
-        print(json.dumps(get_target_info(sys.argv[2]), indent=2))
-    elif cmd == "known-drugs" and len(sys.argv) >= 3:
-        print(json.dumps(get_known_drugs(sys.argv[2]), indent=2))
-    elif cmd == "find-targets" and len(sys.argv) >= 3:
-        disease_query = " ".join(sys.argv[2:])
-        top_n = 10
-        # Check if last arg is a number (top_n)
-        if sys.argv[-1].isdigit():
-            top_n = int(sys.argv[-1])
-            disease_query = " ".join(sys.argv[2:-1])
-        # Resolve disease
-        efo_id = disease_query
-        if not any(disease_query.startswith(p) for p in ["EFO_", "MONDO_", "HP_", "Orphanet_"]):
-            r = search_disease(disease_query)
-            hits = r.get("data", {}).get("search", {}).get("hits", [])
-            if hits:
-                efo_id = hits[0]["id"]
-                print(f"  {disease_query} → {efo_id}")
-            else:
-                print(f"  WARN: disease '{disease_query}' not found")
-                sys.exit(1)
-        result = find_targets_for_disease(efo_id, top_n)
-        disease_data = result.get("data", {}).get("disease")
-        if not disease_data:
-            print("  No data returned for this disease.")
-            sys.exit(1)
-        rows = disease_data["associatedTargets"]["rows"]
-        total = disease_data["associatedTargets"]["count"]
-        print(f"  {disease_data['name']}: {total} associated targets (showing top {len(rows)})\n")
-        print("| Rank | Symbol | Name | Score | Top datatype |")
-        print("|------|--------|------|:-----:|--------------|")
-        for i, row in enumerate(rows, 1):
-            t = row["target"]
-            score = row["score"]
-            dts = sorted(row.get("datatypeScores", []), key=lambda d: d["score"], reverse=True)
-            top_dt = f"{dts[0]['id']} ({dts[0]['score']:.2f})" if dts else "—"
-            name = (t.get("approvedName") or "")[:40]
-            print(f"| {i} | **{t['approvedSymbol']}** | {name} | {score:.3f} | {top_dt} |")
-    elif cmd == "validate" and len(sys.argv) >= 4:
+    if cmd == "validate" and len(sys.argv) >= 4:
         targets = [t.strip() for t in sys.argv[2].split(",")]
         diseases = [d.strip() for d in sys.argv[3].split(",")]
         print(f"Validating {len(targets)} target(s) × {len(diseases)} disease(s)...\n")

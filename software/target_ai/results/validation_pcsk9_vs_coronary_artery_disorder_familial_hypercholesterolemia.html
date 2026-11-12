@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Target Validation — coronary artery disease, familial hypercholesterolemia</title>
+<title>Target Validation — coronary artery disorder, familial hypercholesterolemia</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,7 +95,7 @@
 <body>
 <div class="container">
   <h1>Target Validation Scoring Matrix</h1>
-  <p class="subtitle">1 target(s) (PCSK9) scored against 2 disease(s) (coronary artery disease, familial hypercholesterolemia) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
+  <p class="subtitle">1 target(s) (PCSK9) scored against 2 disease(s) (coronary artery disorder, familial hypercholesterolemia) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
 
   <div class="matrix-wrap">
     <table id="matrix">
@@ -128,12 +128,12 @@
     </div>
   </div>
 
-  <div class="generated">Generated 2026-03-29 22:00 · Data: Open Targets Platform GraphQL API</div>
+  <div class="generated">Generated 2026-11-03 09:58 · Data: Open Targets Platform GraphQL API</div>
 </div>
 
 <script>
 // ── DATA (injected by open_targets_client.py) ────────────────────────────
-const DISEASE_NAME = "coronary artery disease, familial hypercholesterolemia";
+const DISEASE_NAME = "coronary artery disorder, familial hypercholesterolemia";
 
 const DIMENSIONS = [
   { key: "genetic",           label: "Genetic Association",  group: "clinical",     weight: 0, isVeto: false, descriptions: ["No GWAS or rare-variant signal","Suggestive association","Significant GWAS hit (p<5e-8)","GWAS + rare-variant convergence","Strong colocalisation confirmed","Protective LoF + Mendelian evidence"] },
@@ -154,15 +154,15 @@ const TARGETS = [
     "name": "PCSK9",
     "fullName": "proprotein convertase subtilisin/kexin type 9",
     "ensemblId": "ENSG00000169174",
-    "disease": "coronary artery disease",
+    "disease": "coronary artery disorder",
     "context": "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -170,19 +170,19 @@ const TARGETS = [
       "safety": 5
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_association): 0.95",
-      "trials": "Genetic score (genetic_association): 0.95",
-      "clinical_total": "Genetic score (genetic_association): 0.95",
-      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
-      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95",
+      "genetic": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "trials": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "clinical_total": "3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95",
+      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
+      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: Genetic score (genetic_association): 0.95. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf. Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.95."
+    "notes": "Clinical: 3 drug(s) in this disease: EVOLOCUMAB (APPROVAL), ALIROCUMAB (APPROVAL), INCLISIRAN (PHASE_2); Genetic score (genetic_association): 0.95. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s). Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.96."
   },
   {
     "name": "PCSK9",
@@ -191,12 +191,12 @@ const TARGETS = [
     "disease": "familial hypercholesterolemia",
     "context": "Crucial player in the regulation of plasma cholesterol homeostasis. Binds to low",
     "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -204,19 +204,19 @@ const TARGETS = [
       "safety": 5
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "trials": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "clinical_total": "Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04",
-      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf",
-      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
-      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26",
+      "genetic": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "trials": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "clinical_total": "8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03",
+      "sm_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s)",
+      "pathways": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "expression": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "literature": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
+      "pathway_total": "4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78",
       "safety": "No safety liabilities reported"
     },
-    "notes": "Clinical: Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.04. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf. Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.26."
+    "notes": "Clinical: 8 drug(s) in this disease: ALIROCUMAB (APPROVAL), EVOLOCUMAB (APPROVAL), INCLISIRAN (APPROVAL); Genetic score (genetic_literature): 0.90; Genetic score (genetic_association): 0.92; Genetic score (somatic_mutation): 0.03. Druggability: SM(3): Structure with Ligand, High-Quality Ligand; AB(4): Approved Drug, GO CC high conf; 10 drug/clinical candidate(s). Pathway: 4 pw: VLDLR internalisation and degradation; LDL clearance; Literature: 0.90; Literature: 0.78."
   }
 ];
 

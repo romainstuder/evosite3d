@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Target Validation — cutaneous melanoma, non-small cell lung carcinoma</title>
+<title>Target Validation — non-small cell lung carcinoma, cutaneous melanoma</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -95,7 +95,7 @@
 <body>
 <div class="container">
   <h1>Target Validation Scoring Matrix</h1>
-  <p class="subtitle">2 target(s) (BRAF, KRAS) scored against 2 disease(s) (cutaneous melanoma, non-small cell lung carcinoma) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
+  <p class="subtitle">2 target(s) (KRAS, BRAF) scored against 2 disease(s) (non-small cell lung carcinoma, cutaneous melanoma) across 7 evidence sub-dimensions. Scores 0-5 per dimension. Weighted composite determines ranking. Safety score of 0 = veto. Hover scores for details. Click target names for notes.</p>
 
   <div class="matrix-wrap">
     <table id="matrix">
@@ -128,12 +128,12 @@
     </div>
   </div>
 
-  <div class="generated">Generated 2026-03-29 21:59 · Data: Open Targets Platform GraphQL API</div>
+  <div class="generated">Generated 2026-11-03 10:21 · Data: Open Targets Platform GraphQL API</div>
 </div>
 
 <script>
 // ── DATA (injected by open_targets_client.py) ────────────────────────────
-const DISEASE_NAME = "cutaneous melanoma, non-small cell lung carcinoma";
+const DISEASE_NAME = "non-small cell lung carcinoma, cutaneous melanoma";
 
 const DIMENSIONS = [
   { key: "genetic",           label: "Genetic Association",  group: "clinical",     weight: 0, isVeto: false, descriptions: ["No GWAS or rare-variant signal","Suggestive association","Significant GWAS hit (p<5e-8)","GWAS + rare-variant convergence","Strong colocalisation confirmed","Protective LoF + Mendelian evidence"] },
@@ -151,6 +151,40 @@ const DIMENSIONS = [
 
 const TARGETS = [
   {
+    "name": "KRAS",
+    "fullName": "KRas proto-oncogene, GTPase",
+    "ensemblId": "ENSG00000133703",
+    "disease": "non-small cell lung carcinoma",
+    "context": "Signal transducer in the Ras-MAPK signaling pathway that regulates cell prolifer",
+    "scores": {
+      "genetic": 5,
+      "trials": 5,
+      "clinical_total": 5,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
+      "pathways": 5,
+      "expression": 4,
+      "literature": 5,
+      "pathway_total": 5,
+      "safety": 1
+    },
+    "reasons": {
+      "genetic": "3 drug(s) in this disease: SOTORASIB (APPROVAL), ADAGRASIB (APPROVAL), SALIRASIB (PHASE_2); Genetic score (somatic_mutation): 0.92",
+      "trials": "3 drug(s) in this disease: SOTORASIB (APPROVAL), ADAGRASIB (APPROVAL), SALIRASIB (PHASE_2); Genetic score (somatic_mutation): 0.92",
+      "clinical_total": "3 drug(s) in this disease: SOTORASIB (APPROVAL), ADAGRASIB (APPROVAL), SALIRASIB (PHASE_2); Genetic score (somatic_mutation): 0.92",
+      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
+      "pathways": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 1.00",
+      "expression": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 1.00",
+      "literature": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 1.00",
+      "pathway_total": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 1.00",
+      "safety": "High LoF intolerance (pLI-like score=1.00)"
+    },
+    "notes": "Clinical: 3 drug(s) in this disease: SOTORASIB (APPROVAL), ADAGRASIB (APPROVAL), SALIRASIB (PHASE_2); Genetic score (somatic_mutation): 0.92. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s). Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 1.00."
+  },
+  {
     "name": "BRAF",
     "fullName": "B-Raf proto-oncogene, serine/threonine kinase",
     "ensemblId": "ENSG00000157764",
@@ -160,9 +194,9 @@ const TARGETS = [
       "genetic": 4,
       "trials": 4,
       "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 5,
       "expression": 4,
       "literature": 5,
@@ -170,19 +204,19 @@ const TARGETS = [
       "safety": 1
     },
     "reasons": {
-      "genetic": "Genetic score (somatic_mutation): 0.84",
-      "trials": "Genetic score (somatic_mutation): 0.84",
-      "clinical_total": "Genetic score (somatic_mutation): 0.84",
-      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
-      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
-      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
-      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72",
+      "genetic": "3 drug(s) in this disease: VEMURAFENIB (PHASE_3), DABRAFENIB (PHASE_3), ENCORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.84",
+      "trials": "3 drug(s) in this disease: VEMURAFENIB (PHASE_3), DABRAFENIB (PHASE_3), ENCORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.84",
+      "clinical_total": "3 drug(s) in this disease: VEMURAFENIB (PHASE_3), DABRAFENIB (PHASE_3), ENCORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.84",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.87",
+      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.87",
+      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.87",
+      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.87",
       "safety": "High LoF intolerance (pLI-like score=1.00)"
     },
-    "notes": "Clinical: Genetic score (somatic_mutation): 0.84. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf. Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.72."
+    "notes": "Clinical: 3 drug(s) in this disease: VEMURAFENIB (PHASE_3), DABRAFENIB (PHASE_3), ENCORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.84. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s). Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.87."
   },
   {
     "name": "BRAF",
@@ -194,9 +228,9 @@ const TARGETS = [
       "genetic": 4,
       "trials": 4,
       "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 5,
       "expression": 4,
       "literature": 5,
@@ -204,67 +238,33 @@ const TARGETS = [
       "safety": 1
     },
     "reasons": {
-      "genetic": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
-      "trials": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
-      "clinical_total": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87",
-      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf",
-      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
-      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
-      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
-      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98",
+      "genetic": "9 drug(s) in this disease: SORAFENIB (PHASE_3), VEMURAFENIB (PHASE_2_3), REGORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.87",
+      "trials": "9 drug(s) in this disease: SORAFENIB (PHASE_3), VEMURAFENIB (PHASE_2_3), REGORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.87",
+      "clinical_total": "9 drug(s) in this disease: SORAFENIB (PHASE_3), VEMURAFENIB (PHASE_2_3), REGORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.87",
+      "sm_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "ab_tractability": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "druggability_total": "SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s)",
+      "pathways": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.99",
+      "expression": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.99",
+      "literature": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.99",
+      "pathway_total": "16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.99",
       "safety": "High LoF intolerance (pLI-like score=1.00)"
     },
-    "notes": "Clinical: Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.87. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf. Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.76; Literature: 0.98."
+    "notes": "Clinical: 9 drug(s) in this disease: SORAFENIB (PHASE_3), VEMURAFENIB (PHASE_2_3), REGORAFENIB (PHASE_2); Genetic score (somatic_mutation): 0.87. Druggability: SM(5): Approved Drug, Structure with Ligand; AB(3): UniProt loc high conf, GO CC high conf; 18 drug/clinical candidate(s). Pathway: 16 pw: Gain-of-function MRAS complexes activate; Signalling to p38 via RIT and RIN; Literature: 0.99."
   },
   {
     "name": "KRAS",
-    "fullName": "KRAS proto-oncogene, GTPase",
-    "ensemblId": "ENSG00000133703",
-    "disease": "non-small cell lung carcinoma",
-    "context": "Ras proteins bind GDP/GTP and possess intrinsic GTPase activity (PubMed:20949621",
-    "scores": {
-      "genetic": 4,
-      "trials": 4,
-      "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
-      "pathways": 5,
-      "expression": 4,
-      "literature": 5,
-      "pathway_total": 5,
-      "safety": 1
-    },
-    "reasons": {
-      "genetic": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
-      "trials": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
-      "clinical_total": "Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92",
-      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
-      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
-      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
-      "pathways": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
-      "expression": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
-      "literature": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
-      "pathway_total": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00",
-      "safety": "High LoF intolerance (pLI-like score=1.00)"
-    },
-    "notes": "Clinical: Genetic score (genetic_literature): 0.76; Genetic score (somatic_mutation): 0.92. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf. Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.76; Literature: 1.00."
-  },
-  {
-    "name": "KRAS",
-    "fullName": "KRAS proto-oncogene, GTPase",
+    "fullName": "KRas proto-oncogene, GTPase",
     "ensemblId": "ENSG00000133703",
     "disease": "cutaneous melanoma",
-    "context": "Ras proteins bind GDP/GTP and possess intrinsic GTPase activity (PubMed:20949621",
+    "context": "Signal transducer in the Ras-MAPK signaling pathway that regulates cell prolifer",
     "scores": {
       "genetic": 4,
       "trials": 4,
       "clinical_total": 4,
-      "sm_tractability": 3,
-      "ab_tractability": 2,
-      "druggability_total": 3,
+      "sm_tractability": 5,
+      "ab_tractability": 4,
+      "druggability_total": 5,
       "pathways": 4,
       "expression": 3,
       "literature": 4,
@@ -275,16 +275,16 @@ const TARGETS = [
       "genetic": "Genetic score (somatic_mutation): 0.68",
       "trials": "Genetic score (somatic_mutation): 0.68",
       "clinical_total": "Genetic score (somatic_mutation): 0.68",
-      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
-      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
-      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf",
+      "sm_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
+      "ab_tractability": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
+      "druggability_total": "SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s)",
       "pathways": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
       "expression": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
       "literature": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
       "pathway_total": "71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17",
       "safety": "High LoF intolerance (pLI-like score=1.00)"
     },
-    "notes": "Clinical: Genetic score (somatic_mutation): 0.68. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf. Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17."
+    "notes": "Clinical: Genetic score (somatic_mutation): 0.68. Druggability: SM(3): Approved Drug, Structure with Ligand; AB(2): UniProt loc high conf, GO CC high conf; 3 drug/clinical candidate(s). Pathway: 71 pw: Signalling to RAS; SHC-related events triggered by IGF1R; Literature: 0.17."
   }
 ];
 
