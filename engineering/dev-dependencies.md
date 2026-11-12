@@ -6,27 +6,25 @@ the code, and are never needed to run the scripts, tutorials or software.
 ```toml
 [dependency-groups]
 dev = [
-    "mypy>=2.1.0",
-    "pre-commit>=3.0.0",
+    "mypy>=2.4.1",
     "pylint>=3.0.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "ruff>=0.15.16",
+    "ruff>=0.17.4",
     "scipy-stubs>=1.17.1",
-    "ty>=0.0.46",
+    "ty>=0.0.101",
 ]
 ```
 
-| Module                                              | Locked version | Purpose                                     |
-| --------------------------------------------------- | -------------- | ------------------------------------------- |
-| [ruff](https://docs.astral.sh/ruff/)                | 0.15.16        | Linting, import sorting, formatting         |
-| [ty](https://docs.astral.sh/ty/)                    | 0.0.46         | Fast type checking, run on every commit     |
-| [mypy](https://mypy-lang.org/)                      | 2.1.0          | Reference type checking                     |
-| [scipy-stubs](https://github.com/scipy/scipy-stubs) | 1.17.1.5       | Type information for SciPy                  |
-| [pylint](https://pylint.readthedocs.io/)            | 4.0.5          | Deeper static analysis and code smells      |
-| [pytest](https://docs.pytest.org/)                  | 9.0.3          | Test runner                                 |
-| [pytest-cov](https://pytest-cov.readthedocs.io/)    | 7.1.0          | Test coverage reports                       |
-| [pre-commit](https://pre-commit.com/)               | 4.6.0          | Runs the checks automatically before commit |
+| Module                                              | Locked version | Purpose                                 |
+| --------------------------------------------------- | -------------- | --------------------------------------- |
+| [ruff](https://docs.astral.sh/ruff/)                | 0.17.4         | Linting, import sorting, formatting     |
+| [ty](https://docs.astral.sh/ty/)                    | 0.0.101        | Fast type checking, run on every commit |
+| [mypy](https://mypy-lang.org/)                      | 2.4.1          | Reference type checking                 |
+| [scipy-stubs](https://github.com/scipy/scipy-stubs) | 1.18.1.1       | Type information for SciPy              |
+| [pylint](https://pylint.readthedocs.io/)            | 4.1.3          | Deeper static analysis and code smells  |
+| [pytest](https://docs.pytest.org/)                  | 9.2.0          | Test runner                             |
+| [pytest-cov](https://pytest-cov.readthedocs.io/)    | 7.1.0          | Test coverage reports                   |
 
 Locked versions come from [`uv.lock`](../uv.lock); the lower bounds above are the minimum accepted.
 
@@ -64,7 +62,7 @@ uv run ruff format .
 
 ## ty
 
-Astral's type checker, fast enough to run on every commit through pre-commit. Standalone scripts add `lib/` to
+Astral's type checker, fast enough to run on every commit through prek. Standalone scripts add `lib/` to
 `sys.path` at runtime, so ty is told about it statically:
 
 ```toml
@@ -120,15 +118,15 @@ Coverage plugin for pytest, showing which lines the tests exercise.
 uv run pytest --cov --cov-report=term-missing
 ```
 
-## pre-commit
+## prek
 
-Runs the checks from [`.pre-commit-config.yaml`](../.pre-commit-config.yaml) before each commit: file hygiene, Prettier
+[prek](https://github.com/j178/prek) runs the checks from [`.pre-commit-config.yaml`](../.pre-commit-config.yaml) before each commit: file hygiene, Prettier
 for Markdown, Ruff (lint and format) and ty. The Ruff hook pins its own version (`rev` in the config), separate from
 the one locked in `uv.lock`; keep the two in step when you upgrade Ruff.
 
 ```bash
-uvx pre-commit install
-uvx pre-commit run --all-files
+uvx prek install
+uvx prek run --all-files
 ```
 
 ---

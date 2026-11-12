@@ -7,7 +7,6 @@ dependencies = [
     "biopython>=1.87",
     "chembl-webresource-client>=0.10.9",
     "cmapPy>=4.0.1",
-    "claude-agent-sdk>=0.2.87",
     "datasets>=2.18",
     "jupyter>=1.0",
     "jupyterlab>=1.0",
@@ -36,14 +35,13 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mypy>=2.1.0",
-    "pre-commit>=3.0.0",
+    "mypy>=2.4.1",
     "pylint>=3.0.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "ruff>=0.15.16",
+    "ruff>=0.17.4",
     "scipy-stubs>=1.17.1",
-    "ty>=0.0.46",
+    "ty>=0.0.101",
 ]
 
 [tool.setuptools.packages.find]

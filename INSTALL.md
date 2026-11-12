@@ -97,8 +97,8 @@ cd evosite3d
 # Install runtime + dev dependencies (PEP 735 dependency group)
 uv sync --group dev
 
-# Install pre-commit hooks (use uvx so it doesn't leak into the project venv)
-uvx pre-commit install
+# Install git hooks with prek (use uvx so it doesn't leak into the project venv)
+uvx prek install
 ```
 
 ### Python ecosystem links
