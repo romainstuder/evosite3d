@@ -6,24 +6,24 @@ the code, and are never needed to run the scripts, tutorials or software.
 ```toml
 [dependency-groups]
 dev = [
-    "mypy>=2.1.0",
+    "mypy>=2.4.1",
     "pylint>=3.0.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "ruff>=0.15.16",
+    "ruff>=0.17.4",
     "scipy-stubs>=1.17.1",
-    "ty>=0.0.46",
+    "ty>=0.0.101",
 ]
 ```
 
 | Module                                              | Locked version | Purpose                                 |
 | --------------------------------------------------- | -------------- | --------------------------------------- |
-| [ruff](https://docs.astral.sh/ruff/)                | 0.15.16        | Linting, import sorting, formatting     |
-| [ty](https://docs.astral.sh/ty/)                    | 0.0.46         | Fast type checking, run on every commit |
-| [mypy](https://mypy-lang.org/)                      | 2.1.0          | Reference type checking                 |
-| [scipy-stubs](https://github.com/scipy/scipy-stubs) | 1.17.1.5       | Type information for SciPy              |
-| [pylint](https://pylint.readthedocs.io/)            | 4.0.5          | Deeper static analysis and code smells  |
-| [pytest](https://docs.pytest.org/)                  | 9.0.3          | Test runner                             |
+| [ruff](https://docs.astral.sh/ruff/)                | 0.17.4         | Linting, import sorting, formatting     |
+| [ty](https://docs.astral.sh/ty/)                    | 0.0.101        | Fast type checking, run on every commit |
+| [mypy](https://mypy-lang.org/)                      | 2.4.1          | Reference type checking                 |
+| [scipy-stubs](https://github.com/scipy/scipy-stubs) | 1.18.1.1       | Type information for SciPy              |
+| [pylint](https://pylint.readthedocs.io/)            | 4.1.3          | Deeper static analysis and code smells  |
+| [pytest](https://docs.pytest.org/)                  | 9.2.0          | Test runner                             |
 | [pytest-cov](https://pytest-cov.readthedocs.io/)    | 7.1.0          | Test coverage reports                   |
 
 Locked versions come from [`uv.lock`](../uv.lock); the lower bounds above are the minimum accepted.
